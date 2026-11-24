@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kabinett im Viereck</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Planspiel zum magischen Viereck und Achteck der Wirtschaftspolitik für die Oberstufe (SOWI, Q1).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: Lagezentrum. Navy-Kopfleiste als Kommandobrücke, darunter helle Arbeitsfläche; das Viereck/Achteck-Radar ist das wiederkehrende Leitmotiv. */
+:root{
+  --bg:#EEF2F7; --surface:#FFFFFF; --surface-2:#F6F8FB; --ink:#12203A; --muted:#566079; --line:#D6DDE8;
+  --navy:#12203A; --navy-ink:#F3F6FB; --accent:#FFC233; --accent-ink:#12203A;
+  --good:#17955A; --warn:#C98200; --bad:#CF3A2B;
+  --t1:#E4572E; --t2:#0C9A8A; --t3:#3557D0; --t4:#B0198F;
+  --ring:#C7D0DE; --ring-strong:#12203A;
+  --font-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body:"Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --r:14px; --shadow:0 1px 2px rgba(18,32,58,.06), 0 8px 24px rgba(18,32,58,.07);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0D1422; --surface:#151F33; --surface-2:#1B2740; --ink:#E7ECF5; --muted:#9AA6BF; --line:#2A3755;
+  --navy:#08101D; --navy-ink:#F3F6FB; --accent:#FFC94D; --accent-ink:#12203A;
+  --good:#3CC47E; --warn:#F0B13A; --bad:#FF6B5B;
+  --t1:#FF7A52; --t2:#2CC7B4; --t3:#7B93FF; --t4:#E055C2;
+  --ring:#33415F; --ring-strong:#E7ECF5; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0D1422; --surface:#151F33; --surface-2:#1B2740; --ink:#E7ECF5; --muted:#9AA6BF; --line:#2A3755;
+  --navy:#08101D; --navy-ink:#F3F6FB; --accent:#FFC94D; --accent-ink:#12203A;
+  --good:#3CC47E; --warn:#F0B13A; --bad:#FF6B5B;
+  --t1:#FF7A52; --t2:#2CC7B4; --t3:#7B93FF; --t4:#E055C2;
+  --ring:#33415F; --ring-strong:#E7ECF5; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--navy)}
+h1,h2,h3,h4{font-family:var(--font-display);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Kopfleiste */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--navy);color:var(--navy-ink)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--navy-ink);background:none;border:0;padding:0}
+.brand svg{flex:none}
+.nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.nav button{background:transparent;border:0;color:#C9D3E6;padding:8px 12px;border-radius:999px;font-weight:600;font-size:.92rem}
+.nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav button[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+
+main{padding-block:28px 64px}
+.view{display:flex;flex-direction:column;gap:28px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 16px;border-radius:10px;font-weight:600;transition:transform .12s ease, box-shadow .12s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.big{padding:14px 22px;font-size:1.05rem;border-radius:12px}
+.btn.ghost{background:transparent}
+.btn.small{padding:6px 10px;font-size:.85rem;border-radius:8px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.pill.good{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.pill.neutral{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+
+/* Start */
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5.5vw,4.4rem);font-weight:800;letter-spacing:-.03em}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent) 62%);padding:0 .08em}
+.hero .lead{font-size:1.15rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.hero-radar{justify-self:center;width:min(380px,100%)}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stage{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:transform .15s, box-shadow .15s}
+.stage:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.stage .min{font-family:var(--font-mono);font-size:.8rem;color:var(--muted)}
+.stage h3{font-size:1.25rem}
+.stage p{color:var(--muted);font-size:.92rem}
+.stage .step{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-weight:700;font-family:var(--font-mono);font-size:.85rem}
+.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.role h4{font-size:1.05rem;margin-bottom:6px}
+.role p{font-size:.92rem;color:var(--muted)}
+.role .ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);margin-bottom:10px}
+
+.join{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:center;background:var(--navy);color:var(--navy-ink);border-radius:18px;padding:24px 28px}
+.join h2{font-size:clamp(1.4rem,2.6vw,2rem);margin:6px 0 8px}
+.join p{color:#B9C4DA;max-width:60ch}
+.join .join-url{color:var(--accent);font-size:1.1rem;margin-top:10px}
+.join-qr{background:#fff;border-radius:16px;padding:6px;max-width:220px}
+@media (max-width:760px){.join{grid-template-columns:1fr}.join-qr{max-width:200px}}
+/* Lagebild */
+.lage-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.lage-head h1{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800}
+.lage-grid{display:grid;grid-template-columns:minmax(260px,380px) minmax(0,1fr);gap:24px;align-items:start}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile .val{font-family:var(--font-mono);font-size:2.1rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.tile .val.hidden{filter:blur(12px);user-select:none}
+.tile .meta{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.tile .src{font-size:.75rem;color:var(--muted)}
+.tile h3{font-size:1.05rem}
+
+/* Quiz */
+.quiz{max-width:760px;margin:0 auto;width:100%}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow)}
+.qcard h2{font-size:clamp(1.25rem,2.6vw,1.6rem);font-weight:700}
+.qprog{display:flex;gap:6px}
+.qprog span{flex:1;height:6px;border-radius:4px;background:var(--line)}
+.qprog span.ok{background:var(--good)} .qprog span.no{background:var(--bad)} .qprog span.cur{background:var(--accent)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--surface-2);font-weight:500;transition:border-color .12s}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.opt:disabled{cursor:default}
+.explain{border-left:4px solid var(--accent);background:var(--surface-2);padding:12px 14px;border-radius:0 10px 10px 0;font-size:.95rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+
+/* Spiel */
+.gamebar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--navy);color:var(--navy-ink);border-radius:var(--r);padding:16px 20px}
+.gamebar .year{font-family:var(--font-display);font-size:2.2rem;font-weight:800;line-height:1}
+.gamebar .sub{color:#B9C4DA;font-size:.9rem}
+.gamebar .btn{border-color:transparent}
+.timer{font-family:var(--font-mono);font-size:1.8rem;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,.08);min-width:5.5ch;text-align:center}
+.timer.low{background:var(--bad);color:#fff}
+.yearsteps{display:flex;gap:6px}
+.yearsteps span{width:34px;height:8px;border-radius:4px;background:rgba(255,255,255,.18)}
+.yearsteps span.done{background:var(--accent)} .yearsteps span.now{background:#fff}
+.teams{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:14px}
+.team{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--tc);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.team h3{font-size:1.2rem;display:flex;align-items:center;gap:8px}
+.team .dot{width:12px;height:12px;border-radius:50%;background:var(--tc);flex:none}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 10px;border-radius:9px;background:var(--surface-2);border:1px dashed var(--line);font-size:.9rem;font-weight:600;min-height:40px}
+.chip.empty{color:var(--muted);font-weight:500}
+.chip .c{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);font-weight:500}
+.budget{display:flex;flex-direction:column;gap:6px;font-size:.82rem}
+.bar{height:8px;border-radius:5px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.score-big{font-family:var(--font-mono);font-weight:700;font-size:1.5rem}
+.why{font-size:.86rem;color:var(--muted);font-style:italic;border-left:3px solid var(--tc);padding-left:8px}
+
+.banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;border-radius:var(--r);padding:18px 20px;background:color-mix(in srgb,var(--bad) 12%,var(--surface));border:2px solid var(--bad)}
+.banner .flash{background:var(--bad);color:#fff;font-weight:800;letter-spacing:.1em;font-size:.78rem;padding:6px 10px;border-radius:6px;text-transform:uppercase}
+.banner h3{font-size:1.3rem;margin-bottom:4px}
+.ezb{display:flex;gap:14px;align-items:center;padding:14px 18px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line)}
+.ezb .rate{font-family:var(--font-mono);font-size:1.6rem;font-weight:700}
+
+/* Modal / Kabinettssitzung */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(8,14,28,.55);display:flex;align-items:flex-start;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 16px max(12px,env(safe-area-inset-left,0px));overflow:auto}
+.sheet{background:var(--bg);border-radius:18px;width:min(1180px,100%);display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.35);border-top:8px solid var(--tc)}
+.sheet-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:18px 20px;border-bottom:1px solid var(--line);background:var(--surface);border-radius:12px 12px 0 0;position:sticky;top:0;z-index:2}
+.sheet-head h2{font-size:1.4rem}
+.sheet-body{padding:18px 20px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px}
+.cat-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cat-filter button{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:999px;font-size:.82rem;font-weight:600}
+.cat-filter button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.measures{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.mcard{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:12px;transition:border-color .12s, transform .12s}
+.mcard:hover:not(:disabled){border-color:var(--ink)}
+.mcard.sel{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 9%,var(--surface))}
+.mcard:disabled{opacity:.5;cursor:not-allowed}
+.mcard.locked{border-style:dashed;background:var(--surface-2)}
+.mcard h4{font-size:1rem;font-family:var(--font-body);font-weight:700;letter-spacing:0}
+.mcard .meta{display:flex;justify-content:space-between;gap:6px;font-size:.75rem;color:var(--muted);flex-wrap:wrap}
+.arrows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.arrows div{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);background:var(--surface-2);border-radius:6px;padding:4px 8px;line-height:1.2;min-width:0}
+.arrows b{font-size:.92rem;letter-spacing:-.04em;white-space:nowrap}
+.up-good{color:var(--good)} .up-bad{color:var(--bad)} .flat{color:var(--muted)}
+.side{display:flex;flex-direction:column;gap:14px;position:sticky;top:90px;align-self:start}
+textarea,input[type=text],select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea{min-height:84px;resize:vertical}
+label.lbl{font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;padding:12px;border-radius:10px;border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,var(--surface))}
+.check input{margin-top:4px;width:18px;height:18px;accent-color:var(--bad)}
+
+/* Ergebnisse */
+.results{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:14px}
+.res{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--tc);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.res h3{font-size:1.15rem;display:flex;gap:8px;align-items:center}
+.vals{display:grid;grid-template-columns:1fr auto auto;gap:2px 10px;font-size:.85rem;align-items:center}
+.vals .k{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vals .v{font-family:var(--font-mono);text-align:right}
+.vals .d{font-family:var(--font-mono);font-size:.75rem;text-align:right;min-width:4.2ch}
+.vals .sec{grid-column:1/-1;margin-top:6px;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+details.chain{border-top:1px solid var(--line);padding-top:8px}
+details.chain summary{cursor:pointer;font-weight:600;font-size:.88rem}
+.chain ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.84rem}
+.chain li span{color:var(--muted)}
+.rank{display:flex;flex-direction:column;gap:8px}
+.rank-row{display:grid;grid-template-columns:2.2rem minmax(0,1fr) minmax(80px,2fr) 4.2rem 2.4rem;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--tc);border-radius:12px;padding:10px 14px;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.rank-row .pos{font-family:var(--font-display);font-weight:800;font-size:1.6rem}
+.rank-row .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-row .sc{font-family:var(--font-mono);font-weight:700;font-size:1.25rem;text-align:right}
+.rank-row .mv{font-family:var(--font-mono);font-weight:700;text-align:center;font-size:.9rem}
+.rank-row .track{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.rank-row .track i{display:block;height:100%;background:var(--tc);border-radius:6px;transition:width .8s ease}
+
+.reveal-cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;background:var(--navy);color:var(--navy-ink);border-radius:18px;padding:26px 28px}
+.reveal-cta h2{font-size:clamp(1.5rem,3vw,2.2rem)}
+.reveal-cta p{color:#B9C4DA;margin-top:6px;max-width:62ch}
+.charts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.charts.eight{grid-template-columns:repeat(4,minmax(0,1fr))}
+.chartbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;min-width:0}
+.chartbox h4{font-size:.95rem;margin-bottom:2px}
+.chartbox .u{font-size:.75rem;color:var(--muted)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:4px;border-radius:2px;background:var(--tc)}
+.questions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.questions .panel h4{font-size:1.1rem;margin-bottom:6px}
+.weights{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 18px}
+.weights label{font-size:.82rem;font-weight:600;display:flex;justify-content:space-between}
+.weights input{width:100%;accent-color:var(--ink)}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.presets button{border:1px solid var(--line);background:var(--surface-2);padding:6px 12px;border-radius:999px;font-size:.82rem;font-weight:600}
+.presets button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+/* Berater + Quellen */
+.berater-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.bcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.bcard h3{font-size:1.1rem}
+.bcard .chainline{font-size:.88rem;background:var(--surface-2);border-radius:8px;padding:8px 10px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+.setup{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+.teamin{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.teamin .f{border-left:6px solid var(--tc);padding-left:10px}
+.evpick{display:grid;gap:8px}
+.evpick label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.evpick input{margin-top:5px;accent-color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:60;box-shadow:var(--shadow)}
+.confirm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px;border:2px solid var(--bad);border-radius:10px;background:var(--surface)}
+svg text{font-family:var(--font-body)}
+
+@media (max-width:1100px){
+  .teams,.results{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .charts,.charts.eight{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sheet-body{grid-template-columns:1fr}
+  .side{position:static}
+  .stages{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .weights{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .hero,.lage-grid,.lage-head,.setup,.reveal-cta{grid-template-columns:1fr}
+  .tiles,.roles,.questions,.teamin{grid-template-columns:1fr}
+  .teams,.results,.stages{grid-template-columns:1fr}
+  .rank-row{grid-template-columns:2rem minmax(0,1fr) 3.6rem 2.2rem}
+  .rank-row .track{display:none}
+  .nav{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap}
+  .nav button{white-space:nowrap}
+  .gamebar .year{font-size:1.7rem}
+}
+@media (max-width:480px){ .charts,.charts.eight,.weights{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <button class="brand" data-go="start" aria-label="Zur Startseite">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L28 15 L15 28 L2 15 Z" fill="none" stroke="#FFC233" stroke-width="2.5"/><path d="M15 8 L22 15 L15 20 L9 15 Z" fill="#FFC233"/></svg>
+      Kabinett im Viereck
+    </button>
+    <nav class="nav" aria-label="Bereiche">
+      <button data-go="lage">Lagebild</button>
+      <button data-go="quiz">Quiz</button>
+      <button data-go="spiel">Planspiel</button>
+      <button data-go="berater">Berater</button>
+      <button data-go="auswertung">Auswertung</button>
+      <button data-go="quellen">Quellen &amp; Modell</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+
+<script>
+"use strict";
+/* =========================================================
+   DATEN: Ausgangslage, Zeitreihen, Quellen
+   ========================================================= */
+const QR_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" role="img" aria-label="QR-Code zur Spielseite" viewBox="-2 -2 41 41"><rect x="-2" y="-2" width="41" height="41" rx="2.5" fill="#FFFFFF"/><g fill="#12203A"><rect x="9.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="0.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="1.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="2.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="3.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="4.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="5.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="6.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="7.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="8.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="9.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="10.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="11.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="12.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="13.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="14.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="15.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="16.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="17.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="18.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="19.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="20.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="21.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="22.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="23.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="24.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="25.04" width=".92" height=".92" rx=".32"/><rect x="1.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="26.04" width=".92" height=".92" rx=".32"/><rect x="0.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="4.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="7.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="27.04" width=".92" height=".92" rx=".32"/><rect x="2.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="3.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="5.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="6.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="28.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="29.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="30.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="31.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="32.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="13.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="20.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="33.04" width=".92" height=".92" rx=".32"/><rect x="8.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="9.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="14.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="19.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="23.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="27.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="28.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="30.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="34.04" width=".92" height=".92" rx=".32"/><rect x="11.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="21.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="35.04" width=".92" height=".92" rx=".32"/><rect x="10.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="12.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="15.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="16.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="17.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="18.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="22.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="24.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="25.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="26.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="29.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="31.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="32.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="33.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="34.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="35.04" y="36.04" width=".92" height=".92" rx=".32"/><rect x="36.04" y="36.04" width=".92" height=".92" rx=".32"/></g><rect x="0.5" y="0.5" width="6" height="6" rx="1.8" fill="none" stroke="#12203A" stroke-width="1"/><rect x="2" y="2" width="3" height="3" rx=".9" fill="#12203A"/><rect x="30.5" y="0.5" width="6" height="6" rx="1.8" fill="none" stroke="#12203A" stroke-width="1"/><rect x="32" y="2" width="3" height="3" rx=".9" fill="#12203A"/><rect x="0.5" y="30.5" width="6" height="6" rx="1.8" fill="none" stroke="#12203A" stroke-width="1"/><rect x="2" y="32" width="3" height="3" rx=".9" fill="#12203A"/><path d="M18.5 14.9 L22.1 18.5 L18.5 22.1 L14.9 18.5 Z" fill="none" stroke="#12203A" stroke-width=".75" stroke-linejoin="round"/><path d="M18.5 16.6 L20.4 18.5 L18.5 20.1 L16.9 18.5 Z" fill="#FFC233" stroke="#12203A" stroke-width=".3"/></svg>';
+const SITE_URL = "https://nb-gsn.github.io/SowiPlanspiel/";
+const YEARS = [2027, 2028, 2029, 2030, 2031];
+const EVENT_ROUND = 3;          // Schock trifft im Jahr 2029
+const BUDGET_BASE = 25;         // Mrd. € Spielraum pro Jahr innerhalb der Schuldenbremse
+const SV_POT = 60;              // Mrd. € Sondervermögen Infrastruktur/Klima für das ganze Spiel
+const NOTLAGE_PLUS = 30, NOTLAGE_TILGUNG = 6;
+
+// Reihenfolge = Achsen des Radars (im Uhrzeigersinn ab oben). Kernziele liegen auf 0/2/4/6 und bilden das Viereck.
+const GOALS = [
+  {k:"infl", core:true,  name:"Preisniveaustabilität", short:"Preise", ind:"Inflationsrate (VPI)", unit:"%", dec:1, target:"rund 2 %", good:-1},
+  {k:"thg",  core:false, name:"Schutz der Umwelt", short:"Umwelt", ind:"Treibhausgas-Emissionen", unit:" Mio. t", dec:0, target:"Klimapfad: −65 % ggü. 1990 bis 2030 (≈ 438 Mio. t)", good:-1},
+  {k:"alq",  core:true,  name:"Hoher Beschäftigungsstand", short:"Beschäftigung", ind:"Arbeitslosenquote (BA)", unit:"%", dec:1, target:"unter 3 %", good:-1},
+  {k:"armut",core:false, name:"Gerechte Einkommensverteilung", short:"Verteilung", ind:"Armutsgefährdungsquote", unit:"%", dec:1, target:"Spielziel: 11 %", good:-1},
+  {k:"lb",   core:true,  name:"Außenwirtschaftliches Gleichgewicht", short:"Außenwirtschaft", ind:"Leistungsbilanzsaldo in % des BIP", unit:"%", dec:1, target:"ausgeglichen (±1 %); EU-Warnschwelle +6 %", good:0},
+  {k:"nl",   core:false, name:"Humane Arbeitsbedingungen", short:"Arbeit", ind:"Anteil Jobs mit Niedriglohn", unit:"%", dec:1, target:"Spielziel: 8 %", good:-1},
+  {k:"bip",  core:true,  name:"Stetiges, angemessenes Wachstum", short:"Wachstum", ind:"reales BIP-Wachstum", unit:"%", dec:1, target:"2 bis 3 %, ohne starke Schwankungen", good:1},
+  {k:"ee",   core:false, name:"Sicherung der Ressourcen", short:"Ressourcen", ind:"Erneuerbare am Bruttostromverbrauch", unit:"%", dec:0, target:"80 % bis 2030 (EEG-Ziel)", good:1},
+];
+const G = Object.fromEntries(GOALS.map(g=>[g.k,g]));
+const CORE = GOALS.filter(g=>g.core);
+
+// Ausgangslage Herbst 2026 (Werte für das Spieljahr 0)
+const START = {infl:2.8, alq:6.4, lb:4.6, bip:0.5, thg:630, armut:15.5, nl:16, ee:57};
+// Basispfad ohne Politik (gemeinsamer Hintergrund für alle Teams), Index 1..5 = 2027..2031
+const BASE = {
+  infl:[2.8, 2.3, 2.1, 2.0, 2.0, 2.0],
+  bip: [0.5, 1.0, 1.2, 1.1, 1.0, 1.0],
+  alq: [6.4, 6.3, 6.1, 5.9, 5.8, 5.7],
+  lb:  [4.6, 4.4, 4.2, 4.0, 3.9, 3.8],
+  thg: [630, 602, 574, 546, 518, 490],
+  armut:[15.5,15.5,15.5,15.5,15.5,15.5],
+  nl:  [16, 15.7, 15.4, 15.1, 14.8, 14.5],
+  ee:  [57, 59.5, 62, 64.5, 67, 69.5],
+};
+const EURO_BASE = [2.6, 2.2, 2.0, 2.0, 2.0, 2.0];
+const RATE_START = 2.25;
+
+const HISTORY = {
+  years:[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+  infl:[0.7,0.4,1.7,1.9,1.4,0.5,3.1,6.9,5.9,2.2,2.2],
+  alq:[6.4,6.1,5.7,5.2,5.0,5.9,5.7,5.3,5.7,6.0,6.3],
+  bip:[1.5,2.2,2.7,1.0,1.1,-4.1,3.7,1.4,-0.9,-0.5,0.2],
+  lb:[8.6,8.5,7.8,8.0,8.2,7.1,7.7,4.4,6.3,5.7,4.6],
+};
+const LAGE = {
+  infl:{val:"2,8 %", when:"Oktober 2026", status:["verfehlt","warn"], note:"Energie +12,2 % ggü. Vorjahr, Kerninflation 2,1 %. Auslöser: Ölpreisschock durch den Nahostkonflikt (Sperrung der Straße von Hormus).", src:"Destatis, PM Nr. 382 vom 30.10.2026", score:2.8},
+  alq:{val:"6,4 %", when:"Juli 2026", status:["deutlich verfehlt","bad"], note:"3,007 Mio. Arbeitslose bei 653.000 offenen Stellen: Hinweis auf strukturellen Mismatch.", src:"Bundesagentur für Arbeit (Arbeitsblatt M2)", score:6.4},
+  lb:{val:"≈ 4,6 %", when:"Jan.–Sep. 2026", status:["Überschuss","warn"], note:"Leistungsbilanz Jan.–Sep. 2026: +160,0 Mrd. €. US-Zölle seit 2025 drücken den Exportüberschuss mit den USA (Q1: −30,5 %).", src:"Deutsche Bundesbank, Zahlungsbilanz vom 12.11.2026; Destatis 21.05.2026", score:4.6},
+  bip:{val:"+0,5 %", when:"Prognose 2026", status:["verfehlt, nicht stetig","bad"], note:"Prognosen 2026 zwischen +0,4 und +1,0 %. Davor: 2023 −0,9 %, 2024 −0,5 %, 2025 +0,2 % (Destatis, revidiert).", src:"Destatis PM Nr. 017 vom 15.01.2026; Jahreswirtschaftsbericht 2026", score:0.5},
+};
+const HIDDEN_START_NOTE = {
+  thg:"2025: 648,9 Mio. t (−48 % ggü. 1990). Startwert 2026 im Spiel geschätzt.",
+  armut:"Armutsgefährdungsquote rund 15,5 % (EU-SILC 2024, gerundet).",
+  nl:"16 % aller Jobs im April 2025 unter der Niedriglohnschwelle (14,32 €).",
+  ee:"2025: rund 55 %, 2024: 54,1 %. Startwert 2026 im Spiel geschätzt.",
+};
+
+const SOURCES = [
+  ["Inflation Okt. 2026: 2,8 %, Energie +12,2 %, Kerninflation 2,1 %","Statistisches Bundesamt, Pressemitteilung Nr. 382 vom 30.10.2026","https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/10/PD26_382_611.html"],
+  ["BIP 2025 +0,2 %, 2024 −0,5 %, 2023 −0,9 %; Defizit 2025 2,4 % des BIP","Statistisches Bundesamt, Pressemitteilung Nr. 017 vom 15.01.2026","https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/01/PD26_017_811.html"],
+  ["BIP 1. Quartal 2026: +0,3 % ggü. Vorquartal","Statistisches Bundesamt, Pressemitteilung Nr. 173 vom 22.05.2026","https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/05/PD26_173_811.html"],
+  ["Jahresprojektion 2026: BIP +1,0 %, Inflation 2,1 %, Arbeitslosenquote 6,2 %","Bundeswirtschaftsministerium, Jahreswirtschaftsbericht 2026","https://www.bundeswirtschaftsministerium.de/Redaktion/DE/Schlaglichter-der-Wirtschaftspolitik/2026/02/02-jahreswirtschaftsbericht-2026.html"],
+  ["Leistungsbilanz Jan.–Sep. 2026: +160,0 Mrd. € (Vorjahr +149,4 Mrd. €)","Deutsche Bundesbank, Zahlungsbilanz, Pressemitteilung vom 12.11.2026","https://www.bundesbank.de/resource/blob/1015820/379b49f906c89633f4ba9fb1788b59cf/472B63F073F071307366337C94F8C870/2026-11-12-zahlungsbilanz-anlage-data.pdf"],
+  ["Treibhausgase 2025: 648,9 Mio. t CO₂-Äq., −48 % ggü. 1990; Ziel 2030: −65 %","Umweltbundesamt, Pressemitteilung 08/2026 vom 14.03.2026","https://www.umweltbundesamt.de/presse/pressemitteilungen/treibhausgasdaten-zeigen-klimaschutz-braucht-neuen"],
+  ["Erneuerbare am Bruttostromverbrauch: 2025 rund 55 %, 2024 54,1 %; Ziel 2030: 80 %","Umweltbundesamt / AGEE-Stat, Pressemitteilung 42/2025","https://www.umweltbundesamt.de/presse/pressemitteilungen/erneuerbare-stromerzeugung-verhaltenem-wachstum"],
+  ["Niedriglohnanteil April 2025: 16 % (2022: 19 %, 2014: 21 %)","Statistisches Bundesamt, Pressemitteilung Nr. 434 vom 05.12.2025","https://www.destatis.de/DE/Presse/Pressemitteilungen/2025/12/PD25_434_623.html"],
+  ["Arbeitslose Juli 2026: 3,007 Mio., Quote 6,4 %; 653.000 offene Stellen","Bundesagentur für Arbeit (zitiert im Arbeitsblatt, M2 „Zielerreichung 2026“)",null],
+  ["Zeitreihen 2015–2025 (Inflation, Arbeitslosenquote, BIP, Leistungsbilanz)","Destatis, Bundesagentur für Arbeit, Deutsche Bundesbank; Jahreswerte gerundet, Leistungsbilanz in % des BIP teils Näherung",null],
+];
+
+/* =========================================================
+   MASSNAHMEN-KATALOG
+   fx: Abweichung vom Basispfad im Jahr der Entscheidung, +1 Jahr, +2 Jahre.
+   Der letzte Wert gilt danach dauerhaft weiter (langfristige Wirkung).
+   ========================================================= */
+const AREAS = {
+  ord:"Ordnungspolitik", konj:"Prozesspolitik · Konjunktur", wachs:"Prozesspolitik · Wachstum",
+  vert:"Prozesspolitik · Verteilung", struk:"Strukturpolitik",
+};
+const MEASURES = [
+  {id:"konjunktur", area:"konj", name:"Konjunkturpaket", traeger:"Bundesregierung & Bundestag", cost:30,
+   desc:"Investitionszuschüsse für Unternehmen, Prämien für Haushalte. Wirkt schnell, verpufft aber.",
+   chain:"Mehr Staatsnachfrage → Unternehmen produzieren und stellen ein → BIP ↑, Arbeitslosigkeit ↓. Aber: mehr Nachfrage → Preise ↑ und mehr Importe → Leistungsbilanzüberschuss ↓.",
+   fx:{bip:[0.6,0.2,0], infl:[0.25,0.25,0], alq:[-0.2,-0.15,0], lb:[-0.3,-0.1,0], thg:[3,1,0], armut:[-0.1,0,0]}},
+  {id:"infrastruktur", area:"wachs", name:"Investitionsoffensive Infrastruktur", traeger:"Bundestag (Sondervermögen)", cost:25, sv:true,
+   desc:"Schiene, Brücken, Netze, Digitalisierung. Finanziert aus dem Sondervermögen (Grundgesetzänderung 2025).",
+   chain:"Bauaufträge → kurzfristig Nachfrage ↑. Langfristig bessere Infrastruktur → Produktionspotenzial ↑ → Wachstum dauerhaft höher.",
+   fx:{bip:[0.25,0.35,0.4], infl:[0.15,0.1,0], alq:[-0.1,-0.15,-0.1], lb:[-0.2,-0.2,-0.1], thg:[1,-2,-4], ee:[0,1,1.5]}},
+  {id:"bildung", area:"struk", name:"Weiterbildungs- und Qualifizierungsoffensive", traeger:"Bundesagentur für Arbeit", cost:10,
+   desc:"Umschulung für Beschäftigte aus schrumpfenden Branchen, Fachkräfte für offene Stellen.",
+   chain:"3 Mio. Arbeitslose, aber 653.000 offene Stellen (Mismatch) → Qualifizierung bringt beides zusammen → strukturelle Arbeitslosigkeit ↓. Braucht Zeit.",
+   fx:{bip:[0,0.1,0.25], alq:[-0.05,-0.25,-0.35], armut:[0,-0.2,-0.4], nl:[0,-0.5,-1]}},
+  {id:"steuer", area:"wachs", name:"Unternehmenssteuern senken", traeger:"Bundestag & Bundesrat", cost:20,
+   desc:"Körperschaftsteuer schrittweise runter, bessere Abschreibungen (angebotsorientiert).",
+   chain:"Höhere Nettorenditen → mehr Investitionen → Wachstum ↑ (mit Verzögerung). Gewinne fließen vor allem an Kapitaleigner → Ungleichheit ↑.",
+   fx:{bip:[0.15,0.3,0.3], infl:[0.1,0.05,0], alq:[0,-0.1,-0.1], lb:[0.1,0.1,0.1], armut:[0.1,0.2,0.3], thg:[1,2,2]}},
+  {id:"energiepreis", area:"konj", name:"Energiepreise subventionieren", traeger:"Bundesregierung", cost:15, shockBoost:"energie",
+   desc:"Stromsteuer runter, Tankrabatt, Gaspreisbremse. Senkt die gemessene Inflation sofort.",
+   chain:"Energie billiger → Inflationsrate ↓ (nur solange gezahlt wird). Aber: fossile Energie wird attraktiver → Emissionen ↑, weniger Anreiz zum Umstieg.",
+   fx:{infl:[-0.5,0.1,0], bip:[0.15,0,0], alq:[-0.05,0,0], lb:[-0.1,-0.1,0], thg:[4,3,2], ee:[-0.5,-1,-1], armut:[-0.2,0,0]}},
+  {id:"co2", area:"ord", name:"CO₂-Preis rauf, Klimageld zurück", traeger:"Bundestag (Brennstoffemissionshandel)", cost:-10,
+   desc:"Höherer CO₂-Preis auf Heizen und Tanken. Ein Teil der Einnahmen geht pro Kopf an alle zurück.",
+   chain:"Kurzfristig: Kosten ↑ → Preise ↑, Wachstum ↓ (Zielkonflikt). Langfristig: Innovation, weniger Öl- und Gasimporte → Wachstum ↑ (Konflikt wird zur Harmonie).",
+   fx:{infl:[0.35,0.1,0], bip:[-0.2,0,0.15], alq:[0.05,0.05,-0.05], lb:[0,0.2,0.3], thg:[-8,-14,-18], ee:[1,2,3], armut:[-0.1,-0.1,-0.1]}},
+  {id:"mlmod", area:"ord", name:"Mindestlohn moderat anheben (15 €)", traeger:"Bundestag (gegen Empfehlung der Mindestlohnkommission)", cost:0, max:1,
+   desc:"Beschlossen sind 14,60 € ab 2027. Moderate Erhöhung auf 15 €.",
+   chain:"Niedrige Löhne ↑ → weniger Niedriglohnjobs, mehr Kaufkraft unten. Leichter Kostenschub für Unternehmen.",
+   fx:{infl:[0.15,0.05,0], bip:[0.05,0.05,0], alq:[0,0.05,0.05], armut:[-0.3,-0.3,-0.3], nl:[-2,-2.5,-2.5]}},
+  {id:"mlstark", area:"ord", name:"Mindestlohn stark anheben (17 €)", traeger:"Bundestag (gegen Empfehlung der Mindestlohnkommission)", cost:0, max:1,
+   desc:"Kräftiger Sprung auf 17 €. Ausmaß beachten: wirkt anders als eine moderate Erhöhung.",
+   chain:"Niedriglohnjobs ↓↓, aber: Arbeit wird für manche Betriebe zu teuer → Stellenabbau, Preise ↑. Das Ausmaß entscheidet über Harmonie oder Konflikt.",
+   fx:{infl:[0.4,0.2,0], bip:[-0.05,-0.15,-0.1], alq:[0.25,0.35,0.3], armut:[-0.4,-0.4,-0.3], nl:[-4,-5,-5]}},
+  {id:"sparen", area:"konj", name:"Sparpaket: Ausgaben kürzen", traeger:"Bundestag (Haushaltsgesetz)", cost:-25,
+   desc:"Kürzungen bei Subventionen und Sozialleistungen. Schafft Spielraum im Haushalt.",
+   chain:"Weniger Staatsnachfrage → BIP ↓, Arbeitslosigkeit ↑, Preisdruck ↓. Weniger Importe → Überschuss ↑. Kürzungen unten → Armut ↑.",
+   fx:{bip:[-0.45,-0.15,0], infl:[-0.15,-0.1,0], alq:[0.15,0.15,0.05], lb:[0.25,0.1,0], armut:[0.2,0.3,0.3], thg:[-1,0,0], nl:[0,0.3,0.3]}},
+  {id:"buerokratie", area:"ord", name:"Bürokratieabbau, schnellere Genehmigungen", traeger:"Bundesregierung & Bundestag", cost:1,
+   desc:"Planungsbeschleunigung für Windräder, Netze und Werke; weniger Berichtspflichten.",
+   chain:"Regeln ändern sich → Investitionen werden schneller umgesetzt → Wachstum ↑ (verzögert), Ausbau der Erneuerbaren ↑. Umstritten: weniger Dokumentation beim Arbeitsschutz.",
+   fx:{bip:[0,0.15,0.25], alq:[0,-0.05,-0.1], infl:[0,-0.05,-0.05], ee:[0,1.5,3], thg:[0,-1,-3], nl:[0,0,0.3]}},
+  {id:"auto", area:"struk", name:"Transformationsfonds Autoindustrie", traeger:"Bund & Länder", cost:12,
+   desc:"Hilfen für Zulieferer-Regionen beim Umstieg auf E-Mobilität.",
+   chain:"Gezielte Hilfe für eine Branche und Region → Jobs bleiben erhalten → Arbeitslosigkeit ↓, Exporte stabiler. Gefahr: Erhalt alter Strukturen, Lobbyeinfluss.",
+   fx:{alq:[-0.15,-0.1,-0.05], bip:[0.1,0.1,0.1], lb:[0.1,0.15,0.15], infl:[0.05,0,0], thg:[0,-1,-2]}},
+  {id:"export", area:"wachs", name:"Exportförderung und Handelsinitiative in der EU", traeger:"Bundesregierung wirbt, die EU entscheidet", cost:3,
+   desc:"Neue Handelsabkommen (z. B. Mercosur, Indien) und Exportbürgschaften. Handelspolitik ist EU-Sache, deshalb verzögert.",
+   chain:"Neue Absatzmärkte → Exporte ↑ → Wachstum ↑. Aber: Leistungsbilanzüberschuss ↑ → weiter weg vom außenwirtschaftlichen Gleichgewicht.",
+   fx:{lb:[0,0.3,0.4], bip:[0,0.15,0.15], alq:[0,-0.05,-0.05], thg:[0,1,1]}},
+  {id:"wohngeld", area:"vert", name:"Wohngeld und Grundsicherung erhöhen", traeger:"Bundestag & Bundesrat", cost:8,
+   desc:"Mehr Unterstützung für Haushalte mit geringem Einkommen.",
+   chain:"Mehr Einkommen unten → Armutsgefährdung ↓, mehr Konsum → leicht Wachstum ↑. Finanzierung belastet den Haushalt.",
+   fx:{armut:[-0.6,-0.6,-0.5], bip:[0.1,0,0], infl:[0.05,0,0], alq:[0,0.02,0.02], lb:[-0.05,0,0]}},
+  {id:"reichensteuer", area:"vert", name:"Spitzensteuersatz und Erbschaftsteuer rauf", traeger:"Bundestag & Bundesrat", cost:-12,
+   desc:"Höhere Steuern auf sehr hohe Einkommen und große Erbschaften.",
+   chain:"Mehr Einnahmen → Spielraum für Umverteilung → Ungleichheit ↓. Möglich: weniger Investitionen und Abwanderung → Wachstum leicht ↓.",
+   fx:{armut:[-0.1,-0.2,-0.3], bip:[-0.05,-0.1,-0.1], alq:[0,0.03,0.03], lb:[0.05,0.05,0.05]}},
+  {id:"energiewende", area:"struk", name:"Energie unabhängiger machen", traeger:"Bundestag (Sondervermögen Klima)", cost:20, sv:true,
+   desc:"Netze, Speicher, Wind und Solar, neue Lieferländer. Setzt an der Ursache von Energiepreisschocks an.",
+   chain:"Langsam: weniger Abhängigkeit von Öl und Gas → künftige Preisschocks treffen schwächer, Emissionen ↓. Kurzfristig kaum Wirkung auf die Inflation.",
+   fx:{infl:[0.05,-0.1,-0.3], bip:[0.1,0.15,0.2], alq:[-0.05,-0.05,-0.05], lb:[-0.1,0.1,0.3], thg:[0,-6,-14], ee:[1,3,6]}},
+  {id:"fachkraefte", area:"ord", name:"Fachkräfteeinwanderung erleichtern", traeger:"Bundestag", cost:2,
+   desc:"Schnellere Anerkennung von Abschlüssen, digitale Visa.",
+   chain:"Mehr Arbeitskräfte für offene Stellen → Engpässe ↓ → Wachstum ↑, Lohndruck und Preisdruck ↓. Wirkt erst nach einiger Zeit.",
+   fx:{bip:[0,0.15,0.3], infl:[0,-0.05,-0.1], alq:[0,0.05,0]}},
+  {id:"tariftreue", area:"ord", name:"Tariftreue und Arbeitsschutz stärken", traeger:"Bundestag", cost:1,
+   desc:"Öffentliche Aufträge nur an tarifgebundene Firmen; strengere Arbeitszeitkontrollen.",
+   chain:"Bessere Löhne und Bedingungen → weniger Niedriglohn, Armut ↓. Höhere Kosten für manche Betriebe → Wachstum leicht ↓.",
+   fx:{nl:[-1,-1.5,-2], infl:[0.05,0.05,0], bip:[0,-0.05,-0.05], alq:[0,0.05,0.05], armut:[-0.1,-0.2,-0.2]}},
+];
+const M = Object.fromEntries(MEASURES.map(m=>[m.id,m]));
+const LOCKED = [
+  {name:"Leitzins senken", why:"Geht nicht: Die Geldpolitik macht die Europäische Zentralbank, unabhängig von Weisungen (Art. 127, 130 AEUV)."},
+  {name:"Löhne per Gesetz erhöhen", why:"Geht nicht: Tarifautonomie (Art. 9 Abs. 3 GG). Löhne verhandeln Gewerkschaften und Arbeitgeberverbände. Der Staat setzt nur den Rahmen, etwa den Mindestlohn."},
+  {name:"Zölle auf US-Waren", why:"Geht nicht: Handelspolitik gegenüber Drittstaaten ist ausschließliche Zuständigkeit der EU."},
+  {name:"Euro abwerten", why:"Geht nicht: Der Wechselkurs bildet sich am Markt, die Währungspolitik liegt beim Eurosystem."},
+];
+
+const EVENTS = {
+  energie:{title:"Energiepreisschock: Straße von Hormus erneut gesperrt", text:"Öl- und Gaspreise springen um 60 %. Importierte Inflation wie 2026, nur stärker. Wer früh in Energieunabhängigkeit investiert hat, ist besser geschützt.",
+    fx:{infl:[1.6,0.5,0], bip:[-0.6,-0.2,0], alq:[0.15,0.25,0.1], lb:[-0.9,-0.3,0], armut:[0.3,0.2,0], thg:[-4,0,0]}, euro:1.2, mitig:{energiewende:0.35}, mitigMax:0.7},
+  zoll:{title:"US-Zollrunde 2.0: 30 % auf Autos und Maschinen", text:"Die USA erhöhen die Zölle erneut. Exporte brechen ein. Wer neue Märkte erschlossen hat, verliert weniger.",
+    fx:{lb:[-1.2,-0.6,-0.4], bip:[-0.6,-0.3,0], alq:[0.2,0.3,0.2], infl:[0.2,0,0], thg:[-3,-1,0]}, euro:0.2, mitig:{export:0.3, auto:0.15}, mitigMax:0.6},
+  fachkraefte:{title:"Fachkräftemangel spitzt sich zu", text:"Die Babyboomer gehen in Rente. Betriebe finden kein Personal, Aufträge bleiben liegen, Löhne und Preise steigen.",
+    fx:{bip:[-0.4,-0.4,-0.3], infl:[0.4,0.3,0.1], alq:[0,0,0], nl:[0,-0.3,-0.3]}, euro:0.1, mitig:{fachkraefte:0.3, bildung:0.25}, mitigMax:0.6},
+};
+
+/* =========================================================
+   BEWERTUNG: Zielerreichungsgrad 0–100 je Ziel
+   ========================================================= */
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function score(k, v, year, prevBip){
+  let s;
+  switch(k){
+    case "infl": s = 100 - 35*Math.abs(v-2); break;
+    case "alq":  s = 100 - 15*Math.max(0, v-3); break;
+    case "lb":   s = 100 - 14*Math.max(0, Math.abs(v)-1); break;
+    case "bip": { const d = v<2 ? 2-v : (v>3 ? v-3 : 0); s = 100 - 40*d - (prevBip==null?0:10*Math.max(0,Math.abs(v-prevBip)-1)); break; }
+    case "thg": { const req = 649 - 42.2*(year-2025); s = 100 - 0.6*Math.max(0, v-req); break; }
+    case "armut": s = 100 - 10*Math.max(0, v-11); break;
+    case "nl":   s = 100 - 6*Math.max(0, v-8); break;
+    case "ee": { const req = Math.min(80, 55 + 5*(year-2025)); s = 100 - 3*Math.max(0, req-v); break; }
+  }
+  return clamp(s,0,100);
+}
+
+/* =========================================================
+   SIMULATION (rein funktional: aus Entscheidungen werden Jahreswerte)
+   ========================================================= */
+function countPicksBefore(team, id, round){ let n=0; for(let r=1;r<round;r++) for(const x of (team.choices[r-1]||[])) if(x===id) n++; return n; }
+
+function simulate(team, n, event){
+  const years=[{year:2026, v:{...START}, s:null, rate:RATE_START, contrib:[], ezb:null}];
+  let rate = RATE_START;
+  for(let t=1;t<=n;t++){
+    const v={}; const contrib=[];
+    for(const g of GOALS) v[g.k]=BASE[g.k][t];
+    // Maßnahmen aller bisherigen Jahre (mit Verzögerung)
+    for(let r=1;r<=t;r++){
+      for(const id of (team.choices[r-1]||[])){
+        const m=M[id]; if(!m) continue; const lag=t-r;
+        for(const k in m.fx){ const a=m.fx[k]; const val=a[Math.min(lag,a.length-1)]; if(val){ v[k]+=val; contrib.push({src:m.name, r, k, val, lag}); } }
+        if(m.shockBoost && event===m.shockBoost && r===EVENT_ROUND && lag===0){ v.infl-=0.5; contrib.push({src:m.name+" (im Schockjahr besonders wirksam)", r, k:"infl", val:-0.5, lag:0}); }
+      }
+    }
+    // Schockereignis
+    let mit=0;
+    if(event && EVENTS[event] && t>=EVENT_ROUND){
+      const E=EVENTS[event], lag=t-EVENT_ROUND;
+      for(const id in E.mitig) mit += E.mitig[id]*countPicksBefore(team,id,EVENT_ROUND);
+      mit=Math.min(E.mitigMax,mit);
+      for(const k in E.fx){ const a=E.fx[k]; const val=(a[lag]??0)*(1-mit); if(val){ v[k]+=val; contrib.push({src:"Schock: "+E.title.split(":")[0], r:EVENT_ROUND, k, val, lag, shock:true}); } }
+    }
+    // EZB: Zins aus dem Vorjahr wirkt verzögert
+    const gap = rate-2.0;
+    const ezbFx={bip:-0.35*gap, infl:-0.25*gap, alq:0.12*gap};
+    for(const k in ezbFx){ v[k]+=ezbFx[k]; if(Math.abs(ezbFx[k])>=0.01) contrib.push({src:`EZB-Leitzins ${fmt(rate,2)} %`, r:t, k, val:ezbFx[k], lag:1, ezb:true}); }
+    // EZB reagiert auf Inflation im Euroraum (Deutschland ≈ 30 % Gewicht)
+    const euroShock = (event && EVENTS[event] && t===EVENT_ROUND) ? EVENTS[event].euro : 0;
+    const euroInfl = 0.7*(EURO_BASE[t]+euroShock) + 0.3*v.infl;
+    let step = Math.round((0.5*(euroInfl-2.0))/0.25)*0.25; step = clamp(step,-0.5,0.5);
+    const newRate = clamp(rate+step, 0, 4.5);
+    const ezb={old:rate, rate:newRate, step:newRate-rate, euroInfl};
+    rate=newRate;
+    for(const k in v) v[k]=Math.round(v[k]*100)/100;
+    const s={}; const prevBip=years[t-1].v.bip;
+    for(const g of GOALS) s[g.k]=score(g.k, v[g.k], YEARS[t-1], prevBip);
+    years.push({year:YEARS[t-1], v, s, rate, contrib, ezb, mit});
+  }
+  // Startjahr bewerten
+  years[0].s=Object.fromEntries(GOALS.map(g=>[g.k,score(g.k,START[g.k],2026,null)]));
+  return years;
+}
+
+const EQUAL_W = Object.fromEntries(GOALS.map(g=>[g.k,1]));
+function index(s, weights, eight){
+  let sum=0, wsum=0;
+  for(const g of GOALS){ if(!eight && !g.core) continue; const w=weights?weights[g.k]:1; sum+=w*s[g.k]; wsum+=w; }
+  return wsum? sum/wsum : 0;
+}
+function teamIndex(team, n, event, weights, eight){
+  const ys=simulate(team,n,event); if(n<1) return index(ys[0].s,weights,eight);
+  let t=0; for(let i=1;i<=n;i++) t+=index(ys[i].s,weights,eight); return t/n;
+}
+
+/* Haushalt */
+function budgetFor(team, round){
+  let room = BUDGET_BASE;
+  if(team.notlage && round===EVENT_ROUND) room += NOTLAGE_PLUS;
+  if(team.notlage && round>EVENT_ROUND) room -= NOTLAGE_TILGUNG;
+  return room;
+}
+function svUsedBefore(team, round){
+  let used=0;
+  for(let r=1;r<round;r++){ const c=costSplit(team, team.choices[r-1]||[], SV_POT-used); used+=c.sv; }
+  return used;
+}
+function costSplit(team, picks, svLeft){
+  let sv=0, reg=0;
+  for(const id of picks){ const m=M[id]; if(m.sv){ const take=Math.min(svLeft-sv, m.cost); sv+=take; reg+=m.cost-take; } else reg+=m.cost; }
+  return {sv, reg};
+}
+function budgetState(team, round, picks){
+  const svLeft = SV_POT - svUsedBefore(team, round);
+  const c = costSplit(team, picks, svLeft);
+  const room = budgetFor(team, round);
+  return {room, reg:c.reg, sv:c.sv, svLeft, ok:c.reg<=room};
+}
+
+/* =========================================================
+   ZUSTAND
+   ========================================================= */
+const TEAM_COLORS=["var(--t1)","var(--t2)","var(--t3)","var(--t4)"];
+const DEFAULT_NAMES=["Kabinett Koralle","Kabinett Türkis","Kabinett Kobalt","Kabinett Magenta"];
+const KEY="kabinett-im-viereck-v1";
+function freshState(){
+  return {phase:"setup", round:0, nTeams:4, event:"energie", teams:DEFAULT_NAMES.map((n,i)=>({name:n, choices:[], notes:[], notlage:false})), revealed:false, timer:{sec:480, left:480, running:false}, weightsPreset:"gleich", weights:{...EQUAL_W}};
+}
+let S = load() || freshState();
+function load(){ try{ const raw=localStorage.getItem(KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const activeTeams=()=>S.teams.slice(0,S.nTeams);
+const evaluated=()=> S.phase==="result" ? S.round : (S.phase==="end" ? 5 : Math.max(0,S.round-1));
+
+/* =========================================================
+   HILFSFUNKTIONEN
+   ========================================================= */
+function fmt(x, d=1){ return ((Math.round(x*Math.pow(10,d))/Math.pow(10,d))+0).toLocaleString("de-DE",{minimumFractionDigits:d, maximumFractionDigits:d}); }
+function fmtSigned(x,d=1){ const s=fmt(Math.abs(x),d); return (x>0.0001?"+":x<-0.0001?"−":"±")+s; }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function scoreClass(s){ return s>=80?"good":s>=50?"warn":"bad"; }
+function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function tc(i){ return TEAM_COLORS[i]; }
+// Pfeile für die Wirkungsrichtung aus Sicht des Ziels (gut/schlecht in der Ausgangslage)
+function arrowFor(k, val){
+  const a=Math.abs(val);
+  if(a<0.04) return {sym:"○", cls:"flat"};
+  const n = k==="thg"||k==="ee"||k==="nl" ? (a<3?1:2) : (a<0.25?1:2);
+  const sym= n===1 ? (val>0?"↑":"↓") : (val>0?"⇈":"⇊");
+  let goodDir = G[k].good; if(k==="lb") goodDir=-1; // Überschuss zu hoch: sinken ist gut
+  if(k==="infl") goodDir=-1;
+  const good = goodDir*val>0;
+  return {sym, cls: good?"up-good":"up-bad"};
+}
+
+/* =========================================================
+   GRAFIK: Radar (Viereck ↔ Achteck), Linien, Sparklines
+   ========================================================= */
+function radarSVG(s, opt={}){
+  const size=opt.size||300, pad=opt.labels===false?10:44, R=(size/2)-pad, cx=size/2, cy=size/2;
+  const t = opt.reveal ?? 0; const color=opt.color||"var(--ink)";
+  const ang=i=>(-90+i*45)*Math.PI/180;
+  const P=(i,r)=>[cx+Math.cos(ang(i))*r, cy+Math.sin(ang(i))*r];
+  const lerp=(a,b,u)=>[a[0]+(b[0]-a[0])*u, a[1]+(b[1]-a[1])*u];
+  function shape(radFn){
+    const pts=[];
+    for(let i=0;i<8;i++){
+      const real=P(i,radFn(i));
+      if(i%2===0) pts.push(real);
+      else { const a=P(i-1,radFn(i-1)), b=P((i+1)%8,radFn((i+1)%8)); pts.push(lerp([(a[0]+b[0])/2,(a[1]+b[1])/2], real, t)); }
+    }
+    return pts.map(p=>p.map(x=>x.toFixed(1)).join(",")).join(" ");
+  }
+  let g="";
+  for(const lvl of [25,50,75,100]){
+    g+=`<polygon points="${shape(()=>R*lvl/100)}" fill="${lvl===100?"none":"none"}" stroke="${lvl===100?"var(--ring-strong)":"var(--ring)"}" stroke-width="${lvl===100?1.6:1}" ${lvl===100?'stroke-dasharray="5 4"':''}/>`;
+  }
+  for(let i=0;i<8;i++){ const [x,y]=P(i,R); const op=i%2===0?1:t; if(op>0) g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--ring)" stroke-width="1" opacity="${op}"/>`; }
+  const layers = opt.layers || [{s, color}];
+  for(const L of layers){
+    const pts=shape(i=>R*Math.max(4,L.s[GOALS[i].k])/100);
+    g+=`<polygon points="${pts}" fill="${L.color}" fill-opacity="${layers.length>1?0.10:0.22}" stroke="${L.color}" stroke-width="${layers.length>1?2:2.5}" stroke-linejoin="round"/>`;
+    if(layers.length===1) for(let i=0;i<8;i++){ if(i%2===1 && t<0.99) continue; const [x,y]=P(i,R*Math.max(4,L.s[GOALS[i].k])/100); g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${L.color}" stroke="var(--surface)" stroke-width="1.5"/>`; }
+  }
+  if(opt.labels!==false){
+    for(let i=0;i<8;i++){
+      const op=i%2===0?1:t; if(op<=0) continue;
+      const [x,y]=P(i,R+14); const c=Math.cos(ang(i));
+      const anchor = Math.abs(c)<0.2?"middle":(c>0?"start":"end");
+      const dy = Math.sin(ang(i))<-0.7? -4 : (Math.sin(ang(i))>0.7? 14 : 4);
+      const val = opt.values ? `<tspan x="${x.toFixed(1)}" dy="15" font-family="var(--font-mono)" font-size="11" fill="var(--muted)">${opt.values(GOALS[i])}</tspan>` : "";
+      g+=`<text x="${x.toFixed(1)}" y="${(y+dy - (opt.values && Math.sin(ang(i))<-0.7?12:0)).toFixed(1)}" text-anchor="${anchor}" font-size="${opt.fs||13}" font-weight="700" fill="var(--ink)" opacity="${op}">${GOALS[i].short}${val}</text>`;
+    }
+  }
+  const sx = opt.labels===false?0:Math.round(size*0.26);
+  return `<svg viewBox="${-sx} 0 ${size+2*sx} ${size}" width="100%" role="img" aria-label="${esc(opt.aria||"Zielerreichung im Radar")}">${g}</svg>`;
+}
+
+function lineChart(series, opt){
+  const W=320,H=180,l=36,r=16,tp=12,b=24;
+  const xs=opt.years, n=xs.length;
+  let lo=opt.min, hi=opt.max;
+  for(const s of series) for(const v of s.vals){ if(v==null) continue; lo=Math.min(lo,v); hi=Math.max(hi,v); }
+  const span=hi-lo||1; lo-=span*0.08; hi+=span*0.08;
+  const X=i=>l+(W-l-r)*i/(n-1), Y=v=>tp+(H-tp-b)*(1-(v-lo)/(hi-lo));
+  let g="";
+  if(opt.band){ const [a,bb]=opt.band; const y1=Y(Math.min(hi,bb)), y2=Y(Math.max(lo,a)); if(y2>y1) g+=`<rect x="${l}" y="${y1.toFixed(1)}" width="${W-l-r}" height="${(y2-y1).toFixed(1)}" fill="var(--good)" opacity=".12"/>`; }
+  const ticks=niceTicks(lo,hi,4);
+  for(const tv of ticks){ const y=Y(tv); g+=`<line x1="${l}" x2="${W-r}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--line)"/><text x="${l-6}" y="${(y+4).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="var(--font-mono)">${fmt(tv, opt.dec??1)}</text>`; }
+  xs.forEach((yr,i)=>{ if(n<=7 || i%2===0 || i===n-1) g+=`<text x="${X(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="var(--font-mono)">${opt.short?("’"+String(yr).slice(2)):yr}</text>`; });
+  for(const s of series){
+    const pts=s.vals.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);
+    if(!pts.length) continue;
+    g+=`<polyline points="${pts.map(p=>p.map(x=>x.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="${s.color}" stroke-width="${s.w||2.5}" stroke-linejoin="round" stroke-linecap="round" ${s.dash?'stroke-dasharray="4 4"':''}/>`;
+    const last=pts[pts.length-1]; g+=`<circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.5" fill="${s.color}"/>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(opt.aria||"Verlauf")}">${g}</svg>`;
+}
+function niceTicks(lo,hi,count){
+  const span=hi-lo, step0=span/count, mag=Math.pow(10,Math.floor(Math.log10(step0)));
+  const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=step0)||mag*10;
+  const out=[]; for(let v=Math.ceil(lo/step)*step; v<=hi+1e-9; v+=step) out.push(Math.round(v*1000)/1000); return out;
+}
+
+/* =========================================================
+   ANSICHTEN
+   ========================================================= */
+const app=document.getElementById("app");
+const VIEWS={start:renderStart, lage:renderLage, quiz:renderQuiz, spiel:renderSpiel, berater:renderBerater, auswertung:renderAuswertung, quellen:renderQuellen};
+function current(){ const h=(location.hash||"").replace("#",""); return VIEWS[h]?h:"start"; }
+function go(v){ if(location.hash!=="#"+v) location.hash=v; else render(); }
+function render(){
+  const v=current();
+  document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-current", b.dataset.go===v?"page":"false"));
+  app.innerHTML=`<section class="view" id="v-${v}"></section>`;
+  VIEWS[v](app.firstElementChild);
+  window.scrollTo({top:0});
+}
+window.addEventListener("hashchange",render);
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-go]"); if(b){ e.preventDefault(); go(b.dataset.go); } });
+
+/* ---------- START ---------- */
+function renderStart(el){
+  const s=Object.fromEntries(GOALS.map(g=>[g.k,score(g.k,START[g.k],2026,null)]));
+  el.innerHTML=`
+  <div class="hero">
+    <div>
+      <p class="eyebrow">SOWI Q1 · Inhaltsfeld 4: Wirtschaftspolitik</p>
+      <h1 style="margin-top:10px">Vier Ziele. Vier Kabinette. <em>Keins</em> bekommt alles.</h1>
+      <p class="lead">Ihr regiert Deutschland von 2027 bis 2031. Jedes Jahr beschließt euer Kabinett zwei Maßnahmen, mit echten Startdaten von Herbst 2026, verzögerten Wirkungen, einer unabhängigen EZB und der Schuldenbremse. Am Ende zählt, wie nah ihr dem magischen Viereck gekommen seid.</p>
+      <div class="row" style="margin-top:22px">
+        <button class="btn primary big" data-go="lage">Lagebild 2026 öffnen</button>
+        <button class="btn big" data-go="spiel">${S.phase==="setup"?"Planspiel einrichten":"Zum laufenden Planspiel"}</button>
+      </div>
+    </div>
+    <div class="hero-radar">${radarSVG(s,{size:380,fs:19,color:"var(--t1)",aria:"Deutschland 2026 im magischen Viereck"})}
+      <p class="small muted" style="text-align:center">Deutschland 2026: Zielerreichung je Ecke. Gestrichelt = Ziel erreicht.</p></div>
+  </div>
+  <div>
+    <h2 style="font-size:1.5rem;margin-bottom:14px">Ablauf der Doppelstunde</h2>
+    <div class="stages">
+      ${[["lage","1","Lagebild 2026","10 Min · Beamer","Wo steht Deutschland? Werte schätzen, aufdecken, bewerten."],
+         ["quiz","2","Aufwärm-Quiz","5 Min · Team-Handys","Positiv oder normativ? Wer ist zuständig? Welches Marktversagen?"],
+         ["spiel","3","Planspiel","50 Min · 5 Runden","Pro Jahr zwei Maßnahmen beschließen, begründen, Bilanz am Beamer."],
+         ["auswertung","4","Auswertung & Oktogon","25 Min · Plenum","Wer hat was geopfert? Dann: Achteck aufdecken und neu bewerten."]]
+        .map(x=>`<button class="stage" data-go="${x[0]}"><span class="step">${x[1]}</span><span class="min">${x[3]}</span><h3>${x[2]}</h3><p>${x[4]}</p></button>`).join("")}
+    </div>
+  </div>
+  <div class="join">
+    <div class="join-qr">${QR_SVG}</div>
+    <div><p class="eyebrow" style="color:#B9C4DA">Mitmachen per Handy</p><h2>Scannen, dann Quiz oder Berater öffnen</h2>
+      <p>Alle Teams brauchen nur ein Handy pro Gruppe. Die Seite läuft ohne Anmeldung und speichert nichts über euch.</p>
+      <p class="num join-url">nb-gsn.github.io/SowiPlanspiel</p>
+      <div class="row" style="margin-top:14px"><button class="btn primary" data-go="quiz">Quiz</button><button class="btn" data-go="berater">Berater</button></div></div>
+  </div>
+  <div>
+    <h2 style="font-size:1.5rem;margin-bottom:6px">Rollen im Kabinett (je 3 Personen)</h2>
+    <p class="muted" style="margin-bottom:14px">12 Schüler:innen = 4 Kabinette à 3. Jede Rolle hat eine feste Aufgabe, damit niemand nur zuschaut.</p>
+    <div class="roles">
+      <div class="panel role"><div class="ico">${iconSVG("euro")}</div><h4>Finanzministerium</h4><p>Hütet den Haushalt: 25 Mrd. € Spielraum pro Jahr (Schuldenbremse) plus 60 Mrd. € Sondervermögen für das ganze Spiel. Darf eine Notlage erklären, aber nur im Krisenjahr.</p></div>
+      <div class="panel role"><div class="ico">${iconSVG("chart")}</div><h4>Wirtschaftsministerium</h4><p>Schlägt Maßnahmen vor und vertritt Wachstum und Beschäftigung. Nutzt den „Berater“ auf dem Handy, um Wirkungsketten zu prüfen.</p></div>
+      <div class="panel role"><div class="ico">${iconSVG("pen")}</div><h4>Analyse &amp; Sprecher:in</h4><p>Notiert jede Runde, welches Ziel Vorrang hatte und warum. Trägt den Kabinettsbeschluss am Beamer ein und erklärt ihn dem Kurs in 30 Sekunden.</p></div>
+    </div>
+  </div>`;
+}
+function iconSVG(n){
+  const p={euro:'<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10h9M4 14h9" />', chart:'<path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/>', pen:'<path d="M4 20l4-1 11-11-3-3L5 16l-1 4zM14 6l3 3"/>'}[n];
+  return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+}
+
+/* ---------- LAGEBILD ---------- */
+let lageShown = {};
+function renderLage(el){
+  const s=Object.fromEntries(GOALS.map(g=>[g.k,score(g.k,START[g.k],2026,null)]));
+  const allShown = CORE.every(g=>lageShown[g.k]);
+  el.innerHTML=`
+  <div class="lage-head">
+    <div><p class="eyebrow">Lagebild · Stand November 2026</p><h1 style="margin-top:8px">Deutschland im magischen Viereck</h1>
+    <p class="muted" style="margin-top:8px;max-width:70ch">Erst schätzen, dann aufdecken: Tippt zu jedem Ziel einen Wert, bevor ihr die Karte anklickt. Grün hinterlegt ist jeweils der Zielbereich nach § 1 StabG und gängiger Konvention.</p></div>
+    <div class="row"><button class="btn ${allShown?"":"primary"}" id="showAll">${allShown?"Alle verdecken":"Alle aufdecken"}</button></div>
+  </div>
+  <div class="lage-grid">
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px;align-items:center">
+      ${radarSVG(allShown?s:Object.fromEntries(GOALS.map(g=>[g.k,0])),{size:360,fs:17,color:"var(--t1)",values:g=>allShown&&g.core?`${fmt(START[g.k],1)} %`:"", aria:"Zielerreichung Deutschland 2026"})}
+      <p class="small muted" style="text-align:center">${allShown?"Gestrichelte Linie = Ziel erreicht. 2026 liegt keine Ecke auf der Linie.":"Das Radar füllt sich, wenn alle vier Werte aufgedeckt sind."}</p>
+    </div>
+    <div class="tiles">
+      ${CORE.map(g=>{ const L=LAGE[g.k]; const shown=!!lageShown[g.k];
+        const band = g.k==="infl"?[1.5,2.5]: g.k==="alq"?[0,3]: g.k==="lb"?[-1,1]:[2,3];
+        return `<button class="tile" data-tile="${g.k}" style="text-align:left" aria-label="${esc(g.name)} ${shown?"verdecken":"aufdecken"}">
+          <div class="meta"><h3>${g.name}</h3><span class="pill ${shown?L.status[1]:"neutral"}">${shown?L.status[0]:"Tippen zum Aufdecken"}</span></div>
+          <div class="meta"><span class="val ${shown?"":"hidden"}">${shown?L.val:"0,0 %"}</span><span class="small muted">${g.ind}<br>${L.when}</span></div>
+          ${lineChart([{vals:[...HISTORY[g.k], shown?START[g.k]:null], color:"var(--ink)"}],{years:[...HISTORY.years,2026], min:g.k==="bip"?-4:0, max:g.k==="infl"?7:g.k==="lb"?9:g.k==="alq"?7:4, band, short:true, aria:g.ind+" 2015 bis 2026"})}
+          <p class="small" ${shown?"":"hidden"}>${L.note}</p>
+          <p class="src">Ziel: ${g.target} · Quelle: ${L.src}</p>
+        </button>`; }).join("")}
+    </div>
+  </div>
+  <div class="panel">
+    <h3 style="font-size:1.1rem;margin-bottom:6px">Impuls fürs Plenum</h3>
+    <p class="muted">Welche zwei Ziele stehen 2026 im deutlichsten Konflikt? Nutzt den Methodenkasten: Maßnahme statt Ziel betrachten, Wirkungskette verfolgen, Zeithorizont und Ausmaß beachten. Beispiel: Die EZB erhöhte im Juni 2026 den Leitzins um 0,25 Prozentpunkte. Was bedeutet das für Preise und Beschäftigung?</p>
+  </div>`;
+  el.querySelector("#showAll").onclick=()=>{ const v=!allShown; CORE.forEach(g=>lageShown[g.k]=v); renderLage(el); };
+  el.querySelectorAll("[data-tile]").forEach(b=>b.onclick=()=>{ lageShown[b.dataset.tile]=!lageShown[b.dataset.tile]; renderLage(el); });
+}
+
+/* ---------- QUIZ ---------- */
+const QUIZ=[
+  {t:"Positiv oder normativ?", q:"„Die Arbeitslosenquote betrug im Juli 2026 6,4 Prozent.“", o:["positiv","normativ"], a:0, e:"Eine überprüfbare Tatsachenaussage (Statistik). Messbar, also positiv."},
+  {t:"Positiv oder normativ?", q:"„Drei Millionen Arbeitslose sind für ein reiches Land beschämend.“", o:["positiv","normativ"], a:1, e:"„Beschämend“ ist eine Wertung. Die Zahl ist positiv, die Aussage als Ganzes normativ."},
+  {t:"Positiv oder normativ?", q:"„Steuersenkungen für Unternehmen erhöhen die Investitionen.“", o:["positiv","normativ"], a:0, e:"Eine Wirkungsbehauptung, die man empirisch prüfen kann. Umstritten heißt nicht normativ."},
+  {t:"Positiv oder normativ?", q:"„Der Staat sollte die Energiepreise subventionieren.“", o:["positiv","normativ"], a:1, e:"Signalwort „sollte“: eine Forderung, also normativ."},
+  {t:"Positiv oder normativ?", q:"„Die Bürokratie in Deutschland ist erdrückend.“", o:["positiv","normativ"], a:1, e:"Versteckte Wertung im Adjektiv „erdrückend“. Klingt beschreibend, ist aber normativ."},
+  {t:"Positiv oder normativ?", q:"„Die Staatsquote ist zu hoch.“", o:["positiv","normativ"], a:1, e:"Das „zu“ macht die Aussage normativ. „Die Staatsquote beträgt 50,3 %“ wäre positiv."},
+  {t:"Positiv oder normativ?", q:"„Ein Exportüberschuss bedeutet, dass ein Land mehr Waren abgibt, als es erhält.“", o:["positiv","normativ"], a:0, e:"Eine Definition bzw. Beschreibung. Keine Wertung, also positiv."},
+  {t:"Bereich der Wirtschaftspolitik", q:"Die Bundesregierung beschleunigt Genehmigungsverfahren und baut Berichtspflichten ab.", o:["Ordnungspolitik","Prozesspolitik · Konjunktur","Strukturpolitik"], a:0, e:"Es werden Regeln verändert, nicht Ergebnisse. Faustregel: Ordnungspolitik ändert die Spielregeln."},
+  {t:"Bereich der Wirtschaftspolitik", q:"Die EZB erhöht im Juni 2026 den Leitzins um 0,25 Prozentpunkte.", o:["Ordnungspolitik","Prozesspolitik · Konjunktur (Geldpolitik)","Strukturpolitik"], a:1, e:"Kurzfristiger Eingriff in den Wirtschaftsablauf, um das Preisniveau zu beeinflussen. Träger: die unabhängige EZB."},
+  {t:"Bereich der Wirtschaftspolitik", q:"Die Bundesagentur für Arbeit bietet Weiterbildung für Beschäftigte aus der Autozulieferindustrie an.", o:["Ordnungspolitik","Prozesspolitik · Konjunktur","Strukturpolitik"], a:2, e:"Gezielte Hilfe für eine Branche bzw. Gruppe im Wandel: Strukturpolitik (Arbeitsmarkt, Strukturanpassung)."},
+  {t:"Bereich der Wirtschaftspolitik", q:"Der Bundestag beschließt ein Sondervermögen von 500 Mrd. € für Infrastruktur und Klimaneutralität.", o:["Ordnungspolitik","Prozesspolitik · Wachstumspolitik","Verteilungspolitik"], a:1, e:"Ziel ist das Produktionspotenzial (Wachstumspolitik), mit strukturpolitischen Elementen. Mehrfachzuordnung mit Schwerpunkt begründen."},
+  {t:"Bereich der Wirtschaftspolitik", q:"Das Wohngeld wird erhöht.", o:["Ordnungspolitik","Prozesspolitik · Verteilungspolitik","Strukturpolitik"], a:1, e:"Es geht um Umverteilung über Sozialleistungen, also Verteilungspolitik."},
+  {t:"Träger", q:"Wer entscheidet über den Leitzins für Deutschland?", o:["Bundesregierung","Deutsche Bundesbank allein","Europäische Zentralbank (EZB)","Bundestag"], a:2, e:"Die Geldpolitik liegt beim Eurosystem. Die EZB ist unabhängig und vorrangig der Preisstabilität verpflichtet (Art. 127 AEUV)."},
+  {t:"Träger", q:"Wer legt die Löhne in Deutschland fest?", o:["Die Bundesregierung","Gewerkschaften und Arbeitgeberverbände","Das Bundesverfassungsgericht","Die Bundesagentur für Arbeit"], a:1, e:"Tarifautonomie nach Art. 9 Abs. 3 GG. Der Staat setzt nur den Rahmen, etwa den Mindestlohn."},
+  {t:"Träger", q:"Wer ist für Zölle gegenüber den USA zuständig?", o:["Bundestag","Bundesregierung","Europäische Union","Welthandelsorganisation"], a:2, e:"Handelspolitik gegenüber Drittstaaten ist ausschließliche Zuständigkeit der EU."},
+  {t:"Träger", q:"Welches große Steuerungsinstrument bleibt der Bundesregierung im Wesentlichen?", o:["Geldpolitik","Fiskalpolitik","Handelspolitik","Lohnpolitik"], a:1, e:"Einnahmen und Ausgaben des Staates. Darum wird über Haushalt und Schuldenbremse so heftig gestritten."},
+  {t:"Marktversagen", q:"Ein Deich schützt alle Anwohner, niemand kann ausgeschlossen werden.", o:["Öffentliches Gut","Externer Effekt","Natürliches Monopol","Informationsasymmetrie"], a:0, e:"Nichtausschließbarkeit und Nichtrivalität: Trittbrettfahrerproblem, kein privates Angebot."},
+  {t:"Marktversagen", q:"Eine Fabrik leitet Abwasser in einen Fluss, Fischer flussabwärts verlieren ihren Fang.", o:["Öffentliches Gut","Negativer externer Effekt","Natürliches Monopol","Informationsasymmetrie"], a:1, e:"Kosten fallen bei Dritten an, ohne über den Preis abgegolten zu werden. Antwort: Internalisierung."},
+  {t:"Marktversagen", q:"Ein einziges Stromnetz ist billiger als mehrere parallele Netze.", o:["Öffentliches Gut","Externer Effekt","Natürliches Monopol","Informationsasymmetrie"], a:2, e:"Stark fallende Durchschnittskosten. Antwort: Regulierung durch die Bundesnetzagentur."},
+  {t:"Marktversagen", q:"Der Verkäufer eines Gebrauchtwagens kennt die Mängel, die Käuferin nicht.", o:["Öffentliches Gut","Externer Effekt","Natürliches Monopol","Informationsasymmetrie"], a:3, e:"Eine Marktseite weiß mehr. Antwort: Informationspflichten, Standards."},
+  {t:"Staatsversagen", q:"Ein Konjunkturprogramm wirkt erst, als der Aufschwung längst da ist.", o:["Informationsproblem","Zeitproblem","Eigeninteressen","Einfluss organisierter Interessen"], a:1, e:"Zwischen Erkennen, Entscheiden und Wirken vergehen Monate bis Jahre."},
+  {t:"Staatsversagen", q:"Eine Branchensubvention wird leicht beschlossen, aber kaum wieder abgeschafft.", o:["Informationsproblem","Zeitproblem","Folgeprobleme","Einfluss organisierter Interessen"], a:3, e:"Der Nutzen ist für wenige groß, die Kosten für viele klein. Gut organisierte Gruppen setzen sich durch."},
+  {t:"Zielbeziehung", q:"Wirtschaftswachstum und hoher Beschäftigungsstand", o:["Zielharmonie","Zielkonflikt","Zielneutralität"], a:0, e:"Wächst die Produktion, werden in der Regel mehr Arbeitskräfte gebraucht."},
+  {t:"Zielbeziehung", q:"Zinserhöhung gegen Inflation: Was folgt für die Beschäftigung?", o:["Zielharmonie","Zielkonflikt","Zielneutralität"], a:1, e:"Teurere Kredite → weniger Investitionen und Konsum → weniger Beschäftigung. Genau die Lage der EZB 2026."},
+  {t:"Zielbeziehung", q:"Deutschland hat einen Leistungsbilanzüberschuss von rund 4,6 %. Ein Konjunkturpaket steigert die Importe. Was gilt für das außenwirtschaftliche Gleichgewicht?", o:["Es verschlechtert sich","Es verbessert sich","Keine Wirkung"], a:1, e:"Der Überschuss sinkt Richtung Ausgleich. Bei einem Überschuss harmonieren Binnenwachstum und Außenwirtschaft eher."},
+  {t:"Methodenkasten", q:"Umweltauflagen erhöhen kurzfristig Kosten, lösen langfristig aber Innovation aus. Welcher Prüfschritt beschreibt das?", o:["Ausmaß beachten","Zeithorizont beachten","Maßnahme statt Ziel betrachten"], a:1, e:"Viele Zielbeziehungen kehren sich über die Zeit um: kurzfristig Konflikt, langfristig Harmonie."},
+  {t:"Methodenkasten", q:"Ein moderater Mindestlohn wirkt anders als ein sehr hoher. Welcher Prüfschritt?", o:["Ausmaß beachten","Zeithorizont beachten","Wirkungskette verfolgen"], a:0, e:"Die Stärke des Eingriffs entscheidet mit, ob Ziele harmonieren oder konkurrieren."},
+  {t:"Rechnen", q:"Der Verbraucherpreisindex steigt von 124,5 auf 128,0. Wie hoch ist die Inflationsrate?", o:["2,7 %","2,8 %","3,5 %","3,0 %"], a:1, e:"(128,0 − 124,5) ÷ 124,5 × 100 = 2,81 %"},
+  {t:"Rechnen", q:"Tariflohn +4,2 %, Inflation 2,8 %. Wie hoch ist der Reallohnzuwachs (genau)?", o:["1,4 %","1,36 %","7,0 %","1,5 %"], a:1, e:"(1,042 ÷ 1,028 − 1) × 100 = 1,36 %. Die einfache Subtraktion (1,4 %) ist nur eine Näherung."},
+  {t:"Magisches Viereck", q:"Welches Ziel steht NICHT im Stabilitätsgesetz von 1967?", o:["Stabilität des Preisniveaus","Hoher Beschäftigungsstand","Schutz der natürlichen Umwelt","Außenwirtschaftliches Gleichgewicht"], a:2, e:"Umwelt, Verteilung, Arbeitsbedingungen und Ressourcen sind Erweiterungen. Dass sie dazugehören sollten, ist eine normative Forderung."},
+  {t:"Magisches Viereck", q:"Woran misst man das außenwirtschaftliche Gleichgewicht?", o:["Exportvolumen in Mrd. €","Leistungsbilanzsaldo in % des BIP","Wechselkurs Euro/Dollar","Zahl der Handelsabkommen"], a:1, e:"Ziel ist ein ausgeglichener Saldo. Die EU sieht einen Überschuss über 6 % des BIP als Ungleichgewicht."},
+  {t:"Magisches Viereck", q:"Warum liegt das Inflationsziel bei 2 % und nicht bei 0 %?", o:["Weil der Staat Schulden hat","Sicherheitsabstand zur Deflation","Weil Löhne sonst sinken müssen","Weil die EU es vorschreibt"], a:1, e:"Deflation kann eine Abwärtsspirale auslösen. Weitere Gründe: Messfehler, Spielraum für Zinssenkungen und relative Preise."},
+  {t:"Phillips-Kurve", q:"Was zeigte die Stagflation der 1970er-Jahre?", o:["Inflation senkt dauerhaft die Arbeitslosigkeit","Hohe Inflation und hohe Arbeitslosigkeit können gleichzeitig auftreten","Zinsen haben keine Wirkung","Exporte sind wichtiger als Konsum"], a:1, e:"Nach den Ölpreisschocks traten beide Übel gleichzeitig auf. Die ursprüngliche Phillips-Kurve war damit widerlegt."},
+];
+let QZ=null;
+function newQuiz(){ const pool=[...QUIZ].sort(()=>Math.random()-.5); const pick=[]; const seen={}; for(const q of pool){ seen[q.t]=(seen[q.t]||0)+1; if(seen[q.t]<=2) pick.push(q); if(pick.length===10) break; } QZ={qs:pick, i:0, res:[], answered:null}; }
+function renderQuiz(el){
+  if(!QZ) newQuiz();
+  const done = QZ.i>=QZ.qs.length;
+  const right = QZ.res.filter(Boolean).length;
+  if(done){
+    el.innerHTML=`<div class="quiz"><div class="qcard" style="align-items:flex-start">
+      <p class="eyebrow">Ergebnis</p><h2 style="font-size:2.4rem">${right} von ${QZ.qs.length} richtig</h2>
+      <div class="qprog" style="width:100%">${QZ.res.map(r=>`<span class="${r?"ok":"no"}"></span>`).join("")}</div>
+      <p class="muted">${right>=8?"Stark. Ihr seid bereit fürs Kabinett.":right>=5?"Solide Basis. Schaut euch die Erklärungen zu den Fehlern nochmal an.":"Lest im Arbeitsblatt nach: Kapitel 2 (positiv/normativ) und 3 (Bereiche, Träger)."}</p>
+      <div class="row"><button class="btn primary" id="again">Neue Runde</button><button class="btn" data-go="berater">Zum Berater</button></div>
+    </div></div>`;
+    el.querySelector("#again").onclick=()=>{ newQuiz(); renderQuiz(el); };
+    return;
+  }
+  const q=QZ.qs[QZ.i]; const ans=QZ.answered;
+  el.innerHTML=`<div class="quiz"><div class="qcard">
+    <div class="row"><span class="tag">${q.t}</span><span class="spacer"></span><span class="num small muted">Frage ${QZ.i+1}/${QZ.qs.length}</span></div>
+    <div class="qprog">${QZ.qs.map((_,i)=>`<span class="${i<QZ.res.length?(QZ.res[i]?"ok":"no"):(i===QZ.i?"cur":"")}"></span>`).join("")}</div>
+    <h2>${esc(q.q)}</h2>
+    <div class="opts">${q.o.map((o,i)=>`<button class="opt ${ans!=null?(i===q.a?"right":(i===ans?"wrong":"")):""}" data-i="${i}" ${ans!=null?"disabled":""}>${esc(o)}</button>`).join("")}</div>
+    ${ans!=null?`<div class="explain"><strong>${ans===q.a?"Richtig.":"Nicht ganz."}</strong> ${esc(q.e)}</div><div class="row"><span class="spacer"></span><button class="btn primary" id="next">${QZ.i===QZ.qs.length-1?"Ergebnis zeigen":"Weiter"}</button></div>`:""}
+  </div><p class="small muted" style="text-align:center;margin-top:12px">Tipp für die Lehrkraft: Das Quiz läuft auf jedem Handy über denselben Link.</p></div>`;
+  el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ QZ.answered=+b.dataset.i; QZ.res.push(QZ.answered===q.a); renderQuiz(el); });
+  const nx=el.querySelector("#next"); if(nx) nx.onclick=()=>{ QZ.i++; QZ.answered=null; renderQuiz(el); };
+}
+
+/* ---------- PLANSPIEL ---------- */
+let timerHandle=null;
+function renderSpiel(el){
+  if(S.phase==="setup") return renderSetup(el);
+  const n=S.nTeams, r=S.round, yr=YEARS[r-1];
+  const ev=EVENTS[S.event];
+  const allPicked = activeTeams().every(t=>(t.choices[r-1]||[]).length===2);
+  const head=`
+  <div class="gamebar">
+    <div><div class="year num">${yr}</div><div class="sub">Runde ${r} von 5 · ${S.phase==="decide"?"Kabinettssitzung":"Jahresbilanz"}</div></div>
+    <div class="yearsteps" aria-hidden="true">${YEARS.map((_,i)=>`<span class="${i<r-1||(i===r-1&&S.phase==="result")?"done":(i===r-1?"now":"")}"></span>`).join("")}</div>
+    <span class="spacer"></span>
+    ${S.phase==="decide"?`<div class="row"><span class="timer ${S.timer.left<=60?"low":""}" id="timer">${mmss(S.timer.left)}</span>
+      <button class="btn small" id="tStart">${S.timer.running?"Pause":"Start"}</button><button class="btn small ghost" style="color:inherit" id="tReset" aria-label="Timer zurücksetzen">↺ ${Math.round(S.timer.sec/60)} Min</button></div>`:""}
+    ${S.phase==="decide"?`<button class="btn primary" id="evalBtn" ${allPicked?"":"disabled"}>Jahr ${yr} auswerten</button>`:
+      (r<5?`<button class="btn primary" id="nextBtn">Weiter ins Jahr ${YEARS[r]}</button>`:`<button class="btn primary" data-go="auswertung">Zur Auswertung</button>`)}
+  </div>`;
+  let body="";
+  if(r===EVENT_ROUND && ev) body+=`<div class="banner"><span class="flash">Eilmeldung</span><div><h3>${ev.title}</h3><p>${ev.text} <strong>Das Finanzministerium darf in diesem Jahr eine Notlage erklären</strong> (Art. 115 Abs. 2 GG): +${NOTLAGE_PLUS} Mrd. € Spielraum, danach ${NOTLAGE_TILGUNG} Mrd. € Tilgung pro Jahr.</p></div></div>`;
+  if(S.phase==="decide"){
+    body+=`<div class="teams" style="--n:${n}">${activeTeams().map((t,i)=>teamDecideCard(t,i,r)).join("")}</div>
+    <p class="small muted">Analyse-Person jedes Teams kommt nach vorn, tippt auf „Kabinettsbeschluss“ und trägt zwei Maßnahmen samt Begründung ein. Das Jahr kann ausgewertet werden, sobald alle Teams zwei Maßnahmen gewählt haben.</p>`;
+  } else {
+    body+=resultView(r);
+  }
+  el.innerHTML=head+body+`<div class="row"><span class="spacer"></span><span id="resetZone"><button class="btn small ghost" id="resetBtn">Neues Spiel beginnen</button></span></div>`;
+  wireSpiel(el);
+}
+function mmss(s){ return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`; }
+function teamDecideCard(t,i,r){
+  const picks=t.choices[r-1]||[]; const b=budgetState(t,r,picks);
+  const prev = r>1? teamIndex(t,r-1,S.event,null,false):null;
+  return `<div class="team" style="--tc:${tc(i)}">
+    <div class="row" style="justify-content:space-between"><h3><span class="dot"></span>${esc(t.name)}</h3>${prev!=null?`<span class="pill ${scoreClass(prev)} num">${fmt(prev,0)} Pkt.</span>`:""}</div>
+    <div class="chips">${[0,1].map(j=>picks[j]?`<div class="chip">${esc(M[picks[j]].name)}<span class="c">${M[picks[j]].cost>0?"−":"+"}${Math.abs(M[picks[j]].cost)} Mrd.</span></div>`:`<div class="chip empty">Maßnahme ${j+1} offen</div>`).join("")}</div>
+    ${budgetBar(b)}
+    ${t.notes[r-1]?`<p class="why">„${esc(t.notes[r-1])}“</p>`:""}
+    <button class="btn ${picks.length===2?"":"dark"}" data-team="${i}">${picks.length===2?"Beschluss ändern":"Kabinettsbeschluss"}</button>
+  </div>`;
+}
+function budgetBar(b){
+  const used=Math.max(0,b.reg), pct=Math.min(100,used/Math.max(1,b.room)*100);
+  return `<div class="budget">
+    <div class="row" style="justify-content:space-between"><span>Haushalt (Schuldenbremse)</span><span class="num ${b.ok?"":"up-bad"}">${fmt(b.reg,0)} / ${b.room} Mrd. €</span></div>
+    <div class="bar"><i style="width:${pct}%;background:${b.ok?"var(--ink)":"var(--bad)"}"></i></div>
+    <div class="row" style="justify-content:space-between"><span class="muted">Sondervermögen übrig</span><span class="num muted">${fmt(b.svLeft-b.sv,0)} von ${SV_POT} Mrd. €</span></div>
+  </div>`;
+}
+function resultView(r){
+  const n=S.nTeams; const sims=activeTeams().map(t=>simulate(t,r,S.event));
+  const ezb=sims[0][r];
+  const ranking=activeTeams().map((t,i)=>({i, name:t.name, sc:teamIndex(t,r,S.event,null,false)})).sort((a,b)=>b.sc-a.sc);
+  let h=`<div class="ezb"><span class="pill neutral num" style="font-size:.9rem;padding:8px 12px">EZB</span><div><p class="eyebrow">EZB-Ratssitzung Dezember ${YEARS[r-1]}</p>
+    <p>${ezbText(sims)}</p></div></div>`;
+  h+=`<div class="results" style="--n:${n}">${activeTeams().map((t,i)=>{
+    const y=sims[i][r], p=sims[i][r-1]; const idx=index(y.s,null,false);
+    return `<div class="res" style="--tc:${tc(i)}">
+      <div class="row" style="justify-content:space-between"><h3><span class="dot" style="width:12px;height:12px;border-radius:50%;background:${tc(i)}"></span>${esc(t.name)}</h3><span class="score-big" title="Zielerreichung ${YEARS[r-1]}">${fmt(idx,0)}</span></div>
+      ${radarSVG(y.s,{size:260,fs:15,color:tc(i),aria:`Zielerreichung ${t.name} ${YEARS[r-1]}`})}
+      <div class="vals">${CORE.map(g=>{ const d=y.v[g.k]-p.v[g.k]; const a=arrowFor(g.k,d);
+        return `<span class="k">${g.short}</span><span class="v">${fmt(y.v[g.k],1)} %</span><span class="d ${a.cls}">${fmtSigned(d)}</span>`; }).join("")}</div>
+      <div class="chips">${(t.choices[r-1]||[]).map(id=>`<div class="chip" style="min-height:0;padding:6px 10px;font-size:.82rem">${esc(M[id].name)}</div>`).join("")}</div>
+      ${t.notes[r-1]?`<p class="why">„${esc(t.notes[r-1])}“</p>`:""}
+      <details class="chain"><summary>Wirkungsketten ${YEARS[r-1]}</summary>${chainList(y, r)}</details>
+    </div>`; }).join("")}</div>`;
+  h+=`<div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 style="font-size:1.2rem">Zwischenstand: Durchschnitt der Zielerreichung ${r===1?"2027":"2027–"+YEARS[r-1]}</h3><span class="small muted">0 = alle Ziele weit verfehlt · 100 = alle vier Ziele erreicht</span></div>
+    <div class="rank">${ranking.map((x,pos)=>`<div class="rank-row" style="--tc:${tc(x.i)}"><span class="pos">${pos+1}</span><span class="nm">${esc(x.name)}</span><span class="track"><i style="width:${x.sc}%"></i></span><span class="sc">${fmt(x.sc,1)}</span><span></span></div>`).join("")}</div></div>
+  <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:6px">Begründungsrunde (2 Min.)</h3><p class="muted">Jede Analyse-Person erklärt in einem Satz: Welches Ziel hatte für euer Kabinett Vorrang, und welches habt ihr dafür in Kauf genommen? Die anderen achten darauf: Ist das eine positive oder eine normative Aussage?</p></div>`;
+  return h;
+}
+function ezbText(sims){
+  const r=S.round; const e=sims[0][r].ezb;
+  const rates=sims.map(s=>s[r].ezb);
+  const uniq=[...new Set(rates.map(x=>x.rate))];
+  const verb = s=> s>0?`erhöht den Leitzins auf <strong class="num">${fmt(s.rate??0,2)} %</strong>`:"";
+  if(uniq.length===1){
+    const x=rates[0];
+    if(x.step>0) return `Die EZB erhöht den Einlagesatz um ${fmt(x.step,2)} auf <strong class="num">${fmt(x.rate,2)} %</strong>, weil die Inflation im Euroraum (≈ ${fmt(x.euroInfl,1)} %) über dem Ziel liegt. Das bremst eure Wirtschaft im nächsten Jahr.`;
+    if(x.step<0) return `Die EZB senkt den Einlagesatz um ${fmt(-x.step,2)} auf <strong class="num">${fmt(x.rate,2)} %</strong>. Die Inflation im Euroraum (≈ ${fmt(x.euroInfl,1)} %) erlaubt das. Das stützt eure Wirtschaft im nächsten Jahr.`;
+    return `Die EZB lässt den Einlagesatz bei <strong class="num">${fmt(x.rate,2)} %</strong> (Inflation im Euroraum ≈ ${fmt(x.euroInfl,1)} %).`;
+  }
+  return `Die EZB reagiert auf die Inflation im Euroraum, zu der Deutschland rund 30 % beiträgt. Weil eure Kabinette unterschiedlich gehandelt haben, gilt im Spiel für jedes Team ein eigener Leitzins: ${activeTeams().map((t,i)=>`${esc(t.name)} <strong class="num">${fmt(rates[i].rate,2)} %</strong>`).join(" · ")}. Das ist eine Vereinfachung: In Wirklichkeit gibt es nur einen Zins für den ganzen Euroraum.`;
+}
+function chainList(y, r){
+  const byKey={};
+  for(const c of y.contrib){ if(!G[c.k].core) continue; const key=c.src+"|"+c.r; (byKey[key]=byKey[key]||{src:c.src, r:c.r, lag:c.lag, list:[], ezb:c.ezb, shock:c.shock}).list.push(c); }
+  const items=Object.values(byKey).sort((a,b)=>a.lag-b.lag);
+  if(!items.length) return `<p class="small muted">Keine Wirkungen.</p>`;
+  return `<ul>${items.map(it=>{
+    const m=MEASURES.find(x=>x.name===it.src);
+    const when = it.ezb? "Zins wirkt mit Verzögerung" : it.shock? "äußerer Schock" : it.lag===0? "sofort" : `beschlossen ${YEARS[it.r-1]}, wirkt verzögert`;
+    return `<li><strong>${esc(it.src)}</strong> <span>(${when})</span><br>${it.list.map(c=>{ const a=arrowFor(c.k,c.val); return `<span class="${a.cls}" style="white-space:nowrap">${G[c.k].short} ${fmtSigned(c.val,2)}</span>`; }).join(" · ")}${m&&it.lag===0?`<br><span>${esc(m.chain)}</span>`:""}</li>`; }).join("")}</ul>`;
+}
+
+function wireSpiel(el){
+  const q=s=>el.querySelector(s);
+  el.querySelectorAll("[data-team]").forEach(b=>b.onclick=()=>openCabinet(+b.dataset.team));
+  if(q("#evalBtn")) q("#evalBtn").onclick=()=>{ stopTimer(); S.phase="result"; save(); render(); };
+  if(q("#nextBtn")) q("#nextBtn").onclick=()=>{ S.round++; S.phase="decide"; S.timer.left=S.timer.sec; S.timer.running=false; save(); render(); };
+  if(q("#tStart")) q("#tStart").onclick=()=>{ S.timer.running?stopTimer():startTimer(); render(); };
+  if(q("#tReset")) q("#tReset").onclick=()=>{ stopTimer(); const opts=[300,360,420,480,540,600]; const i=opts.indexOf(S.timer.sec); S.timer.sec = S.timer.left!==S.timer.sec? S.timer.sec : opts[(i+1)%opts.length]; S.timer.left=S.timer.sec; save(); render(); };
+  q("#resetBtn").onclick=()=>{ q("#resetZone").innerHTML=`<span class="confirm"><span>Alle Entscheidungen löschen und neu starten?</span><button class="btn small dark" id="resetYes">Ja, neues Spiel</button><button class="btn small" id="resetNo">Abbrechen</button></span>`;
+    q("#resetYes").onclick=()=>{ stopTimer(); S=freshState(); save(); render(); }; q("#resetNo").onclick=()=>render(); };
+}
+function startTimer(){ S.timer.running=true; clearInterval(timerHandle); timerHandle=setInterval(()=>{ S.timer.left=Math.max(0,S.timer.left-1); const t=document.getElementById("timer"); if(t){ t.textContent=mmss(S.timer.left); t.classList.toggle("low",S.timer.left<=60); } if(S.timer.left===0){ stopTimer(); toast("Zeit ist um: Kabinettsbeschlüsse eintragen!"); const b=document.getElementById("tStart"); if(b) b.textContent="Start"; } save(); },1000); }
+function stopTimer(){ S.timer.running=false; clearInterval(timerHandle); save(); }
+
+function renderSetup(el){
+  el.innerHTML=`
+  <div><p class="eyebrow">Planspiel einrichten</p><h1 style="font-size:clamp(2rem,4vw,3rem);margin-top:8px">Vier Kabinette, fünf Jahre</h1>
+  <p class="muted" style="margin-top:8px;max-width:70ch">Dieses Gerät ist die gemeinsame Bühne am Beamer. Der Spielstand wird automatisch in diesem Browser gespeichert, auch wenn die Seite neu geladen wird.</p></div>
+  <div class="setup">
+    <div class="panel"><h3 style="font-size:1.15rem;margin-bottom:12px">Teams</h3>
+      <div class="row" style="margin-bottom:14px"><label class="lbl" for="nTeams" style="margin:0">Anzahl Kabinette</label><select id="nTeams" style="width:auto">${[2,3,4].map(k=>`<option ${k===S.nTeams?"selected":""}>${k}</option>`).join("")}</select></div>
+      <div class="teamin">${S.teams.map((t,i)=>`<div class="f" style="--tc:${tc(i)};${i>=S.nTeams?"opacity:.35":""}"><label class="lbl" for="tn${i}">Name Kabinett ${i+1}</label><input type="text" id="tn${i}" value="${esc(t.name)}" maxlength="28" ${i>=S.nTeams?"disabled":""}></div>`).join("")}</div>
+    </div>
+    <div class="panel"><h3 style="font-size:1.15rem;margin-bottom:4px">Krisenereignis in Runde 3 (2029)</h3><p class="small muted" style="margin-bottom:12px">Trifft alle Teams gleich. Wer vorgesorgt hat, wird weniger hart getroffen.</p>
+      <div class="evpick">${Object.entries(EVENTS).map(([k,e])=>`<label><input type="radio" name="ev" value="${k}" ${S.event===k?"checked":""}><span><strong>${e.title}</strong><br><span class="small muted">${e.text}</span></span></label>`).join("")}
+      <label><input type="radio" name="ev" value="zufall" ${S.event==="zufall"?"checked":""}><span><strong>Zufall</strong><br><span class="small muted">Wird erst in Runde 3 enthüllt.</span></span></label></div>
+    </div>
+  </div>
+  <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:8px">Spielregeln in Kürze</h3>
+    <ul style="margin:0;padding-left:20px;display:grid;gap:6px" class="muted">
+      <li>Jede Runde ist ein Jahr (2027–2031). Pro Jahr beschließt jedes Kabinett <strong>genau zwei Maßnahmen</strong>.</li>
+      <li><strong>Schuldenbremse:</strong> ${BUDGET_BASE} Mrd. € Spielraum pro Jahr. Einnahmen (z. B. CO₂-Preis, Sparpaket) erweitern ihn. Investitionen in Infrastruktur und Energie können aus dem Sondervermögen (${SV_POT} Mrd. € für das ganze Spiel) bezahlt werden.</li>
+      <li><strong>Nicht eure Zuständigkeit:</strong> Leitzins (EZB), Löhne (Tarifparteien), Zölle (EU). Die EZB reagiert aber auf eure Inflation.</li>
+      <li>Viele Maßnahmen wirken <strong>verzögert</strong> oder kehren sich über die Zeit um. Der Berater auf dem Handy zeigt die Richtung, nicht die genauen Zahlen.</li>
+      <li>Gewertet wird die durchschnittliche Zielerreichung im magischen Viereck über alle Jahre.</li>
+    </ul>
+  </div>
+  <div class="row"><button class="btn primary big" id="go">Spiel starten: Jahr 2027</button><button class="btn big" data-go="berater">Berater ansehen</button></div>`;
+  const nT=el.querySelector("#nTeams");
+  nT.onchange=()=>{ S.nTeams=+nT.value; readNames(); save(); renderSetup(el); };
+  function readNames(){ S.teams.forEach((t,i)=>{ const inp=el.querySelector("#tn"+i); if(inp && !inp.disabled) t.name=inp.value.trim()||DEFAULT_NAMES[i]; }); const ev=el.querySelector('input[name="ev"]:checked'); if(ev) S.event=ev.value; }
+  el.querySelectorAll('input[name="ev"]').forEach(x=>x.onchange=()=>{ S.event=x.value; save(); });
+  el.querySelector("#go").onclick=()=>{ readNames(); if(S.event==="zufall"){ const ks=Object.keys(EVENTS); S.event=ks[Math.floor(Math.random()*ks.length)]; S.eventHidden=true; } S.phase="decide"; S.round=1; S.timer.left=S.timer.sec; S.teams.forEach(t=>{t.choices=[];t.notes=[];t.notlage=false;}); save(); render(); };
+}
+
+/* Kabinettssitzung (Auswahl-Dialog) */
+let catFilter="alle";
+function openCabinet(i){
+  const t=S.teams[i], r=S.round; let picks=[...(t.choices[r-1]||[])]; let note=t.notes[r-1]||""; let notlage=t.notlage;
+  const wrap=document.createElement("div"); wrap.className="modal"; wrap.setAttribute("role","dialog"); wrap.setAttribute("aria-modal","true");
+  document.body.appendChild(wrap); document.body.style.overflow="hidden";
+  function close(){ wrap.remove(); document.body.style.overflow=""; render(); }
+  function draw(){
+    const tmp={...t, notlage}; const b=budgetState(tmp,r,picks);
+    const areaKeys=["alle",...Object.keys(AREAS)];
+    wrap.innerHTML=`<div class="sheet" style="--tc:${tc(i)}">
+      <div class="sheet-head"><div><p class="eyebrow">Kabinettsbeschluss ${YEARS[r-1]}</p><h2>${esc(t.name)}</h2></div><span class="spacer"></span>
+        <span class="pill neutral num">${picks.length}/2 gewählt</span>
+        <button class="btn" id="cancel">Abbrechen</button><button class="btn primary" id="ok" ${picks.length===2&&b.ok?"":"disabled"}>Beschließen</button></div>
+      <div class="sheet-body">
+        <div>
+          <div class="cat-filter" role="group" aria-label="Filter nach Bereich">${areaKeys.map(k=>`<button data-cat="${k}" aria-pressed="${catFilter===k}">${k==="alle"?"Alle":AREAS[k]}</button>`).join("")}</div>
+          <div class="measures">${MEASURES.filter(m=>catFilter==="alle"||m.area===catFilter).map(m=>{
+            const sel=picks.includes(m.id); const usedBefore=countPicksBefore(t,m.id,r); const max=m.max??2; const full=usedBefore>=max;
+            const dis = full || (!sel && picks.length>=2);
+            return `<button class="mcard ${sel?"sel":""}" data-m="${m.id}" ${dis&&!sel?"disabled":""} aria-pressed="${sel}">
+              <div class="meta"><span>${AREAS[m.area]}</span><span class="num">${m.cost>0?"kostet "+m.cost:m.cost<0?"bringt "+(-m.cost):"kostenneutral"}${m.cost?" Mrd. €":""}${m.sv?" · SV":""}</span></div>
+              <h4>${esc(m.name)}</h4><p class="small muted">${esc(m.desc)}</p>
+              ${arrowsRow(m)}
+              ${full?`<span class="small up-bad">Schon ${usedBefore}× beschlossen (Maximum)</span>`:usedBefore?`<span class="small muted">Bereits ${usedBefore}× beschlossen, wirkt erneut zusätzlich</span>`:""}
+            </button>`; }).join("")}
+            ${LOCKED.map(l=>`<button class="mcard locked" data-lock="${esc(l.why)}"><div class="meta"><span>nicht zuständig</span><span>🔒</span></div><h4>${esc(l.name)}</h4><p class="small muted">Antippen: Warum geht das nicht?</p></button>`).join("")}
+          </div>
+        </div>
+        <aside class="side">
+          <div class="panel">${budgetBar(b)}${!b.ok?`<p class="small up-bad" style="margin-top:8px">Die Schuldenbremse ist verletzt. Wählt eine günstigere Maßnahme oder eine, die Einnahmen bringt.</p>`:""}</div>
+          ${r===EVENT_ROUND?`<label class="check"><input type="checkbox" id="notlage" ${notlage?"checked":""}><span><strong>Notlage erklären</strong> (Art. 115 Abs. 2 GG): +${NOTLAGE_PLUS} Mrd. € in ${YEARS[r-1]}, danach jedes Jahr ${NOTLAGE_TILGUNG} Mrd. € weniger Spielraum (Tilgung).</span></label>`:(t.notlage&&r>EVENT_ROUND?`<p class="small muted">Notlage aus 2029: ${NOTLAGE_TILGUNG} Mrd. € Tilgung in diesem Jahr.</p>`:"")}
+          <div><label class="lbl" for="note">Begründung: Welches Ziel hat Vorrang, was nehmt ihr in Kauf?</label><textarea id="note" maxlength="200" placeholder="z. B. Wir bekämpfen zuerst die Arbeitslosigkeit und nehmen etwas mehr Inflation in Kauf.">${esc(note)}</textarea></div>
+          <p class="small muted">Legende: ↑ steigt, ⇈ steigt stark, ↓ sinkt · <span class="up-good">grün</span> = in Richtung Ziel, <span class="up-bad">rot</span> = weg vom Ziel. Sofort / nach 1 Jahr / langfristig.</p>
+          <div id="lockInfo"></div>
+        </aside>
+      </div></div>`;
+    wrap.querySelector("#cancel").onclick=close;
+    wrap.querySelector("#ok").onclick=()=>{ t.choices[r-1]=picks; t.notes[r-1]=wrap.querySelector("#note").value.trim(); if(r===EVENT_ROUND) t.notlage=notlage; save(); close(); };
+    wrap.querySelectorAll("[data-cat]").forEach(x=>x.onclick=()=>{ note=wrap.querySelector("#note").value; catFilter=x.dataset.cat; draw(); });
+    wrap.querySelectorAll("[data-m]").forEach(x=>x.onclick=()=>{ note=wrap.querySelector("#note").value; const id=x.dataset.m; picks = picks.includes(id)? picks.filter(p=>p!==id) : [...picks,id].slice(0,2); draw(); });
+    wrap.querySelectorAll("[data-lock]").forEach(x=>x.onclick=()=>{ wrap.querySelector("#lockInfo").innerHTML=`<div class="explain">${x.dataset.lock}</div>`; });
+    const nl=wrap.querySelector("#notlage"); if(nl) nl.onchange=()=>{ note=wrap.querySelector("#note").value; notlage=nl.checked; draw(); };
+  }
+  draw();
+  wrap.addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
+  wrap.querySelector("#cancel").focus();
+}
+function arrowsRow(m){
+  return `<div class="arrows">${CORE.map(g=>{ const a=m.fx[g.k]||[0,0,0];
+    const cells=[a[0]||0, a[1]??a[0]??0, a[a.length-1]||0].map(v=>arrowFor(g.k,v));
+    return `<div title="${g.name}: sofort / nach 1 Jahr / langfristig"><span>${g.short==="Außenwirtschaft"?"Außenw.":g.short==="Beschäftigung"?"Beschäft.":g.short}</span><b>${cells.map(c=>`<span class="${c.cls}">${c.sym}</span>`).join(" ")}</b></div>`; }).join("")}</div>`;
+}
+
+/* ---------- BERATER (für Team-Geräte) ---------- */
+let berFilter="alle";
+function renderBerater(el){
+  const areaKeys=["alle",...Object.keys(AREAS)];
+  el.innerHTML=`<div><p class="eyebrow">Gutachten für die Kabinette</p><h1 style="font-size:clamp(1.9rem,4vw,2.8rem);margin-top:8px">Berater: Maßnahmen und Wirkungsketten</h1>
+    <p class="muted" style="margin-top:8px;max-width:72ch">Öffnet diese Seite auf euren Handys. Die Pfeile zeigen die Richtung der Wirkung auf die vier Ziele: sofort · nach einem Jahr · langfristig. Genaue Zahlen gibt es nicht, auch die Politik muss mit Unsicherheit entscheiden (Informationsproblem).</p></div>
+    <div class="cat-filter" role="group" aria-label="Filter nach Bereich">${areaKeys.map(k=>`<button data-cat="${k}" aria-pressed="${berFilter===k}">${k==="alle"?"Alle":AREAS[k]}</button>`).join("")}</div>
+    <div class="berater-list">${MEASURES.filter(m=>berFilter==="alle"||m.area===berFilter).map(m=>`<article class="bcard">
+      <div class="row" style="justify-content:space-between"><span class="tag">${AREAS[m.area]}</span><span class="num small muted">${m.cost>0?"kostet "+m.cost+" Mrd. €":m.cost<0?"bringt "+(-m.cost)+" Mrd. €":"kostenneutral"}${m.sv?" · Sondervermögen möglich":""}</span></div>
+      <h3>${esc(m.name)}</h3><p class="small muted">Träger: ${esc(m.traeger)}</p><p class="small">${esc(m.desc)}</p>
+      ${arrowsRow(m)}
+      <p class="chainline">${esc(m.chain)}</p></article>`).join("")}</div>
+    <div><h2 style="font-size:1.4rem;margin-bottom:12px">Nicht in der Hand der Bundesregierung</h2>
+    <div class="berater-list">${LOCKED.map(l=>`<article class="bcard" style="background:var(--surface-2)"><h3>🔒 ${esc(l.name)}</h3><p class="small">${esc(l.why)}</p></article>`).join("")}</div></div>`;
+  el.querySelectorAll("[data-cat]").forEach(x=>x.onclick=()=>{ berFilter=x.dataset.cat; renderBerater(el); });
+}
+
+/* ---------- AUSWERTUNG + OKTOGON ---------- */
+const PRESETS={
+  gleich:{label:"Alle gleich", w:EQUAL_W},
+  gewerkschaft:{label:"Gewerkschaft", w:{infl:1,thg:0.5,alq:3,armut:2,lb:0.5,nl:3,bip:1,ee:0.5}},
+  arbeitgeber:{label:"Arbeitgeberverband", w:{infl:1.5,thg:0.5,alq:1,armut:0.5,lb:1.5,nl:0.5,bip:3,ee:0.5}},
+  umwelt:{label:"Umweltverband", w:{infl:0.5,thg:3,alq:0.5,armut:1,lb:0.5,nl:0.5,bip:0.5,ee:3}},
+  ezb:{label:"EZB / Bundesbank", w:{infl:4,thg:0.5,alq:0.5,armut:0.5,lb:1,nl:0.5,bip:1,ee:0.5}},
+  sozial:{label:"Sozialverband", w:{infl:1.5,thg:0.5,alq:2,armut:3,lb:0.5,nl:2,bip:0.5,ee:0.5}},
+};
+let revealAnim=null;
+function renderAuswertung(el){
+  const n = evaluated();
+  if(S.phase==="setup" || n<1){
+    el.innerHTML=`<div class="panel"><h2 style="font-size:1.6rem;margin-bottom:8px">Noch keine Ergebnisse</h2><p class="muted">Die Auswertung füllt sich, sobald im Planspiel das erste Jahr ausgewertet wurde.</p><div class="row" style="margin-top:14px"><button class="btn primary" data-go="spiel">Zum Planspiel</button></div></div>`; return;
+  }
+  const teams=activeTeams(); const sims=teams.map(t=>simulate(t,n,S.event));
+  const rev=S.revealed; const W=S.weights;
+  const rank4=teams.map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,null,false)})).sort((a,b)=>b.sc-a.sc);
+  const rank8=teams.map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,W,true)})).sort((a,b)=>b.sc-a.sc);
+  const shown = rev? rank8 : rank4;
+  const pos4=Object.fromEntries(rank4.map((x,p)=>[x.i,p]));
+  const goals = rev? GOALS : CORE;
+  const years=[2026,...YEARS.slice(0,n)];
+  el.innerHTML=`
+  <div class="lage-head"><div><p class="eyebrow">Auswertung · ${n<5?`Zwischenstand nach ${n} von 5 Jahren`:"Ende der Legislatur 2031"}</p>
+    <h1 style="margin-top:8px">${rev?"Das magische Achteck":"Wer hat welches Ziel geopfert?"}</h1></div>
+    <div class="legend">${teams.map((t,i)=>`<span style="--tc:${tc(i)}"><i></i>${esc(t.name)}</span>`).join("")}</div></div>
+  <div class="results" style="--n:${teams.length}" id="radars">${teams.map((t,i)=>{
+    const last=sims[i][n];
+    return `<div class="res" style="--tc:${tc(i)}"><h3><span style="width:12px;height:12px;border-radius:50%;background:${tc(i)}"></span>${esc(t.name)}</h3>
+      <div class="radar-slot" data-i="${i}">${radarSVG(last.s,{size:260,fs:15,color:tc(i),reveal:rev?1:0})}</div>
+      <div class="vals">${(rev?GOALS:CORE).map(g=>`<span class="k">${g.short}</span><span class="v">${fmt(last.v[g.k],g.dec)}${g.unit}</span><span class="d ${scoreClass(last.s[g.k])==="good"?"up-good":scoreClass(last.s[g.k])==="bad"?"up-bad":"flat"}">${fmt(last.s[g.k],0)}</span>`).join("")}</div>
+    </div>`; }).join("")}</div>
+  <div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 style="font-size:1.25rem">${rev?"Rangliste im Achteck":"Rangliste im Viereck"}</h3><span class="small muted">Durchschnittliche Zielerreichung 2027–${YEARS[n-1]} (0–100)</span></div>
+    <div class="rank" id="rank">${shown.map((x,p)=>{ const mv=rev? pos4[x.i]-p : 0;
+      return `<div class="rank-row" data-i="${x.i}" style="--tc:${tc(x.i)}"><span class="pos">${p+1}</span><span class="nm">${esc(x.name)}</span><span class="track"><i style="width:${x.sc}%"></i></span><span class="sc">${fmt(x.sc,1)}</span><span class="mv ${mv>0?"up-good":mv<0?"up-bad":"flat"}">${rev?(mv>0?"▲"+mv:mv<0?"▼"+(-mv):"="):""}</span></div>`; }).join("")}</div></div>
+  ${rev?revealExtras(n):""}
+  ${!rev?`<div class="reveal-cta"><div><p class="eyebrow" style="color:#B9C4DA">Ausblick</p><h2>Die Simulation hat heimlich vier weitere Ziele mitgerechnet.</h2><p>Umwelt, gerechte Verteilung, humane Arbeitsbedingungen und Ressourcen. Keines davon steht im Stabilitätsgesetz von 1967. Was passiert mit der Rangliste, wenn sie zählen?</p></div><button class="btn primary big" id="reveal">Oktogon aufdecken</button></div>`:""}
+  <div><h2 style="font-size:1.4rem;margin-bottom:12px">Verlauf ${rev?"aller acht Ziele":"der vier Ziele"}</h2>
+  <div class="charts">${goals.map(g=>{ const band = {infl:[1.5,2.5], alq:[0,3], lb:[-1,1], bip:[2,3], thg:null, armut:[0,11], nl:[0,8], ee:[80,100]}[g.k];
+    return `<div class="chartbox"><h4>${g.name}</h4><p class="u">${g.ind} · Ziel: ${g.target}</p>${lineChart(teams.map((t,i)=>({vals:sims[i].map(y=>y.v[g.k]), color:tc(i)})),{years, min:{infl:1.5,alq:3,lb:0,bip:0,thg:430,armut:11,nl:8,ee:55}[g.k], max:{infl:3,alq:6.5,lb:5,bip:2.5,thg:640,armut:16,nl:16,ee:80}[g.k], band, dec:g.dec, aria:g.ind})}</div>`; }).join("")}</div></div>
+  <div class="questions">
+    <div class="panel"><p class="eyebrow">Leitfrage 1</p><h4>Wer hat jetzt „gewonnen“?</h4><p class="muted">Und wer entscheidet, welche Ziele zählen? Die Wirkungen sind positive Aussagen, die Gewichtung der Ziele ist eine normative Entscheidung.</p></div>
+    <div class="panel"><p class="eyebrow">Leitfrage 2</p><h4>Ist das Viereck von 1967 noch zeitgemäß?</h4><p class="muted">Nutzt die drei Positionen aus Kapitel 4.5: Viereck genügt, Sechseck überfällig, das Problem ist die Gewichtung.</p></div>
+    <div class="panel"><p class="eyebrow">Leitfrage 3</p><h4>Wer würde welche Ecke stärker gewichten?</h4><p class="muted">Gewerkschaft, Arbeitgeberverband, Umweltverband, EZB. ${rev?"Probiert die Blickwinkel oben aus.":"Das ist die Brücke zur nächsten Stunde."}</p></div>
+  </div>`;
+  const rb=el.querySelector("#reveal"); if(rb) rb.onclick=()=>doReveal(el, n, sims, rank4);
+  wirePresets(el);
+}
+function revealExtras(n){
+  return `<div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:10px"><h3 style="font-size:1.2rem">Blickwinkel: Wie gewichtet ihr die acht Ziele?</h3><span class="small muted">Die Rangliste oben rechnet sofort neu.</span></div>
+    <div class="presets" style="margin-bottom:14px">${Object.entries(PRESETS).map(([k,p])=>`<button data-preset="${k}" aria-pressed="${S.weightsPreset===k}">${p.label}</button>`).join("")}</div>
+    <div class="weights">${GOALS.map(g=>`<div><label for="w-${g.k}"><span>${g.short}</span><span class="num" id="wv-${g.k}">${fmt(S.weights[g.k],1)}×</span></label><input type="range" id="w-${g.k}" min="0" max="4" step="0.5" value="${S.weights[g.k]}"></div>`).join("")}</div>
+    <p class="small muted" style="margin-top:12px">Hinweis aus dem Arbeitsblatt (4.3, M2): Sobald ein Indikator mehr misst als wirtschaftliche Aktivität, muss entschieden werden, wie stark die Bestandteile zählen. Diese Gewichtung ist unvermeidlich normativ.</p>
+    <details class="chain" style="margin-top:10px"><summary>Startwerte der vier Zusatzziele</summary><ul>${GOALS.filter(g=>!g.core).map(g=>`<li><strong>${g.name}</strong> (${g.ind}): ${HIDDEN_START_NOTE[g.k]}</li>`).join("")}</ul></details></div>`;
+}
+function wirePresets(el){
+  el.querySelectorAll("[data-preset]").forEach(b=>b.onclick=()=>{ S.weightsPreset=b.dataset.preset; S.weights={...PRESETS[b.dataset.preset].w}; save(); updateRanking(el); el.querySelectorAll("[data-preset]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.preset===S.weightsPreset)); GOALS.forEach(g=>{ el.querySelector("#w-"+g.k).value=S.weights[g.k]; el.querySelector("#wv-"+g.k).textContent=fmt(S.weights[g.k],1)+"×"; }); });
+  GOALS.forEach(g=>{ const inp=el.querySelector("#w-"+g.k); if(!inp) return; inp.oninput=()=>{ S.weights[g.k]=+inp.value; S.weightsPreset="eigene"; el.querySelector("#wv-"+g.k).textContent=fmt(+inp.value,1)+"×"; el.querySelectorAll("[data-preset]").forEach(x=>x.setAttribute("aria-pressed","false")); save(); updateRanking(el); }; });
+}
+function updateRanking(el){
+  const n=evaluated(); const teams=activeTeams();
+  const rank4=teams.map((t,i)=>({i,sc:teamIndex(t,n,S.event,null,false)})).sort((a,b)=>b.sc-a.sc);
+  const pos4=Object.fromEntries(rank4.map((x,p)=>[x.i,p]));
+  const rank8=teams.map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,S.weights,true)})).sort((a,b)=>b.sc-a.sc);
+  flipRank(el, rank8, pos4);
+}
+function flipRank(el, ranking, pos4){
+  const box=el.querySelector("#rank"); const rows=[...box.children];
+  const first=Object.fromEntries(rows.map(r=>[r.dataset.i, r.getBoundingClientRect().top]));
+  ranking.forEach((x,p)=>{ const row=rows.find(r=>+r.dataset.i===x.i); box.appendChild(row); row.querySelector(".pos").textContent=p+1; row.querySelector(".sc").textContent=fmt(x.sc,1); row.querySelector(".track i").style.width=x.sc+"%";
+    const mv=pos4[x.i]-p; const m=row.querySelector(".mv"); m.className="mv "+(mv>0?"up-good":mv<0?"up-bad":"flat"); m.textContent=mv>0?"▲"+mv:mv<0?"▼"+(-mv):"="; });
+  [...box.children].forEach(r=>{ const d=first[r.dataset.i]-r.getBoundingClientRect().top; if(d){ r.style.transition="none"; r.style.transform=`translateY(${d}px)`; requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ r.style.transition=""; r.style.transform=""; }); }); } });
+}
+function doReveal(el, n, sims, rank4){
+  const btn=el.querySelector("#reveal"); btn.disabled=true;
+  const slots=[...el.querySelectorAll(".radar-slot")];
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dur=reduce?1:1800; const t0=performance.now();
+  function frame(now){
+    const u=Math.min(1,(now-t0)/dur); const e=1-Math.pow(1-u,3);
+    slots.forEach(s=>{ const i=+s.dataset.i; s.innerHTML=radarSVG(sims[i][n].s,{size:260,fs:15,color:tc(i),reveal:e}); });
+    if(u<1) requestAnimationFrame(frame);
+    else { S.revealed=true; save();
+      const pos4=Object.fromEntries(rank4.map((x,p)=>[x.i,p]));
+      const rank8=activeTeams().map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,S.weights,true)})).sort((a,b)=>b.sc-a.sc);
+      flipRank(el, rank8, pos4);
+      setTimeout(()=>{ renderAuswertung(el); },1200);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- QUELLEN & MODELL ---------- */
+function renderQuellen(el){
+  el.innerHTML=`<div><p class="eyebrow">Transparenz</p><h1 style="font-size:clamp(1.9rem,4vw,2.8rem);margin-top:8px">Quellen und Modell</h1>
+   <p class="muted" style="margin-top:8px;max-width:72ch">Die Startwerte stammen aus amtlichen Quellen (Stand 24.11.2026). Die Wirkungen der Maßnahmen sind ein vereinfachtes Lehrmodell: Richtung und ungefähre Größenordnung orientieren sich an Lehrbuchwissen und empirischen Studien, die genauen Zahlen sind aber gesetzt. Gute Frage für den Kurs: Wo ist das Modell zu einfach?</p></div>
+  <div class="tablewrap"><table><thead><tr><th>Wert</th><th>Quelle</th></tr></thead><tbody>
+   ${SOURCES.map(s=>`<tr><td>${esc(s[0])}</td><td>${s[2]?`<a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a>`:esc(s[1])}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="panel"><h3 style="font-size:1.15rem;margin-bottom:8px">So rechnet die Simulation</h3>
+   <ul style="margin:0;padding-left:20px;display:grid;gap:8px" class="muted">
+    <li><strong>Basispfad:</strong> Ohne Politik erholt sich die Wirtschaft langsam (Wachstum ≈ 1 %, Inflation sinkt Richtung 2 %, Arbeitslosigkeit sinkt leicht). Er orientiert sich an der Jahresprojektion 2026 der Bundesregierung.</li>
+    <li><strong>Maßnahmen</strong> verschieben den Pfad: sofort, nach einem Jahr und langfristig. Wer eine Maßnahme zweimal beschließt, bekommt die Wirkung zweimal.</li>
+    <li><strong>EZB:</strong> Sie reagiert auf die Inflation im Euroraum, zu der Deutschland etwa 30 % beiträgt. Liegt sie über 2 %, steigt der Zins; das bremst ein Jahr später Wachstum und Inflation und erhöht die Arbeitslosigkeit.</li>
+    <li><strong>Krisenereignis 2029:</strong> trifft alle Teams gleich. Vorsorgende Maßnahmen in den Jahren davor dämpfen den Schock (Energieunabhängigkeit, neue Handelsmärkte, Fachkräfte).</li>
+    <li><strong>Zielerreichung (0–100):</strong> Inflation: 100 bei 2 %, je Prozentpunkt Abweichung −35. Arbeitslosigkeit: 100 bei höchstens 3 %, je Punkt darüber −15. Leistungsbilanz: 100 bei ±1 %, je Punkt darüber −14. Wachstum: 100 bei 2–3 %, je Punkt Abstand −40, starke Sprünge kosten zusätzlich. Die Zusatzziele messen den Abstand zum Klimapfad, zum Erneuerbaren-Ziel 2030 und zu Spielzielen für Armut (11 %) und Niedriglohn (8 %).</li>
+    <li><strong>Datenrevisionen:</strong> Das Arbeitsblatt nennt für 2023/2024 −0,3 % und −0,2 %. Destatis hat diese Werte inzwischen auf −0,9 % und −0,5 % korrigiert. Auch das ist ein Informationsproblem der Wirtschaftspolitik.</li>
+   </ul></div>`;
+}
+
+/* Start */
+if(S.timer && S.timer.running){ startTimer(); }
+render();
+</script>
+</body>
+</html>
