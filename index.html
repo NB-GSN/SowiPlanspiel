@@ -108,6 +108,50 @@ main{padding-block:28px 64px}
 .join .join-url{color:var(--accent);font-size:1.1rem;margin-top:10px}
 .join-qr{background:#fff;border-radius:16px;padding:6px;max-width:220px}
 @media (max-width:760px){.join{grid-template-columns:1fr}.join-qr{max-width:200px}}
+.linkbtn{background:none;border:0;padding:0;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.pagetitle{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800;margin-top:8px}
+.sectitle{font-size:1.4rem}
+.stagebar{display:flex;gap:6px;flex-wrap:wrap}
+.stagebar span{font-size:.82rem;font-weight:600;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.08);color:#B9C4DA}
+.stagebar span.now{background:var(--accent);color:var(--accent-ink)}
+.stagebar span.done{color:#fff}
+.cover{display:flex;flex-direction:column;align-items:flex-start;gap:16px;background:var(--surface);border:1px solid var(--line);border-top:12px solid var(--rc);border-radius:18px;padding:clamp(20px,4vw,40px);box-shadow:var(--shadow)}
+.cover h2{font-size:clamp(1.6rem,3.6vw,2.5rem)}
+.cover p{color:var(--muted);max-width:60ch}
+.rolechecks{display:flex;gap:8px;flex-wrap:wrap}
+.rolelist{display:flex;flex-direction:column;gap:12px}
+.rolein{border-left:6px solid var(--rc);padding-left:12px;display:flex;flex-direction:column;gap:6px}
+.propose{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}
+.rolebrief{border-top:8px solid var(--rc);display:flex;flex-direction:column;gap:10px;position:sticky;top:76px}
+.rolebrief h2{font-size:1.3rem}
+.props{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.prop{background:var(--surface);border:1px solid var(--line);border-top:8px solid var(--rc);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.prop h3{font-size:1.2rem}
+.prop.taken{box-shadow:0 0 0 3px var(--accent)}
+.impacts{display:flex;flex-direction:column;gap:5px}
+.impacts .pill{justify-content:space-between;white-space:normal;border-radius:8px;padding:5px 10px}
+.conflicts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
+.conflicts .pill{margin-right:6px}
+.decide{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prio{display:flex;gap:8px;flex-wrap:wrap}
+.prio button{border:2px solid var(--line);background:var(--surface);padding:8px 16px;border-radius:999px;font-weight:600}
+.prio button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.codebox{background:var(--navy);color:var(--navy-ink);border-radius:var(--r);padding:18px 22px;display:flex;flex-direction:column;gap:8px}
+.codebox .code{font-family:var(--font-mono);font-size:clamp(1.3rem,3.6vw,2.2rem);font-weight:700;color:var(--accent);letter-spacing:.04em;word-break:break-all;user-select:all}
+.codebox p{color:#B9C4DA;font-size:.92rem}
+.bilanz{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:20px;align-items:start}
+.rbar{display:grid;grid-template-columns:minmax(0,1.2fr) 2fr 2.6rem;gap:10px;align-items:center;font-size:.92rem}
+.rbar .bar{height:12px}
+.rbar .bar i{background:var(--rc);border-radius:6px}
+.rbar .num{text-align:right;font-weight:700}
+.coursebox .word{font-size:clamp(2.8rem,7vw,4.8rem);font-weight:700;letter-spacing:.1em;line-height:1;margin:8px 0}
+.codes{display:flex;flex-direction:column;gap:10px}
+.coderow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,auto);gap:10px;align-items:center;border-left:6px solid var(--tc);padding-left:10px}
+.timer-l{font-size:1.8rem;font-weight:700;margin-left:auto}
+.tiles .tile .val{font-size:2.4rem}
+@media (max-width:1100px){.props{grid-template-columns:1fr}.decide,.bilanz,.propose{grid-template-columns:1fr}.rolebrief{position:static}}
+@media (max-width:760px){.coderow{grid-template-columns:1fr}.tiles{grid-template-columns:1fr 1fr!important}.slots{grid-template-columns:1fr}}
 /* Lagebild */
 .lage-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
 .lage-head h1{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800}
@@ -288,9 +332,9 @@ svg text{font-family:var(--font-body)}
     <nav class="nav" aria-label="Bereiche">
       <button data-go="lage">Lagebild</button>
       <button data-go="quiz">Quiz</button>
-      <button data-go="spiel">Planspiel</button>
+      <button data-go="team">Team-Spiel</button>
       <button data-go="berater">Berater</button>
-      <button data-go="auswertung">Auswertung</button>
+      <button data-go="vergleich">Vergleich</button>
       <button data-go="quellen">Quellen &amp; Modell</button>
     </nav>
   </div>
@@ -573,18 +617,48 @@ function budgetState(team, round, picks){
 
 /* =========================================================
    ZUSTAND
+   Team-Gerät (T) und Beamer/Lehrkraft (V) speichern getrennt im Browser.
    ========================================================= */
 const TEAM_COLORS=["var(--t1)","var(--t2)","var(--t3)","var(--t4)"];
-const DEFAULT_NAMES=["Kabinett Koralle","Kabinett Türkis","Kabinett Kobalt","Kabinett Magenta"];
-const KEY="kabinett-im-viereck-v1";
-function freshState(){
-  return {phase:"setup", round:0, nTeams:4, event:"energie", teams:DEFAULT_NAMES.map((n,i)=>({name:n, choices:[], notes:[], notlage:false})), revealed:false, timer:{sec:480, left:480, running:false}, weightsPreset:"gleich", weights:{...EQUAL_W}};
+const MLETTERS="ABCDEFGHJKLMNPQRS";               // 17 Maßnahmen, ohne I und O (Verwechslungsgefahr)
+const SAFE32="23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+const EV_CODES={energie:"E", zoll:"Z", fachkraefte:"F"};
+const COURSE_WORDS={energie:"LUCHS", zoll:"ADLER", fachkraefte:"OTTER"};
+const TKEY="kabinett-team-v2", VKEY="kabinett-vergleich-v2";
+function freshTeam(){ return {phase:"setup", name:"", course:"", event:null, members:{fin:"",wirt:"",soz:""}, round:0, choices:[], prio:[], notes:[], proposals:[], notlage:false, step:0, cover:true}; }
+function freshV(){ return {event:"energie", rows:[0,1,2,3].map(()=>({name:"",code:""})), revealed:false, weightsPreset:"gleich", weights:{...EQUAL_W}, timer:{sec:600,left:600,running:false}}; }
+function loadK(k){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):null; }catch(e){ return null; } }
+function saveK(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+let T=loadK(TKEY)||freshTeam();
+let V=loadK(VKEY)||freshV();
+const saveT=()=>saveK(TKEY,T), saveV=()=>saveK(VKEY,V);
+
+/* Ergebniscode: Ereignis + Notlage, dann je Jahr zwei Maßnahmen + Vorrang-Ziel, am Ende ein Prüfzeichen */
+function checksum(s){ let h=7; for(const ch of s) h=(h*31+ch.charCodeAt(0))%32; return SAFE32[h]; }
+function encodeTeam(t){
+  let s=EV_CODES[t.event]+(t.notlage?"J":"N");
+  for(let r=0;r<t.choices.length;r++){ const c=t.choices[r]; if(!c||c.length<2) break;
+    s+="-"+c.map(id=>MLETTERS[MEASURES.findIndex(m=>m.id===id)]).join("")+((t.prio[r]??0)+1); }
+  return s+"-"+checksum(s);
 }
-let S = load() || freshState();
-function load(){ try{ const raw=localStorage.getItem(KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-const activeTeams=()=>S.teams.slice(0,S.nTeams);
-const evaluated=()=> S.phase==="result" ? S.round : (S.phase==="end" ? 5 : Math.max(0,S.round-1));
+function decodeTeam(code){
+  const c=String(code).toUpperCase().replace(/[\s_.]/g,"").replace(/[–—]/g,"-");
+  const parts=c.split("-").filter(Boolean);
+  if(parts.length<3) return {err:"Code zu kurz"};
+  const chk=parts.pop(); const body=parts.join("-");
+  if(checksum(body)!==chk) return {err:"Tippfehler? Prüfzeichen passt nicht"};
+  const head=parts[0]; const ev=Object.keys(EV_CODES).find(k=>EV_CODES[k]===head[0]);
+  if(!ev || !"JN".includes(head[1]||"")) return {err:"Unbekannter Anfang"};
+  const t={event:ev, notlage:head[1]==="J", choices:[], prio:[], notes:[]};
+  for(const p of parts.slice(1)){
+    if(p.length!==3) return {err:"Ungültiger Abschnitt "+p};
+    const a=MLETTERS.indexOf(p[0]), b=MLETTERS.indexOf(p[1]), pr=+p[2]-1;
+    if(a<0||b<0||!(pr>=0&&pr<4)) return {err:"Ungültiger Abschnitt "+p};
+    t.choices.push([MEASURES[a].id, MEASURES[b].id]); t.prio.push(pr);
+  }
+  if(t.choices.length>5) return {err:"Zu viele Jahre"};
+  return t;
+}
 
 /* =========================================================
    HILFSFUNKTIONEN
@@ -681,8 +755,8 @@ function niceTicks(lo,hi,count){
    ANSICHTEN
    ========================================================= */
 const app=document.getElementById("app");
-const VIEWS={start:renderStart, lage:renderLage, quiz:renderQuiz, spiel:renderSpiel, berater:renderBerater, auswertung:renderAuswertung, quellen:renderQuellen};
-function current(){ const h=(location.hash||"").replace("#",""); return VIEWS[h]?h:"start"; }
+const VIEWS={start:renderStart, lage:renderLage, quiz:renderQuiz, team:renderTeam, berater:renderBerater, vergleich:renderVergleich, quellen:renderQuellen};
+function current(){ let h=(location.hash||"").replace("#",""); if(h==="spiel") h="team"; if(h==="auswertung") h="vergleich"; return VIEWS[h]?h:"start"; }
 function go(v){ if(location.hash!=="#"+v) location.hash=v; else render(); }
 function render(){
   const v=current();
@@ -697,16 +771,18 @@ document.addEventListener("click",e=>{ const b=e.target.closest("[data-go]"); if
 /* ---------- START ---------- */
 function renderStart(el){
   const s=Object.fromEntries(GOALS.map(g=>[g.k,score(g.k,START[g.k],2026,null)]));
+  const running = T.phase!=="setup";
   el.innerHTML=`
   <div class="hero">
     <div>
       <p class="eyebrow">SOWI Q1 · Inhaltsfeld 4: Wirtschaftspolitik</p>
-      <h1 style="margin-top:10px">Vier Ziele. Vier Kabinette. <em>Keins</em> bekommt alles.</h1>
-      <p class="lead">Ihr regiert Deutschland von 2027 bis 2031. Jedes Jahr beschließt euer Kabinett zwei Maßnahmen, mit echten Startdaten von Herbst 2026, verzögerten Wirkungen, einer unabhängigen EZB und der Schuldenbremse. Am Ende zählt, wie nah ihr dem magischen Viereck gekommen seid.</p>
+      <h1 style="margin-top:10px">Drei Ministerien. Vier Ziele. <em>Keins</em> bekommt alles.</h1>
+      <p class="lead">Ihr seid ein Kabinett und regiert Deutschland von 2027 bis 2031. Jedes Ressort hat eigene Interessen, jedes Jahr müsst ihr euch auf zwei Maßnahmen einigen. Mit echten Startdaten von Herbst 2026, verzögerten Wirkungen, einer unabhängigen EZB und der Schuldenbremse.</p>
       <div class="row" style="margin-top:22px">
-        <button class="btn primary big" data-go="lage">Lagebild 2026 öffnen</button>
-        <button class="btn big" data-go="spiel">${S.phase==="setup"?"Planspiel einrichten":"Zum laufenden Planspiel"}</button>
+        <button class="btn primary big" data-go="team">${running?"Weiterspielen: "+esc(T.name||"euer Kabinett"):"Team-Spiel starten"}</button>
+        <button class="btn big" data-go="lage">Lagebild 2026</button>
       </div>
+      <p class="small muted" style="margin-top:12px">Lehrkraft? <button class="linkbtn" data-go="vergleich">Kurs vorbereiten und Teams vergleichen</button></p>
     </div>
     <div class="hero-radar">${radarSVG(s,{size:380,fs:19,color:"var(--t1)",aria:"Deutschland 2026 im magischen Viereck"})}
       <p class="small muted" style="text-align:center">Deutschland 2026: Zielerreichung je Ecke. Gestrichelt = Ziel erreicht.</p></div>
@@ -715,31 +791,29 @@ function renderStart(el){
     <h2 style="font-size:1.5rem;margin-bottom:14px">Ablauf der Doppelstunde</h2>
     <div class="stages">
       ${[["lage","1","Lagebild 2026","10 Min · Beamer","Wo steht Deutschland? Werte schätzen, aufdecken, bewerten."],
-         ["quiz","2","Aufwärm-Quiz","5 Min · Team-Handys","Positiv oder normativ? Wer ist zuständig? Welches Marktversagen?"],
-         ["spiel","3","Planspiel","50 Min · 5 Runden","Pro Jahr zwei Maßnahmen beschließen, begründen, Bilanz am Beamer."],
-         ["auswertung","4","Auswertung & Oktogon","25 Min · Plenum","Wer hat was geopfert? Dann: Achteck aufdecken und neu bewerten."]]
+         ["quiz","2","Aufwärm-Quiz","5 Min · Handys","Positiv oder normativ? Wer ist zuständig? Welches Marktversagen?"],
+         ["team","3","Team-Spiel","50 Min · ein Gerät pro Gruppe","Jedes Ministerium schlägt verdeckt vor, dann verhandelt und beschließt das Kabinett."],
+         ["vergleich","4","Vergleich & Oktogon","25 Min · Beamer","Ergebniscodes eintragen, Kabinette vergleichen, Achteck aufdecken."]]
         .map(x=>`<button class="stage" data-go="${x[0]}"><span class="step">${x[1]}</span><span class="min">${x[3]}</span><h3>${x[2]}</h3><p>${x[4]}</p></button>`).join("")}
     </div>
   </div>
   <div class="join">
     <div class="join-qr">${QR_SVG}</div>
-    <div><p class="eyebrow" style="color:#B9C4DA">Mitmachen per Handy</p><h2>Scannen, dann Quiz oder Berater öffnen</h2>
-      <p>Alle Teams brauchen nur ein Handy pro Gruppe. Die Seite läuft ohne Anmeldung und speichert nichts über euch.</p>
+    <div><p class="eyebrow" style="color:#B9C4DA">Mitmachen per Handy oder Tablet</p><h2>Scannen und euer Kabinett bilden</h2>
+      <p>Ein Gerät pro Dreiergruppe reicht. Die Seite läuft ohne Anmeldung, euer Spielstand bleibt nur auf eurem Gerät.</p>
       <p class="num join-url">nb-gsn.github.io/SowiPlanspiel</p>
-      <div class="row" style="margin-top:14px"><button class="btn primary" data-go="quiz">Quiz</button><button class="btn" data-go="berater">Berater</button></div></div>
+      <div class="row" style="margin-top:14px"><button class="btn primary" data-go="team">Team-Spiel</button><button class="btn" data-go="quiz">Quiz</button><button class="btn" data-go="berater">Berater</button></div></div>
   </div>
   <div>
-    <h2 style="font-size:1.5rem;margin-bottom:6px">Rollen im Kabinett (je 3 Personen)</h2>
-    <p class="muted" style="margin-bottom:14px">12 Schüler:innen = 4 Kabinette à 3. Jede Rolle hat eine feste Aufgabe, damit niemand nur zuschaut.</p>
+    <h2 style="font-size:1.5rem;margin-bottom:6px">Die drei Ressorts</h2>
+    <p class="muted" style="margin-bottom:14px">12 Schüler:innen = 4 Kabinette à 3. Jedes Ressort kämpft für eigene Ziele und bekommt eine eigene Ressort-Bilanz. Gewinnen kann das Kabinett aber nur gemeinsam.</p>
     <div class="roles">
-      <div class="panel role"><div class="ico">${iconSVG("euro")}</div><h4>Finanzministerium</h4><p>Hütet den Haushalt: 25 Mrd. € Spielraum pro Jahr (Schuldenbremse) plus 60 Mrd. € Sondervermögen für das ganze Spiel. Darf eine Notlage erklären, aber nur im Krisenjahr.</p></div>
-      <div class="panel role"><div class="ico">${iconSVG("chart")}</div><h4>Wirtschaftsministerium</h4><p>Schlägt Maßnahmen vor und vertritt Wachstum und Beschäftigung. Nutzt den „Berater“ auf dem Handy, um Wirkungsketten zu prüfen.</p></div>
-      <div class="panel role"><div class="ico">${iconSVG("pen")}</div><h4>Analyse &amp; Sprecher:in</h4><p>Notiert jede Runde, welches Ziel Vorrang hatte und warum. Trägt den Kabinettsbeschluss am Beamer ein und erklärt ihn dem Kurs in 30 Sekunden.</p></div>
+      ${ROLES.map(r=>`<div class="panel role" style="border-top:6px solid ${r.color}"><div class="ico">${iconSVG(r.icon)}</div><h4>${r.name}</h4><p>${r.brief}</p><p class="small" style="margin-top:8px"><strong>Ressort-Ziele:</strong> ${roleGoalNames(r)}</p></div>`).join("")}
     </div>
   </div>`;
 }
 function iconSVG(n){
-  const p={euro:'<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10h9M4 14h9" />', chart:'<path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/>', pen:'<path d="M4 20l4-1 11-11-3-3L5 16l-1 4zM14 6l3 3"/>'}[n];
+  const p={euro:'<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10h9M4 14h9" />', chart:'<path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/>', pen:'<path d="M4 20l4-1 11-11-3-3L5 16l-1 4zM14 6l3 3"/>', people:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4.5a3 3 0 0 1 0 6M18 14c2 .8 3 2.8 3 6"/>'}[n];
   return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 }
 
@@ -843,46 +917,50 @@ function renderQuiz(el){
   const nx=el.querySelector("#next"); if(nx) nx.onclick=()=>{ QZ.i++; QZ.answered=null; renderQuiz(el); };
 }
 
-/* ---------- PLANSPIEL ---------- */
-let timerHandle=null;
-function renderSpiel(el){
-  if(S.phase==="setup") return renderSetup(el);
-  const n=S.nTeams, r=S.round, yr=YEARS[r-1];
-  const ev=EVENTS[S.event];
-  const allPicked = activeTeams().every(t=>(t.choices[r-1]||[]).length===2);
-  const head=`
-  <div class="gamebar">
-    <div><div class="year num">${yr}</div><div class="sub">Runde ${r} von 5 · ${S.phase==="decide"?"Kabinettssitzung":"Jahresbilanz"}</div></div>
-    <div class="yearsteps" aria-hidden="true">${YEARS.map((_,i)=>`<span class="${i<r-1||(i===r-1&&S.phase==="result")?"done":(i===r-1?"now":"")}"></span>`).join("")}</div>
-    <span class="spacer"></span>
-    ${S.phase==="decide"?`<div class="row"><span class="timer ${S.timer.left<=60?"low":""}" id="timer">${mmss(S.timer.left)}</span>
-      <button class="btn small" id="tStart">${S.timer.running?"Pause":"Start"}</button><button class="btn small ghost" style="color:inherit" id="tReset" aria-label="Timer zurücksetzen">↺ ${Math.round(S.timer.sec/60)} Min</button></div>`:""}
-    ${S.phase==="decide"?`<button class="btn primary" id="evalBtn" ${allPicked?"":"disabled"}>Jahr ${yr} auswerten</button>`:
-      (r<5?`<button class="btn primary" id="nextBtn">Weiter ins Jahr ${YEARS[r]}</button>`:`<button class="btn primary" data-go="auswertung">Zur Auswertung</button>`)}
-  </div>`;
-  let body="";
-  if(r===EVENT_ROUND && ev) body+=`<div class="banner"><span class="flash">Eilmeldung</span><div><h3>${ev.title}</h3><p>${ev.text} <strong>Das Finanzministerium darf in diesem Jahr eine Notlage erklären</strong> (Art. 115 Abs. 2 GG): +${NOTLAGE_PLUS} Mrd. € Spielraum, danach ${NOTLAGE_TILGUNG} Mrd. € Tilgung pro Jahr.</p></div></div>`;
-  if(S.phase==="decide"){
-    body+=`<div class="teams" style="--n:${n}">${activeTeams().map((t,i)=>teamDecideCard(t,i,r)).join("")}</div>
-    <p class="small muted">Analyse-Person jedes Teams kommt nach vorn, tippt auf „Kabinettsbeschluss“ und trägt zwei Maßnahmen samt Begründung ein. Das Jahr kann ausgewertet werden, sobald alle Teams zwei Maßnahmen gewählt haben.</p>`;
-  } else {
-    body+=resultView(r);
+/* ---------- TEAM-SPIEL (ein Gerät pro Kabinett) ---------- */
+const ROLES=[
+  {id:"fin", name:"Finanzministerium", short:"Finanzen", goals:["infl","haushalt"], color:"var(--t3)", icon:"euro",
+   brief:"Ihr verantwortet stabile Preise und einen soliden Haushalt. Jede Milliarde müsst ihr vor dem Bundestag rechtfertigen, eine Notlage kostet Glaubwürdigkeit.",
+   lens:"Sinkt die Inflation? Was kostet es? Halten wir die Schuldenbremse ein?"},
+  {id:"wirt", name:"Wirtschaftsministerium", short:"Wirtschaft", goals:["bip","lb"], color:"var(--t1)", icon:"chart",
+   brief:"Ihr wollt stetiges Wachstum und wettbewerbsfähige Unternehmen. Gleichzeitig soll der Außenhandel ins Gleichgewicht kommen, denn ein zu hoher Überschuss provoziert Zölle.",
+   lens:"Wächst die Wirtschaft? Was passiert mit Exporten und Importen?"},
+  {id:"soz", name:"Arbeits- und Sozialministerium", short:"Arbeit & Soziales", goals:["alq"], color:"var(--t2)", icon:"people",
+   brief:"Über drei Millionen Menschen sind arbeitslos, viele davon strukturell. Ihr kämpft für Beschäftigung und dafür, dass Krisen nicht auf dem Rücken der Schwächsten ausgetragen werden.",
+   lens:"Entstehen Arbeitsplätze? Wer trägt die Lasten?"},
+];
+const RO=Object.fromEntries(ROLES.map(r=>[r.id,r]));
+const roleGoalNames=r=>r.goals.map(g=>g==="haushalt"?"Haushalt (Schuldenbremse)":G[g].name).join(", ");
+
+function haushaltScore(t,r){ const b=budgetState(t,r,t.choices[r-1]||[]); return clamp(100-2.5*Math.max(0,b.reg-10)-(t.notlage&&r===EVENT_ROUND?30:0),0,100); }
+function ressortYear(t, ys, r){ const s=ys[r].s; return {fin:(s.infl+haushaltScore(t,r))/2, wirt:(s.bip+s.lb)/2, soz:s.alq}; }
+function ressortAvg(t,n){ const ys=simulate(t,n,t.event); const acc={fin:0,wirt:0,soz:0}; if(!n) return acc; for(let r=1;r<=n;r++){ const y=ressortYear(t,ys,r); for(const k in acc) acc[k]+=y[k]; } for(const k in acc) acc[k]/=n; return acc; }
+
+// Wirkung einer Maßnahme auf die Ziele eines Ressorts (nur Richtung, wie im Berater)
+function roleImpact(m, role){
+  const th=0.25; const now=[], late=[];
+  for(const k of role.goals){
+    if(k==="haushalt"){ const h = m.cost>12?-1 : m.cost<=0?1 : m.cost>5?-0.5:0; now.push(h); late.push(h); continue; }
+    const a=m.fx[k]; if(!a){ now.push(0); late.push(0); continue; }
+    const g = k==="bip"?1:-1;
+    now.push(clamp(g*a[0]/0.25,-1,1)); late.push(clamp(g*a[a.length-1]/0.25,-1,1));
   }
-  el.innerHTML=head+body+`<div class="row"><span class="spacer"></span><span id="resetZone"><button class="btn small ghost" id="resetBtn">Neues Spiel beginnen</button></span></div>`;
-  wireSpiel(el);
+  const all=[...now,...late];
+  if(role.goals.length>1 && all.some(x=>x>th) && all.some(x=>x<-th)) return {txt:"zwiespältig", cls:"warn"};
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length; const N=avg(now), L=avg(late);
+  if(N>th && L>th) return {txt:"hilft", cls:"good"};
+  if(N<-th && L<-th) return {txt:"schadet", cls:"bad"};
+  if(N<-th && L>th) return {txt:"erst Nachteil, dann Vorteil", cls:"warn"};
+  if(N>th && L<-th) return {txt:"erst Vorteil, dann Nachteil", cls:"warn"};
+  if(N>th) return {txt:"hilft kurzfristig", cls:"good"};
+  if(L>th) return {txt:"hilft langfristig", cls:"good"};
+  if(N<-th) return {txt:"schadet kurzfristig", cls:"bad"};
+  if(L<-th) return {txt:"schadet langfristig", cls:"bad"};
+  return {txt:"kaum Wirkung", cls:"neutral"};
 }
+
 function mmss(s){ return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`; }
-function teamDecideCard(t,i,r){
-  const picks=t.choices[r-1]||[]; const b=budgetState(t,r,picks);
-  const prev = r>1? teamIndex(t,r-1,S.event,null,false):null;
-  return `<div class="team" style="--tc:${tc(i)}">
-    <div class="row" style="justify-content:space-between"><h3><span class="dot"></span>${esc(t.name)}</h3>${prev!=null?`<span class="pill ${scoreClass(prev)} num">${fmt(prev,0)} Pkt.</span>`:""}</div>
-    <div class="chips">${[0,1].map(j=>picks[j]?`<div class="chip">${esc(M[picks[j]].name)}<span class="c">${M[picks[j]].cost>0?"−":"+"}${Math.abs(M[picks[j]].cost)} Mrd.</span></div>`:`<div class="chip empty">Maßnahme ${j+1} offen</div>`).join("")}</div>
-    ${budgetBar(b)}
-    ${t.notes[r-1]?`<p class="why">„${esc(t.notes[r-1])}“</p>`:""}
-    <button class="btn ${picks.length===2?"":"dark"}" data-team="${i}">${picks.length===2?"Beschluss ändern":"Kabinettsbeschluss"}</button>
-  </div>`;
-}
+function costLabel(m){ return (m.cost>0?"kostet "+m.cost:m.cost<0?"bringt "+(-m.cost):"kostenneutral")+(m.cost?" Mrd. €":"")+(m.sv?" · SV":""); }
 function budgetBar(b){
   const used=Math.max(0,b.reg), pct=Math.min(100,used/Math.max(1,b.room)*100);
   return `<div class="budget">
@@ -891,42 +969,24 @@ function budgetBar(b){
     <div class="row" style="justify-content:space-between"><span class="muted">Sondervermögen übrig</span><span class="num muted">${fmt(b.svLeft-b.sv,0)} von ${SV_POT} Mrd. €</span></div>
   </div>`;
 }
-function resultView(r){
-  const n=S.nTeams; const sims=activeTeams().map(t=>simulate(t,r,S.event));
-  const ezb=sims[0][r];
-  const ranking=activeTeams().map((t,i)=>({i, name:t.name, sc:teamIndex(t,r,S.event,null,false)})).sort((a,b)=>b.sc-a.sc);
-  let h=`<div class="ezb"><span class="pill neutral num" style="font-size:.9rem;padding:8px 12px">EZB</span><div><p class="eyebrow">EZB-Ratssitzung Dezember ${YEARS[r-1]}</p>
-    <p>${ezbText(sims)}</p></div></div>`;
-  h+=`<div class="results" style="--n:${n}">${activeTeams().map((t,i)=>{
-    const y=sims[i][r], p=sims[i][r-1]; const idx=index(y.s,null,false);
-    return `<div class="res" style="--tc:${tc(i)}">
-      <div class="row" style="justify-content:space-between"><h3><span class="dot" style="width:12px;height:12px;border-radius:50%;background:${tc(i)}"></span>${esc(t.name)}</h3><span class="score-big" title="Zielerreichung ${YEARS[r-1]}">${fmt(idx,0)}</span></div>
-      ${radarSVG(y.s,{size:260,fs:15,color:tc(i),aria:`Zielerreichung ${t.name} ${YEARS[r-1]}`})}
-      <div class="vals">${CORE.map(g=>{ const d=y.v[g.k]-p.v[g.k]; const a=arrowFor(g.k,d);
-        return `<span class="k">${g.short}</span><span class="v">${fmt(y.v[g.k],1)} %</span><span class="d ${a.cls}">${fmtSigned(d)}</span>`; }).join("")}</div>
-      <div class="chips">${(t.choices[r-1]||[]).map(id=>`<div class="chip" style="min-height:0;padding:6px 10px;font-size:.82rem">${esc(M[id].name)}</div>`).join("")}</div>
-      ${t.notes[r-1]?`<p class="why">„${esc(t.notes[r-1])}“</p>`:""}
-      <details class="chain"><summary>Wirkungsketten ${YEARS[r-1]}</summary>${chainList(y, r)}</details>
-    </div>`; }).join("")}</div>`;
-  h+=`<div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 style="font-size:1.2rem">Zwischenstand: Durchschnitt der Zielerreichung ${r===1?"2027":"2027–"+YEARS[r-1]}</h3><span class="small muted">0 = alle Ziele weit verfehlt · 100 = alle vier Ziele erreicht</span></div>
-    <div class="rank">${ranking.map((x,pos)=>`<div class="rank-row" style="--tc:${tc(x.i)}"><span class="pos">${pos+1}</span><span class="nm">${esc(x.name)}</span><span class="track"><i style="width:${x.sc}%"></i></span><span class="sc">${fmt(x.sc,1)}</span><span></span></div>`).join("")}</div></div>
-  <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:6px">Begründungsrunde (2 Min.)</h3><p class="muted">Jede Analyse-Person erklärt in einem Satz: Welches Ziel hatte für euer Kabinett Vorrang, und welches habt ihr dafür in Kauf genommen? Die anderen achten darauf: Ist das eine positive oder eine normative Aussage?</p></div>`;
-  return h;
+function arrowsRow(m){
+  return `<div class="arrows">${CORE.map(g=>{ const a=m.fx[g.k]||[0,0,0];
+    const cells=[a[0]||0, a[1]??a[0]??0, a[a.length-1]||0].map(v=>arrowFor(g.k,v));
+    return `<div title="${g.name}: sofort / nach 1 Jahr / langfristig"><span>${g.short==="Außenwirtschaft"?"Außenw.":g.short==="Beschäftigung"?"Beschäft.":g.short}</span><b>${cells.map(c=>`<span class="${c.cls}">${c.sym}</span>`).join(" ")}</b></div>`; }).join("")}</div>`;
 }
-function ezbText(sims){
-  const r=S.round; const e=sims[0][r].ezb;
-  const rates=sims.map(s=>s[r].ezb);
-  const uniq=[...new Set(rates.map(x=>x.rate))];
-  const verb = s=> s>0?`erhöht den Leitzins auf <strong class="num">${fmt(s.rate??0,2)} %</strong>`:"";
-  if(uniq.length===1){
-    const x=rates[0];
-    if(x.step>0) return `Die EZB erhöht den Einlagesatz um ${fmt(x.step,2)} auf <strong class="num">${fmt(x.rate,2)} %</strong>, weil die Inflation im Euroraum (≈ ${fmt(x.euroInfl,1)} %) über dem Ziel liegt. Das bremst eure Wirtschaft im nächsten Jahr.`;
-    if(x.step<0) return `Die EZB senkt den Einlagesatz um ${fmt(-x.step,2)} auf <strong class="num">${fmt(x.rate,2)} %</strong>. Die Inflation im Euroraum (≈ ${fmt(x.euroInfl,1)} %) erlaubt das. Das stützt eure Wirtschaft im nächsten Jahr.`;
-    return `Die EZB lässt den Einlagesatz bei <strong class="num">${fmt(x.rate,2)} %</strong> (Inflation im Euroraum ≈ ${fmt(x.euroInfl,1)} %).`;
-  }
-  return `Die EZB reagiert auf die Inflation im Euroraum, zu der Deutschland rund 30 % beiträgt. Weil eure Kabinette unterschiedlich gehandelt haben, gilt im Spiel für jedes Team ein eigener Leitzins: ${activeTeams().map((t,i)=>`${esc(t.name)} <strong class="num">${fmt(rates[i].rate,2)} %</strong>`).join(" · ")}. Das ist eine Vereinfachung: In Wirklichkeit gibt es nur einen Zins für den ganzen Euroraum.`;
+function measureCard(m, o={}){
+  const imp=o.role?roleImpact(m,o.role):null;
+  return `<button class="mcard ${o.sel?"sel":""}" data-m="${m.id}" ${o.disabled?"disabled":""} aria-pressed="${!!o.sel}">
+    <div class="meta"><span>${AREAS[m.area]}</span><span class="num">${costLabel(m)}</span></div>
+    <h4>${esc(m.name)}</h4><p class="small muted">${esc(m.desc)}</p>
+    ${imp?`<span class="pill ${imp.cls}" style="align-self:flex-start">Für euer Ressort: ${imp.txt}</span>`:""}
+    ${arrowsRow(m)}${o.note||""}</button>`;
 }
-function chainList(y, r){
+function lockedCards(){ return LOCKED.map(l=>`<button class="mcard locked" data-lock="${esc(l.why)}"><div class="meta"><span>nicht zuständig</span><span>🔒</span></div><h4>${esc(l.name)}</h4><p class="small muted">Antippen: Warum geht das nicht?</p></button>`).join(""); }
+function wireLocked(root){ root.querySelectorAll("[data-lock]").forEach(x=>x.onclick=()=>toast(x.dataset.lock.slice(0,90)+(x.dataset.lock.length>90?" …":""))); }
+function usedUp(t, id, r){ return countPicksBefore(t,id,r) >= (M[id].max??2); }
+
+function chainList(y){
   const byKey={};
   for(const c of y.contrib){ if(!G[c.k].core) continue; const key=c.src+"|"+c.r; (byKey[key]=byKey[key]||{src:c.src, r:c.r, lag:c.lag, list:[], ezb:c.ezb, shock:c.shock}).list.push(c); }
   const items=Object.values(byKey).sort((a,b)=>a.lag-b.lag);
@@ -936,104 +996,203 @@ function chainList(y, r){
     const when = it.ezb? "Zins wirkt mit Verzögerung" : it.shock? "äußerer Schock" : it.lag===0? "sofort" : `beschlossen ${YEARS[it.r-1]}, wirkt verzögert`;
     return `<li><strong>${esc(it.src)}</strong> <span>(${when})</span><br>${it.list.map(c=>{ const a=arrowFor(c.k,c.val); return `<span class="${a.cls}" style="white-space:nowrap">${G[c.k].short} ${fmtSigned(c.val,2)}</span>`; }).join(" · ")}${m&&it.lag===0?`<br><span>${esc(m.chain)}</span>`:""}</li>`; }).join("")}</ul>`;
 }
-
-function wireSpiel(el){
-  const q=s=>el.querySelector(s);
-  el.querySelectorAll("[data-team]").forEach(b=>b.onclick=()=>openCabinet(+b.dataset.team));
-  if(q("#evalBtn")) q("#evalBtn").onclick=()=>{ stopTimer(); S.phase="result"; save(); render(); };
-  if(q("#nextBtn")) q("#nextBtn").onclick=()=>{ S.round++; S.phase="decide"; S.timer.left=S.timer.sec; S.timer.running=false; save(); render(); };
-  if(q("#tStart")) q("#tStart").onclick=()=>{ S.timer.running?stopTimer():startTimer(); render(); };
-  if(q("#tReset")) q("#tReset").onclick=()=>{ stopTimer(); const opts=[300,360,420,480,540,600]; const i=opts.indexOf(S.timer.sec); S.timer.sec = S.timer.left!==S.timer.sec? S.timer.sec : opts[(i+1)%opts.length]; S.timer.left=S.timer.sec; save(); render(); };
-  q("#resetBtn").onclick=()=>{ q("#resetZone").innerHTML=`<span class="confirm"><span>Alle Entscheidungen löschen und neu starten?</span><button class="btn small dark" id="resetYes">Ja, neues Spiel</button><button class="btn small" id="resetNo">Abbrechen</button></span>`;
-    q("#resetYes").onclick=()=>{ stopTimer(); S=freshState(); save(); render(); }; q("#resetNo").onclick=()=>render(); };
+function ezbOne(e){
+  if(e.step>0) return `Die EZB erhöht den Einlagesatz um ${fmt(e.step,2)} auf <strong class="num">${fmt(e.rate,2)} %</strong>, weil die Inflation im Euroraum (≈ ${fmt(e.euroInfl,1)} %) über dem Ziel liegt. Das bremst eure Wirtschaft im nächsten Jahr.`;
+  if(e.step<0) return `Die EZB senkt den Einlagesatz um ${fmt(-e.step,2)} auf <strong class="num">${fmt(e.rate,2)} %</strong>, weil die Inflation im Euroraum (≈ ${fmt(e.euroInfl,1)} %) das erlaubt. Das stützt eure Wirtschaft im nächsten Jahr.`;
+  return `Die EZB lässt den Einlagesatz bei <strong class="num">${fmt(e.rate,2)} %</strong> (Inflation im Euroraum ≈ ${fmt(e.euroInfl,1)} %).`;
 }
-function startTimer(){ S.timer.running=true; clearInterval(timerHandle); timerHandle=setInterval(()=>{ S.timer.left=Math.max(0,S.timer.left-1); const t=document.getElementById("timer"); if(t){ t.textContent=mmss(S.timer.left); t.classList.toggle("low",S.timer.left<=60); } if(S.timer.left===0){ stopTimer(); toast("Zeit ist um: Kabinettsbeschlüsse eintragen!"); const b=document.getElementById("tStart"); if(b) b.textContent="Start"; } save(); },1000); }
-function stopTimer(){ S.timer.running=false; clearInterval(timerHandle); save(); }
+function eventBanner(ev){
+  const E=EVENTS[ev]; if(!E) return "";
+  return `<div class="banner"><span class="flash">Eilmeldung</span><div><h3>${E.title}</h3><p>${E.text} <strong>In diesem Jahr darf das Kabinett eine Notlage erklären</strong> (Art. 115 Abs. 2 GG): +${NOTLAGE_PLUS} Mrd. € Spielraum, danach ${NOTLAGE_TILGUNG} Mrd. € Tilgung pro Jahr.</p></div></div>`;
+}
+function teamHeader(stage){
+  const r=T.round, yr=YEARS[r-1]; const st=["Vorschläge","Kabinettssitzung","Bilanz"];
+  return `<div class="gamebar">
+    <div><div class="year num">${yr}</div><div class="sub">${esc(T.name)} · Jahr ${r} von 5</div></div>
+    <div class="stagebar">${st.map((s,i)=>`<span class="${i<stage?"done":i===stage?"now":""}">${i<stage?"✓":i+1} ${s}</span>`).join("")}</div>
+    <span class="spacer"></span>
+    <div class="yearsteps" aria-hidden="true">${YEARS.map((_,i)=>`<span class="${i<r-1||(i===r-1&&stage===2)?"done":(i===r-1?"now":"")}"></span>`).join("")}</div>
+  </div>`;
+}
+function resetZone(){ return `<div class="row"><span class="spacer"></span><span id="resetZone"><button class="btn small ghost" id="resetBtn">Neues Spiel beginnen</button></span></div>`; }
+function wireReset(el){
+  const b=el.querySelector("#resetBtn"); if(!b) return;
+  b.onclick=()=>{ el.querySelector("#resetZone").innerHTML=`<span class="confirm"><span>Alle Entscheidungen auf diesem Gerät löschen?</span><button class="btn small dark" id="resetYes">Ja, neu starten</button><button class="btn small" id="resetNo">Abbrechen</button></span>`;
+    el.querySelector("#resetYes").onclick=()=>{ T=freshTeam(); saveT(); render(); }; el.querySelector("#resetNo").onclick=()=>render(); };
+}
 
-function renderSetup(el){
-  el.innerHTML=`
-  <div><p class="eyebrow">Planspiel einrichten</p><h1 style="font-size:clamp(2rem,4vw,3rem);margin-top:8px">Vier Kabinette, fünf Jahre</h1>
-  <p class="muted" style="margin-top:8px;max-width:70ch">Dieses Gerät ist die gemeinsame Bühne am Beamer. Der Spielstand wird automatisch in diesem Browser gespeichert, auch wenn die Seite neu geladen wird.</p></div>
+function renderTeam(el){
+  ({setup:teamSetup, propose:teamPropose, cabinet:teamCabinet, result:teamResult, end:teamEnd})[T.phase](el);
+  wireReset(el); wireLocked(el);
+}
+
+function teamSetup(el){
+  el.innerHTML=`<div><p class="eyebrow">Team-Spiel · ein Gerät pro Kabinett</p><h1 class="pagetitle">Bildet eure Regierung</h1>
+    <p class="muted" style="margin-top:8px;max-width:72ch">Ihr seid drei Ministerien mit eigenen Zielen. Jedes Jahr macht jedes Ressort verdeckt einen Vorschlag. Danach verhandelt ihr im Kabinett und beschließt gemeinsam zwei Maßnahmen, ein Ziel mit Vorrang und eine Begründung.</p></div>
   <div class="setup">
-    <div class="panel"><h3 style="font-size:1.15rem;margin-bottom:12px">Teams</h3>
-      <div class="row" style="margin-bottom:14px"><label class="lbl" for="nTeams" style="margin:0">Anzahl Kabinette</label><select id="nTeams" style="width:auto">${[2,3,4].map(k=>`<option ${k===S.nTeams?"selected":""}>${k}</option>`).join("")}</select></div>
-      <div class="teamin">${S.teams.map((t,i)=>`<div class="f" style="--tc:${tc(i)};${i>=S.nTeams?"opacity:.35":""}"><label class="lbl" for="tn${i}">Name Kabinett ${i+1}</label><input type="text" id="tn${i}" value="${esc(t.name)}" maxlength="28" ${i>=S.nTeams?"disabled":""}></div>`).join("")}</div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:6px">
+      <label class="lbl" for="tname">Name eures Kabinetts</label><input type="text" id="tname" maxlength="28" value="${esc(T.name)}" placeholder="z. B. Kabinett Koralle">
+      <label class="lbl" for="tcourse" style="margin-top:12px">Kurswort von der Tafel</label><input type="text" id="tcourse" class="num" maxlength="10" value="${esc(T.course)}" placeholder="z. B. LUCHS" autocapitalize="characters" autocomplete="off">
+      <p class="small muted">Das Kurswort sorgt dafür, dass alle Kabinette im Jahr 2029 dieselbe Krise erleben.</p>
+      <p id="setupErr" class="small up-bad" role="alert"></p>
     </div>
-    <div class="panel"><h3 style="font-size:1.15rem;margin-bottom:4px">Krisenereignis in Runde 3 (2029)</h3><p class="small muted" style="margin-bottom:12px">Trifft alle Teams gleich. Wer vorgesorgt hat, wird weniger hart getroffen.</p>
-      <div class="evpick">${Object.entries(EVENTS).map(([k,e])=>`<label><input type="radio" name="ev" value="${k}" ${S.event===k?"checked":""}><span><strong>${e.title}</strong><br><span class="small muted">${e.text}</span></span></label>`).join("")}
-      <label><input type="radio" name="ev" value="zufall" ${S.event==="zufall"?"checked":""}><span><strong>Zufall</strong><br><span class="small muted">Wird erst in Runde 3 enthüllt.</span></span></label></div>
+    <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:12px">Wer übernimmt welches Ressort?</h3>
+      <div class="rolelist">${ROLES.map(r=>`<div class="rolein" style="--rc:${r.color}"><div class="row" style="gap:8px">${iconSVG(r.icon)}<strong>${r.name}</strong></div><p class="small muted">Ziele: ${roleGoalNames(r)}</p><input type="text" id="m-${r.id}" placeholder="Vorname" maxlength="24" value="${esc(T.members[r.id]||"")}" aria-label="Name ${r.name}"></div>`).join("")}</div>
     </div>
   </div>
-  <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:8px">Spielregeln in Kürze</h3>
-    <ul style="margin:0;padding-left:20px;display:grid;gap:6px" class="muted">
-      <li>Jede Runde ist ein Jahr (2027–2031). Pro Jahr beschließt jedes Kabinett <strong>genau zwei Maßnahmen</strong>.</li>
-      <li><strong>Schuldenbremse:</strong> ${BUDGET_BASE} Mrd. € Spielraum pro Jahr. Einnahmen (z. B. CO₂-Preis, Sparpaket) erweitern ihn. Investitionen in Infrastruktur und Energie können aus dem Sondervermögen (${SV_POT} Mrd. € für das ganze Spiel) bezahlt werden.</li>
-      <li><strong>Nicht eure Zuständigkeit:</strong> Leitzins (EZB), Löhne (Tarifparteien), Zölle (EU). Die EZB reagiert aber auf eure Inflation.</li>
-      <li>Viele Maßnahmen wirken <strong>verzögert</strong> oder kehren sich über die Zeit um. Der Berater auf dem Handy zeigt die Richtung, nicht die genauen Zahlen.</li>
-      <li>Gewertet wird die durchschnittliche Zielerreichung im magischen Viereck über alle Jahre.</li>
-    </ul>
-  </div>
-  <div class="row"><button class="btn primary big" id="go">Spiel starten: Jahr 2027</button><button class="btn big" data-go="berater">Berater ansehen</button></div>`;
-  const nT=el.querySelector("#nTeams");
-  nT.onchange=()=>{ S.nTeams=+nT.value; readNames(); save(); renderSetup(el); };
-  function readNames(){ S.teams.forEach((t,i)=>{ const inp=el.querySelector("#tn"+i); if(inp && !inp.disabled) t.name=inp.value.trim()||DEFAULT_NAMES[i]; }); const ev=el.querySelector('input[name="ev"]:checked'); if(ev) S.event=ev.value; }
-  el.querySelectorAll('input[name="ev"]').forEach(x=>x.onchange=()=>{ S.event=x.value; save(); });
-  el.querySelector("#go").onclick=()=>{ readNames(); if(S.event==="zufall"){ const ks=Object.keys(EVENTS); S.event=ks[Math.floor(Math.random()*ks.length)]; S.eventHidden=true; } S.phase="decide"; S.round=1; S.timer.left=S.timer.sec; S.teams.forEach(t=>{t.choices=[];t.notes=[];t.notlage=false;}); save(); render(); };
+  <div class="row"><button class="btn primary big" id="start">Regierung bilden: Jahr 2027</button><button class="btn big ghost" id="solo">Ohne Kurswort üben</button></div>`;
+  const read=()=>{ T.name=el.querySelector("#tname").value.trim()||"Unser Kabinett"; T.course=el.querySelector("#tcourse").value.trim().toUpperCase(); ROLES.forEach(r=>T.members[r.id]=el.querySelector("#m-"+r.id).value.trim()); };
+  const begin=ev=>{ T.event=ev; T.phase="propose"; T.round=1; T.step=0; T.cover=true; T.choices=[]; T.prio=[]; T.notes=[]; T.proposals=[]; T.notlage=false; saveT(); render(); };
+  el.querySelector("#start").onclick=()=>{ read(); const ev=Object.keys(COURSE_WORDS).find(k=>COURSE_WORDS[k]===T.course);
+    if(!ev){ el.querySelector("#setupErr").textContent = T.course? "Dieses Kurswort kennt das Spiel nicht. Schaut nochmal an die Tafel." : "Bitte das Kurswort von der Tafel eintragen."; return; } begin(ev); };
+  el.querySelector("#solo").onclick=()=>{ read(); T.course="ÜBUNG"; const ks=Object.keys(EVENTS); begin(ks[Math.floor(Math.random()*ks.length)]); };
 }
 
-/* Kabinettssitzung (Auswahl-Dialog) */
-let catFilter="alle";
-function openCabinet(i){
-  const t=S.teams[i], r=S.round; let picks=[...(t.choices[r-1]||[])]; let note=t.notes[r-1]||""; let notlage=t.notlage;
-  const wrap=document.createElement("div"); wrap.className="modal"; wrap.setAttribute("role","dialog"); wrap.setAttribute("aria-modal","true");
-  document.body.appendChild(wrap); document.body.style.overflow="hidden";
-  function close(){ wrap.remove(); document.body.style.overflow=""; render(); }
-  function draw(){
-    const tmp={...t, notlage}; const b=budgetState(tmp,r,picks);
-    const areaKeys=["alle",...Object.keys(AREAS)];
-    wrap.innerHTML=`<div class="sheet" style="--tc:${tc(i)}">
-      <div class="sheet-head"><div><p class="eyebrow">Kabinettsbeschluss ${YEARS[r-1]}</p><h2>${esc(t.name)}</h2></div><span class="spacer"></span>
-        <span class="pill neutral num">${picks.length}/2 gewählt</span>
-        <button class="btn" id="cancel">Abbrechen</button><button class="btn primary" id="ok" ${picks.length===2&&b.ok?"":"disabled"}>Beschließen</button></div>
-      <div class="sheet-body">
-        <div>
-          <div class="cat-filter" role="group" aria-label="Filter nach Bereich">${areaKeys.map(k=>`<button data-cat="${k}" aria-pressed="${catFilter===k}">${k==="alle"?"Alle":AREAS[k]}</button>`).join("")}</div>
-          <div class="measures">${MEASURES.filter(m=>catFilter==="alle"||m.area===catFilter).map(m=>{
-            const sel=picks.includes(m.id); const usedBefore=countPicksBefore(t,m.id,r); const max=m.max??2; const full=usedBefore>=max;
-            const dis = full || (!sel && picks.length>=2);
-            return `<button class="mcard ${sel?"sel":""}" data-m="${m.id}" ${dis&&!sel?"disabled":""} aria-pressed="${sel}">
-              <div class="meta"><span>${AREAS[m.area]}</span><span class="num">${m.cost>0?"kostet "+m.cost:m.cost<0?"bringt "+(-m.cost):"kostenneutral"}${m.cost?" Mrd. €":""}${m.sv?" · SV":""}</span></div>
-              <h4>${esc(m.name)}</h4><p class="small muted">${esc(m.desc)}</p>
-              ${arrowsRow(m)}
-              ${full?`<span class="small up-bad">Schon ${usedBefore}× beschlossen (Maximum)</span>`:usedBefore?`<span class="small muted">Bereits ${usedBefore}× beschlossen, wirkt erneut zusätzlich</span>`:""}
-            </button>`; }).join("")}
-            ${LOCKED.map(l=>`<button class="mcard locked" data-lock="${esc(l.why)}"><div class="meta"><span>nicht zuständig</span><span>🔒</span></div><h4>${esc(l.name)}</h4><p class="small muted">Antippen: Warum geht das nicht?</p></button>`).join("")}
-          </div>
-        </div>
-        <aside class="side">
-          <div class="panel">${budgetBar(b)}${!b.ok?`<p class="small up-bad" style="margin-top:8px">Die Schuldenbremse ist verletzt. Wählt eine günstigere Maßnahme oder eine, die Einnahmen bringt.</p>`:""}</div>
-          ${r===EVENT_ROUND?`<label class="check"><input type="checkbox" id="notlage" ${notlage?"checked":""}><span><strong>Notlage erklären</strong> (Art. 115 Abs. 2 GG): +${NOTLAGE_PLUS} Mrd. € in ${YEARS[r-1]}, danach jedes Jahr ${NOTLAGE_TILGUNG} Mrd. € weniger Spielraum (Tilgung).</span></label>`:(t.notlage&&r>EVENT_ROUND?`<p class="small muted">Notlage aus 2029: ${NOTLAGE_TILGUNG} Mrd. € Tilgung in diesem Jahr.</p>`:"")}
-          <div><label class="lbl" for="note">Begründung: Welches Ziel hat Vorrang, was nehmt ihr in Kauf?</label><textarea id="note" maxlength="200" placeholder="z. B. Wir bekämpfen zuerst die Arbeitslosigkeit und nehmen etwas mehr Inflation in Kauf.">${esc(note)}</textarea></div>
-          <p class="small muted">Legende: ↑ steigt, ⇈ steigt stark, ↓ sinkt · <span class="up-good">grün</span> = in Richtung Ziel, <span class="up-bad">rot</span> = weg vom Ziel. Sofort / nach 1 Jahr / langfristig.</p>
-          <div id="lockInfo"></div>
-        </aside>
-      </div></div>`;
-    wrap.querySelector("#cancel").onclick=close;
-    wrap.querySelector("#ok").onclick=()=>{ t.choices[r-1]=picks; t.notes[r-1]=wrap.querySelector("#note").value.trim(); if(r===EVENT_ROUND) t.notlage=notlage; save(); close(); };
-    wrap.querySelectorAll("[data-cat]").forEach(x=>x.onclick=()=>{ note=wrap.querySelector("#note").value; catFilter=x.dataset.cat; draw(); });
-    wrap.querySelectorAll("[data-m]").forEach(x=>x.onclick=()=>{ note=wrap.querySelector("#note").value; const id=x.dataset.m; picks = picks.includes(id)? picks.filter(p=>p!==id) : [...picks,id].slice(0,2); draw(); });
-    wrap.querySelectorAll("[data-lock]").forEach(x=>x.onclick=()=>{ wrap.querySelector("#lockInfo").innerHTML=`<div class="explain">${x.dataset.lock}</div>`; });
-    const nl=wrap.querySelector("#notlage"); if(nl) nl.onchange=()=>{ note=wrap.querySelector("#note").value; notlage=nl.checked; draw(); };
+function teamPropose(el){
+  const r=T.round, role=ROLES[T.step]; const props=T.proposals[r-1]||{};
+  let h=teamHeader(0)+(r===EVENT_ROUND?eventBanner(T.event):"");
+  if(T.cover){
+    const who=T.members[role.id];
+    h+=`<div class="cover" style="--rc:${role.color}">
+      <p class="eyebrow">Vorschlag ${T.step+1} von 3 · verdeckt</p>
+      <h2>Gerät weitergeben an: ${role.name}${who?` (${esc(who)})`:""}</h2>
+      <p>Nur diese Person schaut jetzt auf den Bildschirm. Die anderen beiden überlegen, welche Maßnahme sie in der Kabinettssitzung fordern und mit welchem Argument.</p>
+      <div class="rolechecks">${ROLES.map(x=>`<span class="pill ${props[x.id]?"good":"neutral"}">${props[x.id]?"✓ ":""}${x.short}</span>`).join("")}</div>
+      <button class="btn primary big" id="open">Ich bin ${role.short}: Vorschlag machen</button></div>`;
+    el.innerHTML=h+resetZone();
+    el.querySelector("#open").onclick=()=>{ T.cover=false; saveT(); render(); };
+    return;
   }
-  draw();
-  wrap.addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
-  wrap.querySelector("#cancel").focus();
+  const avg = r>1? ressortAvg(T,r-1)[role.id] : null;
+  h+=`<div class="propose">
+    <aside class="panel rolebrief" style="--rc:${role.color}">
+      <div class="row" style="gap:10px">${iconSVG(role.icon)}<h2>${role.name}</h2></div>
+      <p>${role.brief}</p>
+      <p class="small"><strong>Eure Brille:</strong> ${role.lens}</p>
+      <p class="small muted">Ressort-Ziele: ${roleGoalNames(role)}</p>
+      ${avg!=null?`<div class="rbar" style="--rc:${role.color}"><span>Ressort-Bilanz bisher</span><span class="bar"><i style="width:${avg}%"></i></span><span class="num">${fmt(avg,0)}</span></div>`:""}
+      <div id="picked" class="chip empty">Noch keine Maßnahme gewählt</div>
+      <label class="lbl" for="why">Euer Argument für das Kabinett (ein Satz)</label>
+      <textarea id="why" maxlength="180" placeholder="z. B. Ohne Arbeitsplätze verlieren wir das Vertrauen der Menschen."></textarea>
+      <button class="btn primary" id="give" disabled>Vorschlag verdeckt abgeben</button>
+    </aside>
+    <div><p class="small muted" style="margin-bottom:10px">Wählt genau eine Wunschmaßnahme. Das Etikett zeigt, ob sie eurem Ressort hilft. Die Pfeile zeigen sofort · nach 1 Jahr · langfristig.</p>
+      <div class="measures">${MEASURES.map(m=>measureCard(m,{role, disabled:usedUp(T,m.id,r), note:usedUp(T,m.id,r)?`<span class="small up-bad">Schon ausgeschöpft</span>`:""})).join("")}${lockedCards()}</div></div>
+  </div>`;
+  el.innerHTML=h+resetZone();
+  let pick=null;
+  const give=el.querySelector("#give"), picked=el.querySelector("#picked");
+  el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ pick=b.dataset.m; el.querySelectorAll("[data-m]").forEach(x=>{ const on=x.dataset.m===pick; x.classList.toggle("sel",on); x.setAttribute("aria-pressed",on); }); picked.className="chip"; picked.textContent=M[pick].name; give.disabled=false; if(window.innerWidth<1100) picked.scrollIntoView({block:"center",behavior:"smooth"}); });
+  give.onclick=()=>{ const p=T.proposals[r-1]||{}; p[role.id]={m:pick, why:el.querySelector("#why").value.trim()}; T.proposals[r-1]=p; T.step++; T.cover=true;
+    if(T.step>=3){ T.phase="cabinet"; T.step=0; T.cover=false; CAB=null; } saveT(); render(); };
 }
-function arrowsRow(m){
-  return `<div class="arrows">${CORE.map(g=>{ const a=m.fx[g.k]||[0,0,0];
-    const cells=[a[0]||0, a[1]??a[0]??0, a[a.length-1]||0].map(v=>arrowFor(g.k,v));
-    return `<div title="${g.name}: sofort / nach 1 Jahr / langfristig"><span>${g.short==="Außenwirtschaft"?"Außenw.":g.short==="Beschäftigung"?"Beschäft.":g.short}</span><b>${cells.map(c=>`<span class="${c.cls}">${c.sym}</span>`).join(" ")}</b></div>`; }).join("")}</div>`;
+
+let CAB=null;
+function teamCabinet(el){
+  const r=T.round, props=T.proposals[r-1]||{};
+  if(!CAB||CAB.round!==r) CAB={round:r, picks:[], prio:null, note:"", notlage:T.notlage, showAll:false};
+  const tmp={...T, notlage:CAB.notlage}; const b=budgetState(tmp,r,CAB.picks);
+  // Konflikte zwischen den Vorschlägen
+  const lines=[];
+  for(const A of ROLES){ const p=props[A.id]; if(!p) continue; const m=M[p.m];
+    for(const B of ROLES){ if(B.id===A.id) continue; const imp=roleImpact(m,B);
+      if(imp.cls==="bad") lines.push(`<li><span class="pill bad">Konflikt</span> Der Vorschlag von <strong>${A.short}</strong> (${esc(m.name)}) <strong>${imp.txt}</strong> dem Ressort ${B.short}.</li>`);
+      else if(imp.cls==="warn") lines.push(`<li><span class="pill warn">Abwägen</span> ${esc(m.name)} (${A.short}) ist für ${B.short} <strong>${imp.txt}</strong>.</li>`);
+      else if(imp.cls==="good") lines.push(`<li><span class="pill good">Harmonie</span> ${esc(m.name)} (${A.short}) <strong>${imp.txt}</strong> auch dem Ressort ${B.short}.</li>`);
+    } }
+  const uniq=[...new Set(ROLES.map(x=>props[x.id]?.m).filter(Boolean))];
+  const allCost=costSplit(tmp, uniq, b.svLeft); const same=uniq.length<3;
+  let h=teamHeader(1)+(r===EVENT_ROUND?eventBanner(T.event):"");
+  h+=`<div><h2 class="sectitle">Die drei Vorschläge</h2><p class="muted small">Jetzt laut: Jedes Ressort stellt seinen Vorschlag vor (30 Sekunden). Danach verhandelt ihr.</p></div>
+  <div class="props">${ROLES.map(x=>{ const p=props[x.id]; const m=M[p.m]; const taken=CAB.picks.includes(m.id);
+    return `<div class="prop ${taken?"taken":""}" style="--rc:${x.color}">
+      <p class="eyebrow">${x.name}${T.members[x.id]?" · "+esc(T.members[x.id]):""}</p>
+      <h3>${esc(m.name)}</h3><p class="small muted num">${costLabel(m)}</p>
+      ${p.why?`<p class="why" style="--tc:${x.color}">„${esc(p.why)}“</p>`:""}
+      <div class="impacts">${ROLES.map(y=>{ const i=roleImpact(m,y); return `<span class="pill ${i.cls}"><span>${y.short}</span><span>${i.txt}</span></span>`; }).join("")}</div>
+      <button class="btn ${taken?"":"dark"} small" data-take="${m.id}" ${!taken&&(CAB.picks.length>=2||usedUp(T,m.id,r))?"disabled":""}>${taken?"Aus dem Beschluss nehmen":"In den Beschluss übernehmen"}</button>
+    </div>`; }).join("")}</div>
+  <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:8px">Was die Vorschläge miteinander machen</h3>
+    <ul class="conflicts">${lines.join("")||'<li class="muted">Keine deutlichen Wechselwirkungen zwischen den Ressorts.</li>'}
+    <li><span class="pill ${allCost.reg>b.room?"bad":"neutral"}">Geld</span> ${same?"Zwei Ressorts wollen dasselbe. ":""}Alle Vorschläge zusammen belasten den Haushalt mit <strong class="num">${fmt(allCost.reg,0)} Mrd. €</strong>${allCost.sv?` (plus ${fmt(allCost.sv,0)} Mrd. € aus dem Sondervermögen)`:""}. Spielraum: <strong class="num">${b.room} Mrd. €</strong>. Beschließen dürft ihr nur zwei Maßnahmen.</li></ul></div>
+  <div class="decide">
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      <h2 class="sectitle">Kabinettsbeschluss ${YEARS[r-1]}</h2>
+      <div class="slots">${[0,1].map(j=>CAB.picks[j]?`<div class="chip">${esc(M[CAB.picks[j]].name)}<button class="btn small ghost" data-drop="${CAB.picks[j]}" aria-label="Entfernen">✕</button></div>`:`<div class="chip empty">Maßnahme ${j+1} offen</div>`).join("")}</div>
+      <button class="btn small" id="showAll" style="align-self:flex-start">${CAB.showAll?"Katalog ausblenden":"Kompromiss suchen: ganzen Katalog zeigen"}</button>
+      ${CAB.showAll?`<div class="measures">${MEASURES.map(m=>{ const sel=CAB.picks.includes(m.id); const dis=usedUp(T,m.id,r)||(!sel&&CAB.picks.length>=2); return measureCard(m,{sel, disabled:dis&&!sel}); }).join("")}</div>`:""}
+      <div><p class="lbl">Welches Ziel hat in diesem Jahr Vorrang?</p><div class="prio" role="group" aria-label="Vorrang">${CORE.map((g,i)=>`<button data-prio="${i}" aria-pressed="${CAB.prio===i}">${g.short}</button>`).join("")}</div></div>
+      <div><label class="lbl" for="note">Protokoll: Warum dieser Beschluss? Was nehmt ihr in Kauf?</label><textarea id="note" maxlength="220" placeholder="z. B. Wir stellen die Beschäftigung vor die Preisstabilität, weil …">${esc(CAB.note)}</textarea></div>
+    </div>
+    <aside class="side">
+      <div class="panel">${budgetBar(b)}${!b.ok?`<p class="small up-bad" style="margin-top:8px">Die Schuldenbremse ist verletzt. Das Finanzministerium muss widersprechen.</p>`:""}</div>
+      ${r===EVENT_ROUND?`<label class="check"><input type="checkbox" id="notlage" ${CAB.notlage?"checked":""}><span><strong>Notlage erklären</strong> (nur mit Zustimmung des Finanzministeriums): +${NOTLAGE_PLUS} Mrd. € jetzt, danach jedes Jahr ${NOTLAGE_TILGUNG} Mrd. € weniger Spielraum.</span></label>`:(T.notlage&&r>EVENT_ROUND?`<p class="small muted">Notlage aus 2029: ${NOTLAGE_TILGUNG} Mrd. € Tilgung in diesem Jahr.</p>`:"")}
+      <button class="btn primary big" id="decide" ${CAB.picks.length===2&&b.ok&&CAB.prio!=null&&CAB.note.trim().length>=5?"":"disabled"}>Beschluss fassen</button>
+      <p class="small muted" id="missing">${[CAB.picks.length<2?"zwei Maßnahmen":null, !b.ok?"Haushalt einhalten":null, CAB.prio==null?"Vorrang-Ziel":null, CAB.note.trim().length<5?"Protokoll":null].filter(Boolean).map(x=>"○ "+x).join("<br>")}</p>
+    </aside>
+  </div>`;
+  el.innerHTML=h+resetZone();
+  const redraw=()=>{ const y=window.scrollY; teamCabinet(el); wireReset(el); window.scrollTo(0,y); };
+  const toggle=id=>{ CAB.picks = CAB.picks.includes(id)? CAB.picks.filter(x=>x!==id) : [...CAB.picks,id].slice(0,2); redraw(); };
+  el.querySelectorAll("[data-take]").forEach(x=>x.onclick=()=>toggle(x.dataset.take));
+  el.querySelectorAll("[data-drop]").forEach(x=>x.onclick=()=>toggle(x.dataset.drop));
+  el.querySelectorAll(".decide [data-m]").forEach(x=>x.onclick=()=>toggle(x.dataset.m));
+  el.querySelectorAll("[data-prio]").forEach(x=>x.onclick=()=>{ CAB.prio=+x.dataset.prio; redraw(); });
+  el.querySelector("#showAll").onclick=()=>{ CAB.showAll=!CAB.showAll; redraw(); };
+  const note=el.querySelector("#note"); note.oninput=()=>{ CAB.note=note.value; const ok=CAB.picks.length===2&&b.ok&&CAB.prio!=null&&CAB.note.trim().length>=5; el.querySelector("#decide").disabled=!ok; };
+  const nl=el.querySelector("#notlage"); if(nl) nl.onchange=()=>{ CAB.notlage=nl.checked; redraw(); };
+  el.querySelector("#decide").onclick=()=>{ T.choices[r-1]=[...CAB.picks]; T.prio[r-1]=CAB.prio; T.notes[r-1]=CAB.note.trim(); if(r===EVENT_ROUND) T.notlage=CAB.notlage; T.phase="result"; CAB=null; saveT(); render(); };
 }
+
+function teamResult(el){
+  const n=T.round, ys=simulate(T,n,T.event), y=ys[n], p=ys[n-1];
+  const rs=ressortYear(T,ys,n), ra=ressortAvg(T,n); const idx=index(y.s,null,false);
+  const code=encodeTeam(T);
+  let h=teamHeader(2)+`<div class="bilanz">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="row" style="justify-content:space-between"><h2 class="sectitle">Bilanz ${YEARS[n-1]}</h2><span class="pill ${scoreClass(idx)} num" style="font-size:1rem">${fmt(idx,0)} von 100</span></div>
+      ${radarSVG(y.s,{size:320,fs:16,color:"var(--t1)",aria:"Zielerreichung "+YEARS[n-1]})}
+      <div class="vals">${CORE.map(g=>{ const d=y.v[g.k]-p.v[g.k]; const a=arrowFor(g.k,d); return `<span class="k">${g.name}</span><span class="v">${fmt(y.v[g.k],1)} %</span><span class="d ${a.cls}">${fmtSigned(d)}</span>`; }).join("")}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div class="ezb"><span class="pill neutral num" style="font-size:.9rem;padding:8px 12px">EZB</span><p>${ezbOne(y.ezb)}</p></div>
+      <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:10px">Ressort-Bilanz</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">${ROLES.map(x=>`<div class="rbar" style="--rc:${x.color}"><span><strong>${x.short}</strong><br><span class="small muted">Ø bisher ${fmt(ra[x.id],0)}</span></span><span class="bar"><i style="width:${rs[x.id]}%"></i></span><span class="num">${fmt(rs[x.id],0)}</span></div>`).join("")}</div>
+        <p class="small muted" style="margin-top:10px">Finanzen = Preise + Haushalt · Wirtschaft = Wachstum + Außenwirtschaft · Arbeit &amp; Soziales = Beschäftigung</p></div>
+      <div class="panel"><p class="eyebrow">Euer Beschluss</p><p style="margin:6px 0"><strong>${T.choices[n-1].map(id=>esc(M[id].name)).join(" + ")}</strong> · Vorrang: ${CORE[T.prio[n-1]].name}</p>${T.notes[n-1]?`<p class="why" style="--tc:var(--t1)">„${esc(T.notes[n-1])}“</p>`:""}
+        <details class="chain" open><summary>Wirkungsketten ${YEARS[n-1]}</summary>${chainList(y)}</details></div>
+    </div>
+  </div>
+  <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:6px">Kurz besprechen (1 Min.)</h3><p class="muted">Welches Ressort hat sich durchgesetzt? Welches Ziel habt ihr dafür in Kauf genommen? Ist eure Begründung eine positive oder eine normative Aussage?</p></div>
+  <div class="codebox"><p class="eyebrow" style="color:#B9C4DA">Ergebniscode nach ${YEARS[n-1]}</p><div class="code" id="code">${code}</div><p>Diesen Code nennt ihr der Lehrkraft, wenn sie danach fragt. Er enthält eure Beschlüsse, keine Namen.</p><div class="row"><button class="btn small" id="copy">Code kopieren</button></div></div>
+  <div class="row"><span class="spacer"></span><button class="btn primary big" id="next">${n<5?"Weiter ins Jahr "+YEARS[n]:"Legislatur beenden"}</button></div>`;
+  el.innerHTML=h+resetZone();
+  el.querySelector("#copy").onclick=()=>{ const done=()=>toast("Code kopiert"); try{ navigator.clipboard.writeText(code).then(done,()=>selectCode()); }catch(e){ selectCode(); } };
+  function selectCode(){ const r=document.createRange(); r.selectNodeContents(el.querySelector("#code")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("Code markiert: jetzt kopieren"); }
+  el.querySelector("#next").onclick=()=>{ if(n<5){ T.round++; T.phase="propose"; T.step=0; T.cover=true; } else T.phase="end"; saveT(); render(); };
+}
+
+function teamEnd(el){
+  const n=5, ys=simulate(T,n,T.event), base=simulate({choices:[]},n,T.event);
+  const ra=ressortAvg(T,n); const avg=teamIndex(T,n,T.event,null,false); const code=encodeTeam(T);
+  const years=[2026,...YEARS];
+  el.innerHTML=`<div><p class="eyebrow">${esc(T.name)} · Legislatur 2027–2031</p><h1 class="pagetitle">Eure Bilanz</h1></div>
+  <div class="codebox"><p class="eyebrow" style="color:#B9C4DA">Endgültiger Ergebniscode</p><div class="code">${code}</div><p>Gebt diesen Code der Lehrkraft. Am Beamer werden alle Kabinette verglichen, und dann wartet noch eine Überraschung.</p></div>
+  <div class="tiles" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+    <div class="tile"><span class="small muted">Zielerreichung Viereck (Ø)</span><span class="val">${fmt(avg,0)}</span></div>
+    ${ROLES.map(x=>`<div class="tile" style="border-top:6px solid ${x.color}"><span class="small muted">${x.name}</span><span class="val">${fmt(ra[x.id],0)}</span></div>`).join("")}
+  </div>
+  <div><h2 class="sectitle" style="margin-bottom:6px">Was hat eure Politik verändert?</h2><p class="small muted" style="margin-bottom:12px">Durchgezogen: euer Kabinett · gestrichelt: dieselbe Krise ohne eure Maßnahmen</p>
+  <div class="charts">${CORE.map(g=>`<div class="chartbox"><h4>${g.name}</h4><p class="u">${g.ind}</p>${lineChart([{vals:base.map(y=>y.v[g.k]),color:"var(--muted)",dash:true,w:2},{vals:ys.map(y=>y.v[g.k]),color:"var(--t1)"}],{years,min:{infl:1.5,alq:3,lb:0,bip:0}[g.k],max:{infl:3,alq:6.5,lb:5,bip:2.5}[g.k],band:{infl:[1.5,2.5],alq:[0,3],lb:[-1,1],bip:[2,3]}[g.k],aria:g.ind})}</div>`).join("")}</div></div>
+  <div><h2 class="sectitle" style="margin-bottom:12px">Kabinettsprotokoll</h2><div class="tablewrap"><table><thead><tr><th>Jahr</th><th>Vorschläge der Ressorts</th><th>Beschluss</th><th>Vorrang</th><th>Begründung</th></tr></thead><tbody>
+    ${YEARS.map((yr,i)=>{ const p=T.proposals[i]||{}; return `<tr><td class="num">${yr}</td><td>${ROLES.map(x=>p[x.id]?`<span class="small"><strong>${x.short}:</strong> ${esc(M[p[x.id].m].name)}</span>`:"").join("<br>")}</td><td>${(T.choices[i]||[]).map(id=>esc(M[id].name)).join("<br>")}</td><td>${T.prio[i]!=null?CORE[T.prio[i]].short:""}</td><td class="small">${esc(T.notes[i]||"")}</td></tr>`; }).join("")}
+  </tbody></table></div></div>`+resetZone();
+}
+
+/* Timer am Beamer */
+let timerHandle=null;
+function startTimer(){ V.timer.running=true; clearInterval(timerHandle); timerHandle=setInterval(()=>{ V.timer.left=Math.max(0,V.timer.left-1); const t=document.getElementById("timer"); if(t){ t.textContent=mmss(V.timer.left); t.classList.toggle("up-bad",V.timer.left<=60); } if(V.timer.left===0){ stopTimer(); toast("Zeit ist um: Beschlüsse fassen!"); const b=document.getElementById("tStart"); if(b) b.textContent="Start"; } saveV(); },1000); }
+function stopTimer(){ V.timer.running=false; clearInterval(timerHandle); saveV(); }
 
 /* ---------- BERATER (für Team-Geräte) ---------- */
 let berFilter="alle";
@@ -1052,7 +1211,7 @@ function renderBerater(el){
   el.querySelectorAll("[data-cat]").forEach(x=>x.onclick=()=>{ berFilter=x.dataset.cat; renderBerater(el); });
 }
 
-/* ---------- AUSWERTUNG + OKTOGON ---------- */
+/* ---------- VERGLEICH + OKTOGON (Beamer, Lehrkraft) ---------- */
 const PRESETS={
   gleich:{label:"Alle gleich", w:EQUAL_W},
   gewerkschaft:{label:"Gewerkschaft", w:{infl:1,thg:0.5,alq:3,armut:2,lb:0.5,nl:3,bip:1,ee:0.5}},
@@ -1061,86 +1220,127 @@ const PRESETS={
   ezb:{label:"EZB / Bundesbank", w:{infl:4,thg:0.5,alq:0.5,armut:0.5,lb:1,nl:0.5,bip:1,ee:0.5}},
   sozial:{label:"Sozialverband", w:{infl:1.5,thg:0.5,alq:2,armut:3,lb:0.5,nl:2,bip:0.5,ee:0.5}},
 };
-let revealAnim=null;
-function renderAuswertung(el){
-  const n = evaluated();
-  if(S.phase==="setup" || n<1){
-    el.innerHTML=`<div class="panel"><h2 style="font-size:1.6rem;margin-bottom:8px">Noch keine Ergebnisse</h2><p class="muted">Die Auswertung füllt sich, sobald im Planspiel das erste Jahr ausgewertet wurde.</p><div class="row" style="margin-top:14px"><button class="btn primary" data-go="spiel">Zum Planspiel</button></div></div>`; return;
-  }
-  const teams=activeTeams(); const sims=teams.map(t=>simulate(t,n,S.event));
-  const rev=S.revealed; const W=S.weights;
-  const rank4=teams.map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,null,false)})).sort((a,b)=>b.sc-a.sc);
-  const rank8=teams.map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,W,true)})).sort((a,b)=>b.sc-a.sc);
-  const shown = rev? rank8 : rank4;
-  const pos4=Object.fromEntries(rank4.map((x,p)=>[x.i,p]));
-  const goals = rev? GOALS : CORE;
-  const years=[2026,...YEARS.slice(0,n)];
+const DEMO=[
+  {name:"Kabinett Koralle", choices:[["konjunktur","co2"],["infrastruktur","reichensteuer"],["konjunktur","energiepreis"],["infrastruktur","co2"],["energiewende","sparen"]], prio:[1,3,0,3,0], notlage:true},
+  {name:"Kabinett Türkis", choices:[["energiewende","bildung"],["co2","energiewende"],["bildung","fachkraefte"],["co2","buerokratie"],["infrastruktur","tariftreue"]], prio:[1,1,1,3,1], notlage:false},
+  {name:"Kabinett Kobalt", choices:[["steuer","export"],["steuer","buerokratie"],["export","auto"],["buerokratie","auto"],["fachkraefte","bildung"]], prio:[3,3,2,3,3], notlage:false},
+  {name:"Kabinett Magenta", choices:[["mlmod","wohngeld"],["energiepreis","sparen"],["wohngeld","tariftreue"],["sparen","reichensteuer"],["mlstark","bildung"]], prio:[1,0,1,0,1], notlage:false},
+];
+function cmpTeams(){
+  return V.rows.map((rw,i)=>{ if(!rw.code.trim()) return null; const d=decodeTeam(rw.code); if(d.err) return null; return {...d, name:rw.name.trim()||`Kabinett ${i+1}`, ci:i}; }).filter(Boolean);
+}
+function rowStatus(rw){
+  if(!rw.code.trim()) return `<span class="pill neutral">leer</span>`;
+  const d=decodeTeam(rw.code); if(d.err) return `<span class="pill bad">${esc(d.err)}</span>`;
+  return `<span class="pill good">✓ ${d.choices.length} ${d.choices.length===1?"Jahr":"Jahre"}</span>`;
+}
+function renderVergleich(el){
   el.innerHTML=`
-  <div class="lage-head"><div><p class="eyebrow">Auswertung · ${n<5?`Zwischenstand nach ${n} von 5 Jahren`:"Ende der Legislatur 2031"}</p>
-    <h1 style="margin-top:8px">${rev?"Das magische Achteck":"Wer hat welches Ziel geopfert?"}</h1></div>
-    <div class="legend">${teams.map((t,i)=>`<span style="--tc:${tc(i)}"><i></i>${esc(t.name)}</span>`).join("")}</div></div>
-  <div class="results" style="--n:${teams.length}" id="radars">${teams.map((t,i)=>{
-    const last=sims[i][n];
-    return `<div class="res" style="--tc:${tc(i)}"><h3><span style="width:12px;height:12px;border-radius:50%;background:${tc(i)}"></span>${esc(t.name)}</h3>
-      <div class="radar-slot" data-i="${i}">${radarSVG(last.s,{size:260,fs:15,color:tc(i),reveal:rev?1:0})}</div>
-      <div class="vals">${(rev?GOALS:CORE).map(g=>`<span class="k">${g.short}</span><span class="v">${fmt(last.v[g.k],g.dec)}${g.unit}</span><span class="d ${scoreClass(last.s[g.k])==="good"?"up-good":scoreClass(last.s[g.k])==="bad"?"up-bad":"flat"}">${fmt(last.s[g.k],0)}</span>`).join("")}</div>
+  <div class="lage-head"><div><p class="eyebrow">Beamer · Lehrkraft</p><h1 class="pagetitle">Kurs vorbereiten und vergleichen</h1></div></div>
+  <div class="setup">
+    <div class="panel"><h3 style="font-size:1.15rem;margin-bottom:4px">1. Krise für das Jahr 2029 wählen</h3><p class="small muted" style="margin-bottom:12px">Trifft alle Kabinette gleich. Wer vorgesorgt hat, wird weniger hart getroffen.</p>
+      <div class="evpick">${Object.entries(EVENTS).map(([k,e])=>`<label><input type="radio" name="ev" value="${k}" ${V.event===k?"checked":""}><span><strong>${e.title}</strong><br><span class="small muted">${e.text}</span></span></label>`).join("")}</div>
+      <button class="btn small" id="rnd" style="margin-top:10px">Zufällig wählen</button></div>
+    <div class="panel coursebox"><p class="eyebrow">2. Kurswort an die Tafel</p><div class="word num" id="word">${COURSE_WORDS[V.event]}</div>
+      <p class="small muted">Die Teams geben es beim Start ein. So erleben alle dieselbe Krise, ohne sie vorher zu kennen.</p>
+      <div class="row" style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px"><span class="small muted">Rundentimer</span><span class="timer-l num ${V.timer.left<=60?"up-bad":""}" id="timer">${mmss(V.timer.left)}</span><button class="btn small" id="tStart">${V.timer.running?"Pause":"Start"}</button><button class="btn small ghost" id="tReset">↺ ${Math.round(V.timer.sec/60)} Min</button></div></div>
+  </div>
+  <div class="panel"><div class="row" style="margin-bottom:12px"><h3 style="font-size:1.15rem">3. Ergebniscodes der Kabinette eintragen</h3><span class="spacer"></span><button class="btn small" id="demo">Beispielcodes laden</button><button class="btn small ghost" id="clear">Leeren</button></div>
+    <div class="codes">${V.rows.map((rw,i)=>`<div class="coderow" style="--tc:${tc(i)}"><input type="text" id="cn${i}" placeholder="Name Kabinett ${i+1}" value="${esc(rw.name)}" maxlength="28" aria-label="Name Kabinett ${i+1}"><input type="text" id="cc${i}" class="num" placeholder="z. B. EN-AC2-…" value="${esc(rw.code)}" autocapitalize="characters" autocomplete="off" aria-label="Code Kabinett ${i+1}"><span id="cs${i}">${rowStatus(rw)}</span></div>`).join("")}</div>
+    <p class="small muted" style="margin-top:10px">Die Teams sehen ihren Code nach jedem Jahr in der Bilanz. Ihr könnt also auch zwischendurch vergleichen. Groß- und Kleinschreibung ist egal.</p></div>
+  <div id="cmp" class="view"></div>`;
+  el.querySelectorAll('input[name="ev"]').forEach(x=>x.onchange=()=>{ V.event=x.value; saveV(); el.querySelector("#word").textContent=COURSE_WORDS[V.event]; });
+  el.querySelector("#rnd").onclick=()=>{ const ks=Object.keys(EVENTS); V.event=ks[Math.floor(Math.random()*ks.length)]; saveV(); renderVergleich(el); toast("Krise zufällig gewählt. Das Kurswort verrät sie nicht."); };
+  el.querySelector("#tStart").onclick=()=>{ V.timer.running?stopTimer():startTimer(); el.querySelector("#tStart").textContent=V.timer.running?"Pause":"Start"; };
+  el.querySelector("#tReset").onclick=()=>{ stopTimer(); const opts=[300,420,480,600,720]; const i=opts.indexOf(V.timer.sec); if(V.timer.left===V.timer.sec) V.timer.sec=opts[(i+1)%opts.length]; V.timer.left=V.timer.sec; saveV(); renderVergleich(el); };
+  el.querySelector("#demo").onclick=()=>{ DEMO.forEach((d,i)=>{ V.rows[i]={name:d.name, code:encodeTeam({...d, event:V.event})}; }); V.revealed=false; saveV(); renderVergleich(el); };
+  el.querySelector("#clear").onclick=()=>{ V.rows=freshV().rows; V.revealed=false; saveV(); renderVergleich(el); };
+  V.rows.forEach((rw,i)=>{
+    const cn=el.querySelector("#cn"+i), cc=el.querySelector("#cc"+i);
+    cn.oninput=()=>{ V.rows[i].name=cn.value; saveV(); drawCmp(el.querySelector("#cmp")); };
+    cc.oninput=()=>{ V.rows[i].code=cc.value; saveV(); el.querySelector("#cs"+i).innerHTML=rowStatus(V.rows[i]); drawCmp(el.querySelector("#cmp")); };
+  });
+  drawCmp(el.querySelector("#cmp"));
+}
+
+function drawCmp(box){
+  const teams=cmpTeams();
+  if(!teams.length){ box.innerHTML=`<div class="panel"><h2 class="sectitle">Noch keine gültigen Codes</h2><p class="muted" style="margin-top:6px">Sobald mindestens ein Code eingetragen ist, erscheint hier der Vergleich. Zum Ausprobieren: „Beispielcodes laden“.</p></div>`; return; }
+  const n=Math.min(...teams.map(t=>t.choices.length));
+  if(n<1){ box.innerHTML=`<div class="panel"><p class="muted">Mindestens ein Kabinett hat noch kein Jahr beschlossen.</p></div>`; return; }
+  const evs=[...new Set(teams.map(t=>t.event))];
+  const sims=teams.map(t=>simulate(t,n,t.event));
+  const rev=V.revealed, W=V.weights;
+  const rank=(eight,w)=>teams.map((t,j)=>({j,sc:teamIndex(t,n,t.event,w,eight)})).sort((a,b)=>b.sc-a.sc);
+  const r4=rank(false,null), shown=rev?rank(true,W):r4;
+  const pos4=Object.fromEntries(r4.map((x,p)=>[x.j,p]));
+  const goals=rev?GOALS:CORE; const years=[2026,...YEARS.slice(0,n)];
+  const ressort=teams.map(t=>ressortAvg(t,n));
+  box.innerHTML=`
+  ${evs.length>1?`<div class="banner"><span class="flash">Achtung</span><div><h3>Unterschiedliche Krisen</h3><p>Nicht alle Kabinette haben dasselbe Kurswort benutzt. Der Vergleich ist dann nur eingeschränkt fair.</p></div></div>`:""}
+  <div class="lage-head"><div><p class="eyebrow">${n<5?`Zwischenstand nach ${n} von 5 Jahren`:"Ende der Legislatur 2031"}${teams.some(t=>t.choices.length>n)?" · verglichen wird bis zum Jahr, das alle erreicht haben":""}</p>
+    <h2 class="pagetitle" style="font-size:clamp(1.8rem,3.6vw,2.6rem)">${rev?"Das magische Achteck":"Wer hat welches Ziel geopfert?"}</h2></div>
+    <div class="legend">${teams.map(t=>`<span style="--tc:${tc(t.ci)}"><i></i>${esc(t.name)}</span>`).join("")}</div></div>
+  <div class="results" style="--n:${teams.length}">${teams.map((t,j)=>{ const last=sims[j][n];
+    return `<div class="res" style="--tc:${tc(t.ci)}"><h3><span style="width:12px;height:12px;border-radius:50%;background:${tc(t.ci)}"></span>${esc(t.name)}</h3>
+      <div class="radar-slot" data-j="${j}">${radarSVG(last.s,{size:260,fs:15,color:tc(t.ci),reveal:rev?1:0})}</div>
+      <div class="vals">${goals.map(g=>`<span class="k">${g.short}</span><span class="v">${fmt(last.v[g.k],g.dec)}${g.unit}</span><span class="d ${scoreClass(last.s[g.k])==="good"?"up-good":scoreClass(last.s[g.k])==="bad"?"up-bad":"flat"}">${fmt(last.s[g.k],0)}</span>`).join("")}</div>
     </div>`; }).join("")}</div>
-  <div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 style="font-size:1.25rem">${rev?"Rangliste im Achteck":"Rangliste im Viereck"}</h3><span class="small muted">Durchschnittliche Zielerreichung 2027–${YEARS[n-1]} (0–100)</span></div>
-    <div class="rank" id="rank">${shown.map((x,p)=>{ const mv=rev? pos4[x.i]-p : 0;
-      return `<div class="rank-row" data-i="${x.i}" style="--tc:${tc(x.i)}"><span class="pos">${p+1}</span><span class="nm">${esc(x.name)}</span><span class="track"><i style="width:${x.sc}%"></i></span><span class="sc">${fmt(x.sc,1)}</span><span class="mv ${mv>0?"up-good":mv<0?"up-bad":"flat"}">${rev?(mv>0?"▲"+mv:mv<0?"▼"+(-mv):"="):""}</span></div>`; }).join("")}</div></div>
-  ${rev?revealExtras(n):""}
-  ${!rev?`<div class="reveal-cta"><div><p class="eyebrow" style="color:#B9C4DA">Ausblick</p><h2>Die Simulation hat heimlich vier weitere Ziele mitgerechnet.</h2><p>Umwelt, gerechte Verteilung, humane Arbeitsbedingungen und Ressourcen. Keines davon steht im Stabilitätsgesetz von 1967. Was passiert mit der Rangliste, wenn sie zählen?</p></div><button class="btn primary big" id="reveal">Oktogon aufdecken</button></div>`:""}
-  <div><h2 style="font-size:1.4rem;margin-bottom:12px">Verlauf ${rev?"aller acht Ziele":"der vier Ziele"}</h2>
-  <div class="charts">${goals.map(g=>{ const band = {infl:[1.5,2.5], alq:[0,3], lb:[-1,1], bip:[2,3], thg:null, armut:[0,11], nl:[0,8], ee:[80,100]}[g.k];
-    return `<div class="chartbox"><h4>${g.name}</h4><p class="u">${g.ind} · Ziel: ${g.target}</p>${lineChart(teams.map((t,i)=>({vals:sims[i].map(y=>y.v[g.k]), color:tc(i)})),{years, min:{infl:1.5,alq:3,lb:0,bip:0,thg:430,armut:11,nl:8,ee:55}[g.k], max:{infl:3,alq:6.5,lb:5,bip:2.5,thg:640,armut:16,nl:16,ee:80}[g.k], band, dec:g.dec, aria:g.ind})}</div>`; }).join("")}</div></div>
+  <div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 style="font-size:1.25rem">${rev?"Rangliste im Achteck":"Rangliste im Viereck"}</h3><span class="small muted">Durchschnittliche Zielerreichung ${n===1?"2027":"2027–"+YEARS[n-1]} (0–100)</span></div>
+    <div class="rank" id="rank">${shown.map((x,p)=>{ const t=teams[x.j]; const mv=rev?pos4[x.j]-p:0;
+      return `<div class="rank-row" data-i="${x.j}" style="--tc:${tc(t.ci)}"><span class="pos">${p+1}</span><span class="nm">${esc(t.name)}</span><span class="track"><i style="width:${x.sc}%"></i></span><span class="sc">${fmt(x.sc,1)}</span><span class="mv ${mv>0?"up-good":mv<0?"up-bad":"flat"}">${rev?(mv>0?"▲"+mv:mv<0?"▼"+(-mv):"="):""}</span></div>`; }).join("")}</div></div>
+  ${rev?weightsPanel():`<div class="reveal-cta"><div><p class="eyebrow" style="color:#B9C4DA">Ausblick</p><h2>Die Simulation hat heimlich vier weitere Ziele mitgerechnet.</h2><p>Umwelt, gerechte Verteilung, humane Arbeitsbedingungen und Ressourcen. Keines davon steht im Stabilitätsgesetz von 1967. Was passiert mit der Rangliste, wenn sie zählen?</p></div><button class="btn primary big" id="reveal">Oktogon aufdecken</button></div>`}
+  <div><h2 class="sectitle" style="margin-bottom:12px">Wer hat welchem Ziel Vorrang gegeben?</h2><div class="tablewrap"><table><thead><tr><th>Kabinett</th>${YEARS.slice(0,n).map(y=>`<th>${y}</th>`).join("")}<th>Finanzen</th><th>Wirtschaft</th><th>Arbeit &amp; Soz.</th></tr></thead><tbody>
+    ${teams.map((t,j)=>`<tr><td><strong style="color:${tc(t.ci)}">${esc(t.name)}</strong></td>${YEARS.slice(0,n).map((_,r)=>`<td><span class="pill neutral">${CORE[t.prio[r]].short}</span><br><span class="small muted">${t.choices[r].map(id=>esc(M[id].name)).join(" + ")}</span>${r===EVENT_ROUND-1&&t.notlage?`<br><span class="pill bad">Notlage</span>`:""}</td>`).join("")}${ROLES.map(x=>`<td class="num">${fmt(ressort[j][x.id],0)}</td>`).join("")}</tr>`).join("")}
+  </tbody></table></div><p class="small muted" style="margin-top:8px">Rechts: Ressort-Bilanz je Ministerium (Ø 0–100). Welches Ressort hat sich in welchem Kabinett durchgesetzt?</p></div>
+  <div><h2 class="sectitle" style="margin-bottom:12px">Verlauf ${rev?"aller acht Ziele":"der vier Ziele"}</h2>
+  <div class="charts">${goals.map(g=>{ const band={infl:[1.5,2.5],alq:[0,3],lb:[-1,1],bip:[2,3],thg:null,armut:[0,11],nl:[0,8],ee:[80,100]}[g.k];
+    return `<div class="chartbox"><h4>${g.name}</h4><p class="u">${g.ind} · Ziel: ${g.target}</p>${lineChart(teams.map((t,j)=>({vals:sims[j].map(y=>y.v[g.k]),color:tc(t.ci)})),{years,min:{infl:1.5,alq:3,lb:0,bip:0,thg:430,armut:11,nl:8,ee:55}[g.k],max:{infl:3,alq:6.5,lb:5,bip:2.5,thg:640,armut:16,nl:16,ee:80}[g.k],band,dec:g.dec,aria:g.ind})}</div>`; }).join("")}</div></div>
   <div class="questions">
     <div class="panel"><p class="eyebrow">Leitfrage 1</p><h4>Wer hat jetzt „gewonnen“?</h4><p class="muted">Und wer entscheidet, welche Ziele zählen? Die Wirkungen sind positive Aussagen, die Gewichtung der Ziele ist eine normative Entscheidung.</p></div>
     <div class="panel"><p class="eyebrow">Leitfrage 2</p><h4>Ist das Viereck von 1967 noch zeitgemäß?</h4><p class="muted">Nutzt die drei Positionen aus Kapitel 4.5: Viereck genügt, Sechseck überfällig, das Problem ist die Gewichtung.</p></div>
-    <div class="panel"><p class="eyebrow">Leitfrage 3</p><h4>Wer würde welche Ecke stärker gewichten?</h4><p class="muted">Gewerkschaft, Arbeitgeberverband, Umweltverband, EZB. ${rev?"Probiert die Blickwinkel oben aus.":"Das ist die Brücke zur nächsten Stunde."}</p></div>
-  </div>`;
-  const rb=el.querySelector("#reveal"); if(rb) rb.onclick=()=>doReveal(el, n, sims, rank4);
-  wirePresets(el);
+    <div class="panel"><p class="eyebrow">Leitfrage 3</p><h4>Wer würde welche Ecke stärker gewichten?</h4><p class="muted">Ihr habt im Kabinett schon Ressortinteressen vertreten. Wie sähe die Rangliste aus Sicht von Gewerkschaft, Arbeitgebern oder Umweltverband aus?</p></div>
+  </div>
+  <div class="row"><span class="spacer"></span>${rev?`<button class="btn small ghost" id="hide">Oktogon wieder verdecken</button>`:""}</div>`;
+  const rb=box.querySelector("#reveal"); if(rb) rb.onclick=()=>doReveal(box, teams, n, sims, r4);
+  const hb=box.querySelector("#hide"); if(hb) hb.onclick=()=>{ V.revealed=false; saveV(); drawCmp(box); };
+  wirePresets(box, teams, n, pos4);
 }
-function revealExtras(n){
+function weightsPanel(){
   return `<div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:10px"><h3 style="font-size:1.2rem">Blickwinkel: Wie gewichtet ihr die acht Ziele?</h3><span class="small muted">Die Rangliste oben rechnet sofort neu.</span></div>
-    <div class="presets" style="margin-bottom:14px">${Object.entries(PRESETS).map(([k,p])=>`<button data-preset="${k}" aria-pressed="${S.weightsPreset===k}">${p.label}</button>`).join("")}</div>
-    <div class="weights">${GOALS.map(g=>`<div><label for="w-${g.k}"><span>${g.short}</span><span class="num" id="wv-${g.k}">${fmt(S.weights[g.k],1)}×</span></label><input type="range" id="w-${g.k}" min="0" max="4" step="0.5" value="${S.weights[g.k]}"></div>`).join("")}</div>
+    <div class="presets" style="margin-bottom:14px">${Object.entries(PRESETS).map(([k,p])=>`<button data-preset="${k}" aria-pressed="${V.weightsPreset===k}">${p.label}</button>`).join("")}</div>
+    <div class="weights">${GOALS.map(g=>`<div><label for="w-${g.k}"><span>${g.short}</span><span class="num" id="wv-${g.k}">${fmt(V.weights[g.k],1)}×</span></label><input type="range" id="w-${g.k}" min="0" max="4" step="0.5" value="${V.weights[g.k]}"></div>`).join("")}</div>
     <p class="small muted" style="margin-top:12px">Hinweis aus dem Arbeitsblatt (4.3, M2): Sobald ein Indikator mehr misst als wirtschaftliche Aktivität, muss entschieden werden, wie stark die Bestandteile zählen. Diese Gewichtung ist unvermeidlich normativ.</p>
     <details class="chain" style="margin-top:10px"><summary>Startwerte der vier Zusatzziele</summary><ul>${GOALS.filter(g=>!g.core).map(g=>`<li><strong>${g.name}</strong> (${g.ind}): ${HIDDEN_START_NOTE[g.k]}</li>`).join("")}</ul></details></div>`;
 }
-function wirePresets(el){
-  el.querySelectorAll("[data-preset]").forEach(b=>b.onclick=()=>{ S.weightsPreset=b.dataset.preset; S.weights={...PRESETS[b.dataset.preset].w}; save(); updateRanking(el); el.querySelectorAll("[data-preset]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.preset===S.weightsPreset)); GOALS.forEach(g=>{ el.querySelector("#w-"+g.k).value=S.weights[g.k]; el.querySelector("#wv-"+g.k).textContent=fmt(S.weights[g.k],1)+"×"; }); });
-  GOALS.forEach(g=>{ const inp=el.querySelector("#w-"+g.k); if(!inp) return; inp.oninput=()=>{ S.weights[g.k]=+inp.value; S.weightsPreset="eigene"; el.querySelector("#wv-"+g.k).textContent=fmt(+inp.value,1)+"×"; el.querySelectorAll("[data-preset]").forEach(x=>x.setAttribute("aria-pressed","false")); save(); updateRanking(el); }; });
+function wirePresets(box, teams, n, pos4){
+  const upd=()=>{ const r8=teams.map((t,j)=>({j,sc:teamIndex(t,n,t.event,V.weights,true)})).sort((a,b)=>b.sc-a.sc); flipRank(box, r8, pos4); };
+  box.querySelectorAll("[data-preset]").forEach(b=>b.onclick=()=>{ V.weightsPreset=b.dataset.preset; V.weights={...PRESETS[b.dataset.preset].w}; saveV(); upd();
+    box.querySelectorAll("[data-preset]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.preset===V.weightsPreset));
+    GOALS.forEach(g=>{ box.querySelector("#w-"+g.k).value=V.weights[g.k]; box.querySelector("#wv-"+g.k).textContent=fmt(V.weights[g.k],1)+"×"; }); });
+  GOALS.forEach(g=>{ const inp=box.querySelector("#w-"+g.k); if(!inp) return; inp.oninput=()=>{ V.weights[g.k]=+inp.value; V.weightsPreset="eigene"; box.querySelector("#wv-"+g.k).textContent=fmt(+inp.value,1)+"×"; box.querySelectorAll("[data-preset]").forEach(x=>x.setAttribute("aria-pressed","false")); saveV(); upd(); }; });
 }
-function updateRanking(el){
-  const n=evaluated(); const teams=activeTeams();
-  const rank4=teams.map((t,i)=>({i,sc:teamIndex(t,n,S.event,null,false)})).sort((a,b)=>b.sc-a.sc);
-  const pos4=Object.fromEntries(rank4.map((x,p)=>[x.i,p]));
-  const rank8=teams.map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,S.weights,true)})).sort((a,b)=>b.sc-a.sc);
-  flipRank(el, rank8, pos4);
-}
-function flipRank(el, ranking, pos4){
-  const box=el.querySelector("#rank"); const rows=[...box.children];
+function flipRank(box, ranking, pos4){
+  const list=box.querySelector("#rank"); const rows=[...list.children];
   const first=Object.fromEntries(rows.map(r=>[r.dataset.i, r.getBoundingClientRect().top]));
-  ranking.forEach((x,p)=>{ const row=rows.find(r=>+r.dataset.i===x.i); box.appendChild(row); row.querySelector(".pos").textContent=p+1; row.querySelector(".sc").textContent=fmt(x.sc,1); row.querySelector(".track i").style.width=x.sc+"%";
-    const mv=pos4[x.i]-p; const m=row.querySelector(".mv"); m.className="mv "+(mv>0?"up-good":mv<0?"up-bad":"flat"); m.textContent=mv>0?"▲"+mv:mv<0?"▼"+(-mv):"="; });
-  [...box.children].forEach(r=>{ const d=first[r.dataset.i]-r.getBoundingClientRect().top; if(d){ r.style.transition="none"; r.style.transform=`translateY(${d}px)`; requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ r.style.transition=""; r.style.transform=""; }); }); } });
+  ranking.forEach((x,p)=>{ const row=rows.find(r=>+r.dataset.i===x.j); list.appendChild(row); row.querySelector(".pos").textContent=p+1; row.querySelector(".sc").textContent=fmt(x.sc,1); row.querySelector(".track i").style.width=x.sc+"%";
+    const mv=pos4[x.j]-p; const m=row.querySelector(".mv"); m.className="mv "+(mv>0?"up-good":mv<0?"up-bad":"flat"); m.textContent=mv>0?"▲"+mv:mv<0?"▼"+(-mv):"="; });
+  [...list.children].forEach(r=>{ const d=first[r.dataset.i]-r.getBoundingClientRect().top; if(d){ r.style.transition="none"; r.style.transform=`translateY(${d}px)`; requestAnimationFrame(()=>requestAnimationFrame(()=>{ r.style.transition=""; r.style.transform=""; })); } });
 }
-function doReveal(el, n, sims, rank4){
-  const btn=el.querySelector("#reveal"); btn.disabled=true;
-  const slots=[...el.querySelectorAll(".radar-slot")];
+function doReveal(box, teams, n, sims, r4){
+  box.querySelector("#reveal").disabled=true;
+  const slots=[...box.querySelectorAll(".radar-slot")];
   const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const dur=reduce?1:1800; const t0=performance.now();
+  const dur=reduce?1:1800, t0=performance.now();
+  const pos4=Object.fromEntries(r4.map((x,p)=>[x.j,p]));
   function frame(now){
-    const u=Math.min(1,(now-t0)/dur); const e=1-Math.pow(1-u,3);
-    slots.forEach(s=>{ const i=+s.dataset.i; s.innerHTML=radarSVG(sims[i][n].s,{size:260,fs:15,color:tc(i),reveal:e}); });
-    if(u<1) requestAnimationFrame(frame);
-    else { S.revealed=true; save();
-      const pos4=Object.fromEntries(rank4.map((x,p)=>[x.i,p]));
-      const rank8=activeTeams().map((t,i)=>({i,name:t.name,sc:teamIndex(t,n,S.event,S.weights,true)})).sort((a,b)=>b.sc-a.sc);
-      flipRank(el, rank8, pos4);
-      setTimeout(()=>{ renderAuswertung(el); },1200);
-    }
+    const u=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-u,3);
+    slots.forEach(s=>{ const j=+s.dataset.j; s.innerHTML=radarSVG(sims[j][n].s,{size:260,fs:15,color:tc(teams[j].ci),reveal:e}); });
+    if(u<1) return requestAnimationFrame(frame);
+    V.revealed=true; saveV();
+    const r8=teams.map((t,j)=>({j,sc:teamIndex(t,n,t.event,V.weights,true)})).sort((a,b)=>b.sc-a.sc);
+    flipRank(box, r8, pos4);
+    setTimeout(()=>drawCmp(box),1200);
   }
   requestAnimationFrame(frame);
 }
@@ -1159,12 +1359,14 @@ function renderQuellen(el){
     <li><strong>EZB:</strong> Sie reagiert auf die Inflation im Euroraum, zu der Deutschland etwa 30 % beiträgt. Liegt sie über 2 %, steigt der Zins; das bremst ein Jahr später Wachstum und Inflation und erhöht die Arbeitslosigkeit.</li>
     <li><strong>Krisenereignis 2029:</strong> trifft alle Teams gleich. Vorsorgende Maßnahmen in den Jahren davor dämpfen den Schock (Energieunabhängigkeit, neue Handelsmärkte, Fachkräfte).</li>
     <li><strong>Zielerreichung (0–100):</strong> Inflation: 100 bei 2 %, je Prozentpunkt Abweichung −35. Arbeitslosigkeit: 100 bei höchstens 3 %, je Punkt darüber −15. Leistungsbilanz: 100 bei ±1 %, je Punkt darüber −14. Wachstum: 100 bei 2–3 %, je Punkt Abstand −40, starke Sprünge kosten zusätzlich. Die Zusatzziele messen den Abstand zum Klimapfad, zum Erneuerbaren-Ziel 2030 und zu Spielzielen für Armut (11 %) und Niedriglohn (8 %).</li>
+    <li><strong>Ressort-Bilanz:</strong> Finanzen = Mittel aus Preisstabilität und Haushalt (100 Punkte bei höchstens 10 Mrd. € Ausgaben, je weitere Milliarde −2,5, Notlage −30). Wirtschaft = Mittel aus Wachstum und Außenwirtschaft. Arbeit &amp; Soziales = Beschäftigung.</li>
+    <li><strong>Ergebniscode:</strong> enthält Krise, Notlage, je Jahr die zwei Maßnahmen und das Vorrang-Ziel sowie ein Prüfzeichen. Namen werden nicht übertragen.</li>
     <li><strong>Datenrevisionen:</strong> Das Arbeitsblatt nennt für 2023/2024 −0,3 % und −0,2 %. Destatis hat diese Werte inzwischen auf −0,9 % und −0,5 % korrigiert. Auch das ist ein Informationsproblem der Wirtschaftspolitik.</li>
    </ul></div>`;
 }
 
 /* Start */
-if(S.timer && S.timer.running){ startTimer(); }
+if(V.timer && V.timer.running){ startTimer(); }
 render();
 </script>
 </body>

@@ -1,64 +1,80 @@
 # Kabinett im Viereck: Anleitung für die Lehrkraft
 
-**Kurs:** SOWI Q1, 12 Schüler:innen · **Dauer:** Doppelstunde (90 Min.) · **Material:** Beamer-Rechner, je Team mindestens ein Handy, Arbeitsblatt „Ziele der Wirtschaftspolitik“
+**Kurs:** SOWI Q1, 12 Schüler:innen · **Dauer:** Doppelstunde (90 Min.)
+**Material:** Beamer-Rechner, ein Gerät pro Dreiergruppe (Tablet, Laptop oder Handy), Arbeitsblatt „Ziele der Wirtschaftspolitik“
+**Link:** https://nb-gsn.github.io/SowiPlanspiel/ (QR-Code auf der Startseite und in `assets/qr-code.png`)
+
+## Grundidee
+
+Jede Dreiergruppe ist ein Kabinett und spielt **auf ihrem eigenen Gerät** fünf Jahre (2027–2031). Die drei Mitglieder vertreten unterschiedliche Ressorts mit eigenen Zielen:
+
+| Ressort | Ressort-Ziele | Typische Brille |
+|---|---|---|
+| Finanzministerium | Preisstabilität + Haushalt (Schuldenbremse) | Was kostet es? Sinkt die Inflation? |
+| Wirtschaftsministerium | Wachstum + außenwirtschaftliches Gleichgewicht | Wächst die Wirtschaft? Was passiert mit dem Außenhandel? |
+| Arbeits- und Sozialministerium | Beschäftigung | Entstehen Arbeitsplätze? Wer trägt die Lasten? |
+
+Jedes Ressort bekommt eine eigene **Ressort-Bilanz**. Gewertet wird am Ende aber das ganze Kabinett im magischen Viereck. So entstehen echte Verhandlungen.
+
+## Ablauf eines Jahres auf dem Team-Gerät (ca. 9 Min.)
+
+1. **Verdeckte Vorschläge (3 Min.):** Das Gerät geht reihum. Jedes Ressort sieht seine Rollenkarte, wählt *eine* Wunschmaßnahme und schreibt ein Argument dazu. Ein Etikett zeigt, ob die Maßnahme dem eigenen Ressort hilft, schadet oder zwiespältig ist.
+2. **Kabinettssitzung (4 Min.):** Alle drei Vorschläge erscheinen nebeneinander. Die App zeigt, welcher Vorschlag welchem anderen Ressort schadet (Konflikt), hilft (Harmonie) oder abgewogen werden muss, und ob das Geld reicht. Das Kabinett beschließt **zwei Maßnahmen** (auch Kompromisse aus dem ganzen Katalog), wählt **ein Ziel mit Vorrang** und schreibt ein **Protokoll**.
+3. **Bilanz (2 Min.):** Radar, Werte, EZB-Entscheidung, Ressort-Bilanz und Wirkungsketten. Kurze Reflexion: Wer hat sich durchgesetzt? Ist die Begründung positiv oder normativ? Dazu erscheint ein **Ergebniscode**.
+
+Im Jahr **2029** trifft alle Kabinette eine Krise. Nur dann darf eine Notlage erklärt werden (Art. 115 GG).
 
 ## Vorbereitung (5 Min., vor der Stunde)
 
-1. Seite am Beamer öffnen, auf **Planspiel** gehen und vier Teamnamen eintragen (oder Standardnamen lassen).
-2. Krisenereignis für 2029 wählen. Empfehlung: **Energiepreisschock**, weil er direkt an M2 „Woher Inflation kommt“ und die Lage 2026 anschließt. Alternativ „Zufall“ für mehr Spannung.
-3. Den Link für die Handys an die Tafel schreiben (Pfad `#berater` und `#quiz`).
-4. Vier Gruppen à 3 bilden, Rollen verteilen: **Finanzministerium**, **Wirtschaftsministerium**, **Analyse & Sprecher:in**.
+1. Am Beamer **Vergleich** öffnen.
+2. Krise für 2029 wählen (Empfehlung: **Energiepreisschock**, passt zu 4.1 M2 und zur Lage 2026) oder „Zufällig wählen“.
+3. Das angezeigte **Kurswort** (z. B. `LUCHS`) an die Tafel schreiben. Die Teams geben es beim Start ein. So erleben alle dieselbe Krise, ohne sie vorher zu kennen.
+4. Gruppen bilden und Ressorts verteilen.
 
-## Ablauf
+## Ablauf der Doppelstunde
 
-| Zeit | Phase | Was passiert |
+| Zeit | Phase | Wo |
 |---|---|---|
-| 0–10 | **Lagebild** (Beamer) | Teams schätzen die vier Werte für 2026, dann nacheinander aufdecken. Frage: Welche Ziele sind verfehlt, welche stehen im Konflikt? |
-| 10–15 | **Quiz** (Handys) | Jedes Team spielt eine Runde mit 10 Fragen. Kurz die Punktzahl abfragen. |
-| 15–65 | **Planspiel** (5 Runden à ca. 9 Min.) | Siehe unten |
-| 65–85 | **Auswertung** | Rangliste im Viereck besprechen, dann „Oktogon aufdecken“ |
-| 85–90 | **Ausblick / Hausaufgabe** | Leitfragen, Brücke zur Stunde mit Interessengruppen |
+| 0–10 | **Lagebild 2026**: Werte schätzen, aufdecken, Zielkonflikte benennen | Beamer |
+| 10–15 | **Quiz** zur Wiederholung | Team-Geräte |
+| 15–65 | **Team-Spiel**: 5 Jahre à ca. 9 Min. Der Rundentimer läuft am Beamer. | Team-Geräte |
+| 65–85 | **Vergleich & Oktogon**: Codes eintragen, Teams vergleichen, Achteck aufdecken | Beamer |
+| 85–90 | Leitfragen, Hausaufgabe | Plenum |
 
-## Eine Spielrunde (≈ 9 Min.)
+**Tipp:** Nach Jahr 2 oder 3 die aktuellen Codes einsammeln und einen Zwischenstand zeigen. Das erhöht die Spannung.
 
-1. **Beratung (5 Min., Timer am Beamer):** Teams prüfen im „Berater“ auf dem Handy die Maßnahmen. Die Pfeile zeigen nur die Richtung, keine Zahlen. Das ist Absicht (Informationsproblem).
-2. **Beschluss (2 Min.):** Die Analyse-Person jedes Teams tippt am Beamer auf „Kabinettsbeschluss“, wählt zwei Maßnahmen und schreibt eine Begründung (Welches Ziel hat Vorrang?). Das Finanzministerium achtet auf die Schuldenbremse: Die App lässt keine Beschlüsse über dem Spielraum zu.
-3. **Bilanz (2 Min.):** „Jahr auswerten“. Am Beamer erscheinen die vier Radare nebeneinander, die EZB-Entscheidung und die Rangliste. Unter „Wirkungsketten“ steht für jedes Team, welche Maßnahme was bewirkt hat, auch verzögerte Effekte aus Vorjahren.
+## Vergleich und Oktogon am Beamer
 
-**Runde 3 (2029):** Die Eilmeldung zum Krisenereignis erscheint vor den Beschlüssen. Nur in diesem Jahr darf eine Notlage erklärt werden (Art. 115 GG): mehr Geld jetzt, weniger Spielraum später.
+1. Die Teams nennen ihren **Ergebniscode** (z. B. `EN-QC3-FQ4-CR1-FK2-BS3-C`). Eintragen, Groß- und Kleinschreibung ist egal. Ein Prüfzeichen am Ende erkennt Tippfehler.
+2. Es erscheinen Radare, Rangliste im Viereck, eine Tabelle „Wer hat welchem Ziel Vorrang gegeben?“ mit den Ressort-Bilanzen und die Verläufe.
+3. **„Oktogon aufdecken“**: Die Diagramme klappen zum Achteck auf (Umwelt, Verteilung, Arbeitsbedingungen, Ressourcen wurden die ganze Zeit mitgerechnet). Die Rangliste sortiert sich neu, ▲▼ zeigt Platzwechsel.
+4. **Blickwinkel**: Gewerkschaft, Arbeitgeberverband, Umweltverband, EZB, Sozialverband gewichten die Ziele unterschiedlich. Die Rangliste reagiert sofort.
 
-**Tipp:** Wenn die Zeit knapp wird, den Timer kürzer stellen (Klick auf „↺ Min.“ wechselt 5–10 Minuten).
-
-## Auswertung und Oktogon (20 Min.)
-
-1. **Rangliste im Viereck:** „Welches Ziel hat das Siegerteam vernachlässigt?“ Die Begründungen der Analyse-Personen vorlesen lassen und als positiv oder normativ einordnen.
-2. **Oktogon aufdecken:** Die Diagramme klappen vom Viereck zum Achteck auf, die Rangliste wird neu sortiert (▲▼ zeigt Platzwechsel).
-3. **Blickwinkel:** Mit den Schaltflächen „Gewerkschaft“, „Arbeitgeberverband“, „Umweltverband“, „EZB / Bundesbank“, „Sozialverband“ die Gewichtung ändern. Die Rangliste reagiert sofort. Kernaussage: Die Wirkungen sind positiv (prüfbar), die Gewichtung ist normativ.
+Zum Ausprobieren vorab: **„Beispielcodes laden“**.
 
 ### Leitfragen
-- Wer hat jetzt „gewonnen“, und wer entscheidet, welche Ziele zählen?
-- Ist der Zielkatalog des Stabilitätsgesetzes von 1967 noch zeitgemäß? (Positionen aus Kapitel 4.5)
-- Welche Interessengruppe würde welche Ecke stärker gewichten? (Brücke zur Folgestunde)
+- Wer hat jetzt „gewonnen“, und wer entscheidet, welche Ziele zählen? (positiv vs. normativ)
+- Ist der Zielkatalog des Stabilitätsgesetzes von 1967 noch zeitgemäß? (Kapitel 4.5)
+- Ihr habt im Kabinett Ressortinteressen vertreten: Welche Interessengruppe würde welche Ecke stärker gewichten? (Brücke zur Folgestunde)
 
 ### Hausaufgabe (Vorschlag)
-Verfasse nach dem Methodenkasten „Ein politisches Urteil formulieren“ ein Urteil: Welchem Ziel hätte euer Kabinett 2029 Vorrang geben sollen? Nenne die Kriterien ausdrücklich.
+Verfasse nach dem Methodenkasten „Ein politisches Urteil formulieren“ ein Urteil: Welchem Ziel hätte euer Kabinett 2029 Vorrang geben sollen? Nenne die Kriterien ausdrücklich. Grundlage ist das Kabinettsprotokoll am Ende des Team-Spiels.
 
 ## Bezüge zum Arbeitsblatt
 
 | Im Spiel | Arbeitsblatt |
 |---|---|
 | Startwerte Lagebild | 4 M2 „Zielerreichung 2026“, 4.1–4.3 |
-| Pfeile sofort / 1 Jahr / langfristig, CO₂-Preis kehrt sich um | Methodenkasten Zielbeziehungen: Zeithorizont |
+| Konflikt/Harmonie/Abwägen in der Kabinettssitzung | 4 M3 Zielbeziehungen, Methodenkasten |
+| Etiketten „erst Nachteil, dann Vorteil“, CO₂-Preis | Methodenkasten: Zeithorizont |
 | Mindestlohn 15 € vs. 17 € | Methodenkasten: Ausmaß |
-| Gesperrte Karten (Leitzins, Löhne, Zölle) | 3 M2 Träger: Tarifautonomie, EZB, EU |
-| Bereichs-Etiketten der Maßnahmen | 3 M1 Ordnungs-, Prozess-, Strukturpolitik |
-| EZB-Reaktion, Energiepreisschock | 4.1 M2 importierte Inflation, Zweitrundeneffekte, Phillips-Kurve |
-| Weiterbildungsoffensive gegen Mismatch | 4.2 M2 strukturelle Arbeitslosigkeit |
-| Konjunkturpaket senkt Exportüberschuss | 4 M3 Wachstum vs. außenwirtschaftliches Gleichgewicht, 4.3 M3 |
-| Oktogon, Gewichtung | 4 M3 Sechseck/Achteck, 4.3 M2 Gewichtungsproblem, 4.5 |
+| Gesperrte Karten (Leitzins, Löhne, Zölle) | 3 M2 Träger: EZB, Tarifautonomie, EU |
+| Ressorts mit eigenen Interessen | 1 M2 Staatsversagen: Eigeninteressen, organisierte Interessen |
+| Vorrang-Ziel und Protokoll | 2 M1 positive und normative Aussagen |
+| Oktogon und Gewichtung | 4 M3 Sechseck/Achteck, 4.3 M2, 4.5 |
 
-## Hinweise zu Daten und Modell
-- Die Startwerte sind belegt (Seite „Quellen & Modell“). Die Wirkungsstärken der Maßnahmen sind ein vereinfachtes Lehrmodell, orientiert an Lehrbuch und Empirie. Das sollte im Kurs offen benannt werden.
-- Destatis hat das BIP 2023/2024 auf −0,9 % / −0,5 % revidiert (Arbeitsblatt: −0,3 % / −0,2 %). Die App nutzt die neuen Werte und weist darauf hin.
-- Weil jedes Team ein eigenes Deutschland regiert, bekommt im Spiel jedes Team einen eigenen EZB-Zins. Die App erklärt diese Vereinfachung.
-- Der Spielstand bleibt im Browser des Beamer-Rechners gespeichert, auch nach einem Neuladen. „Neues Spiel beginnen“ setzt alles zurück.
+## Hinweise
+- Startwerte sind belegt (Seite „Quellen & Modell“). Die Wirkungsstärken sind ein vereinfachtes Lehrmodell. Das sollte im Kurs offen benannt werden.
+- Destatis hat das BIP 2023/2024 auf −0,9 % / −0,5 % revidiert (Arbeitsblatt: −0,3 % / −0,2 %). Die App nutzt die neuen Werte.
+- Jedes Kabinett regiert „sein“ Deutschland, deshalb reagiert die EZB in jedem Spiel auf die eigene Inflation. In Wirklichkeit gibt es nur einen Zins für den Euroraum.
+- Spielstände bleiben nur auf dem jeweiligen Gerät (Browser-Speicher). Wer die Seite neu lädt, spielt an derselben Stelle weiter. Es werden keine Namen übertragen; der Ergebniscode enthält nur die Beschlüsse.
