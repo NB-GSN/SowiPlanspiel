@@ -3,6 +3,7 @@
 **Kurs:** SOWI Q1, 12 Schüler:innen · **Dauer:** Doppelstunde (90 Min.)
 **Material:** Beamer-Rechner, ein Gerät pro Dreiergruppe (Tablet, Laptop oder Handy), Arbeitsblatt „Ziele der Wirtschaftspolitik“
 **Link:** https://nb-gsn.github.io/SowiPlanspiel/ (QR-Code auf der Startseite und in `assets/qr-code.png`)
+**Druckfassungen:** Lehrkraft- und Schüleranleitung als DOCX und PDF im Ordner `material/`
 
 ## Grundidee
 
