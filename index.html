@@ -271,7 +271,7 @@ details.chain summary{cursor:pointer;font-weight:600;font-size:.88rem}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;font-weight:600}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:14px;height:4px;border-radius:2px;background:var(--tc)}
-.questions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .questions .panel h4{font-size:1.1rem;margin-bottom:6px}
 .weights{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 18px}
 .weights label{font-size:.82rem;font-weight:600;display:flex;justify-content:space-between}
@@ -471,7 +471,7 @@ const MEASURES = [
    desc:"Hilfen für Zulieferer-Regionen beim Umstieg auf E-Mobilität.",
    chain:"Gezielte Hilfe für eine Branche und Region → Jobs bleiben erhalten → Arbeitslosigkeit ↓, Exporte stabiler. Gefahr: Erhalt alter Strukturen, Lobbyeinfluss.",
    fx:{alq:[-0.15,-0.1,-0.05], bip:[0.1,0.1,0.1], lb:[0.1,0.15,0.15], infl:[0.05,0,0], thg:[0,-1,-2]}},
-  {id:"export", area:"wachs", name:"Exportförderung und Handelsinitiative in der EU", traeger:"Bundesregierung wirbt, die EU entscheidet", cost:3,
+  {id:"export", area:"wachs", name:"Exportbürgschaften, für EU-Handelsabkommen werben", traeger:"Bundesregierung wirbt, die EU entscheidet", cost:3,
    desc:"Neue Handelsabkommen (z. B. Mercosur, Indien) und Exportbürgschaften. Handelspolitik ist EU-Sache, deshalb verzögert.",
    chain:"Neue Absatzmärkte → Exporte ↑ → Wachstum ↑. Aber: Leistungsbilanzüberschuss ↑ → weiter weg vom außenwirtschaftlichen Gleichgewicht.",
    fx:{lb:[0,0.3,0.4], bip:[0,0.15,0.15], alq:[0,-0.05,-0.05], thg:[0,1,1]}},
@@ -808,7 +808,7 @@ function renderStart(el){
     <h2 style="font-size:1.5rem;margin-bottom:6px">Die drei Ressorts</h2>
     <p class="muted" style="margin-bottom:14px">12 Schüler:innen = 4 Kabinette à 3. Jedes Ressort kämpft für eigene Ziele und bekommt eine eigene Ressort-Bilanz. Gewinnen kann das Kabinett aber nur gemeinsam.</p>
     <div class="roles">
-      ${ROLES.map(r=>`<div class="panel role" style="border-top:6px solid ${r.color}"><div class="ico">${iconSVG(r.icon)}</div><h4>${r.name}</h4><p>${r.brief}</p><p class="small" style="margin-top:8px"><strong>Ressort-Ziele:</strong> ${roleGoalNames(r)}</p></div>`).join("")}
+      ${ROLES.map(r=>`<div class="panel role" style="border-top:6px solid ${r.color}"><div class="ico">${iconSVG(r.icon)}</div><h4>${r.name}</h4><p>${r.brief}</p><p class="small" style="margin-top:8px"><strong>Ressort-Ziel:</strong> ${roleGoalNames(r)}</p><p class="small muted" style="margin-top:6px"><strong>Nicht euer Hebel:</strong> ${r.limit}</p></div>`).join("")}
     </div>
   </div>`;
 }
@@ -919,13 +919,16 @@ function renderQuiz(el){
 
 /* ---------- TEAM-SPIEL (ein Gerät pro Kabinett) ---------- */
 const ROLES=[
-  {id:"fin", name:"Finanzministerium", short:"Finanzen", goals:["infl","haushalt"], color:"var(--t3)", icon:"euro",
-   brief:"Ihr verantwortet stabile Preise und einen soliden Haushalt. Jede Milliarde müsst ihr vor dem Bundestag rechtfertigen, eine Notlage kostet Glaubwürdigkeit.",
-   lens:"Sinkt die Inflation? Was kostet es? Halten wir die Schuldenbremse ein?"},
-  {id:"wirt", name:"Wirtschaftsministerium", short:"Wirtschaft", goals:["bip","lb"], color:"var(--t1)", icon:"chart",
-   brief:"Ihr wollt stetiges Wachstum und wettbewerbsfähige Unternehmen. Gleichzeitig soll der Außenhandel ins Gleichgewicht kommen, denn ein zu hoher Überschuss provoziert Zölle.",
-   lens:"Wächst die Wirtschaft? Was passiert mit Exporten und Importen?"},
+  {id:"fin", name:"Finanzministerium", short:"Finanzen", goals:["haushalt"], color:"var(--t3)", icon:"euro",
+   brief:"Ihr verantwortet Steuern, Ausgaben und einen soliden Haushalt. Jede Milliarde müsst ihr vor dem Bundestag rechtfertigen, eine Notlage kostet Glaubwürdigkeit.",
+   limit:"Für stabile Preise ist die unabhängige EZB zuständig, nicht ihr. Aber: Viel Staatsnachfrage treibt die Inflation, und darauf antwortet die EZB mit höheren Zinsen.",
+   lens:"Was kostet es? Halten wir die Schuldenbremse ein? Wie reagiert die EZB?"},
+  {id:"wirt", name:"Wirtschaftsministerium", short:"Wirtschaft", goals:["bip"], color:"var(--t1)", icon:"chart",
+   brief:"Ihr wollt stetiges Wachstum und wettbewerbsfähige Unternehmen: gute Standortbedingungen, Investitionen, Innovation.",
+   limit:"Zölle und Freihandelsabkommen beschließt die EU, nicht ihr. Ihr könnt in Brüssel nur dafür werben. Den Außenhandel beeinflusst ihr also nur indirekt.",
+   lens:"Wächst die Wirtschaft? Investieren die Unternehmen? Was können wir selbst entscheiden?"},
   {id:"soz", name:"Arbeits- und Sozialministerium", short:"Arbeit & Soziales", goals:["alq"], color:"var(--t2)", icon:"people",
+   limit:"Löhne handeln Gewerkschaften und Arbeitgeber aus (Tarifautonomie). Ihr setzt nur den Rahmen, etwa den Mindestlohn.",
    brief:"Über drei Millionen Menschen sind arbeitslos, viele davon strukturell. Ihr kämpft für Beschäftigung und dafür, dass Krisen nicht auf dem Rücken der Schwächsten ausgetragen werden.",
    lens:"Entstehen Arbeitsplätze? Wer trägt die Lasten?"},
 ];
@@ -933,7 +936,7 @@ const RO=Object.fromEntries(ROLES.map(r=>[r.id,r]));
 const roleGoalNames=r=>r.goals.map(g=>g==="haushalt"?"Haushalt (Schuldenbremse)":G[g].name).join(", ");
 
 function haushaltScore(t,r){ const b=budgetState(t,r,t.choices[r-1]||[]); return clamp(100-2.5*Math.max(0,b.reg-10)-(t.notlage&&r===EVENT_ROUND?30:0),0,100); }
-function ressortYear(t, ys, r){ const s=ys[r].s; return {fin:(s.infl+haushaltScore(t,r))/2, wirt:(s.bip+s.lb)/2, soz:s.alq}; }
+function ressortYear(t, ys, r){ const s=ys[r].s; return {fin:haushaltScore(t,r), wirt:s.bip, soz:s.alq}; }
 function ressortAvg(t,n){ const ys=simulate(t,n,t.event); const acc={fin:0,wirt:0,soz:0}; if(!n) return acc; for(let r=1;r<=n;r++){ const y=ressortYear(t,ys,r); for(const k in acc) acc[k]+=y[k]; } for(const k in acc) acc[k]/=n; return acc; }
 
 // Wirkung einer Maßnahme auf die Ziele eines Ressorts (nur Richtung, wie im Berater)
@@ -1069,7 +1072,8 @@ function teamPropose(el){
       <div class="row" style="gap:10px">${iconSVG(role.icon)}<h2>${role.name}</h2></div>
       <p>${role.brief}</p>
       <p class="small"><strong>Eure Brille:</strong> ${role.lens}</p>
-      <p class="small muted">Ressort-Ziele: ${roleGoalNames(role)}</p>
+      <p class="small"><strong>Nicht euer Hebel:</strong> ${role.limit}</p>
+      <p class="small muted">Ressort-Ziel: ${roleGoalNames(role)}</p>
       ${avg!=null?`<div class="rbar" style="--rc:${role.color}"><span>Ressort-Bilanz bisher</span><span class="bar"><i style="width:${avg}%"></i></span><span class="num">${fmt(avg,0)}</span></div>`:""}
       <div id="picked" class="chip empty">Noch keine Maßnahme gewählt</div>
       <label class="lbl" for="why">Euer Argument für das Kabinett (ein Satz)</label>
@@ -1158,7 +1162,7 @@ function teamResult(el){
       <div class="ezb"><span class="pill neutral num" style="font-size:.9rem;padding:8px 12px">EZB</span><p>${ezbOne(y.ezb)}</p></div>
       <div class="panel"><h3 style="font-size:1.1rem;margin-bottom:10px">Ressort-Bilanz</h3>
         <div style="display:flex;flex-direction:column;gap:10px">${ROLES.map(x=>`<div class="rbar" style="--rc:${x.color}"><span><strong>${x.short}</strong><br><span class="small muted">Ø bisher ${fmt(ra[x.id],0)}</span></span><span class="bar"><i style="width:${rs[x.id]}%"></i></span><span class="num">${fmt(rs[x.id],0)}</span></div>`).join("")}</div>
-        <p class="small muted" style="margin-top:10px">Finanzen = Preise + Haushalt · Wirtschaft = Wachstum + Außenwirtschaft · Arbeit &amp; Soziales = Beschäftigung</p></div>
+        <p class="small muted" style="margin-top:10px">Finanzen = Haushalt · Wirtschaft = Wachstum · Arbeit &amp; Soziales = Beschäftigung. Preise (EZB) und Außenhandel (EU, Weltmarkt) hat kein Ministerium in der Hand, sie zählen aber im Viereck.</p></div>
       <div class="panel"><p class="eyebrow">Euer Beschluss</p><p style="margin:6px 0"><strong>${T.choices[n-1].map(id=>esc(M[id].name)).join(" + ")}</strong> · Vorrang: ${CORE[T.prio[n-1]].name}</p>${T.notes[n-1]?`<p class="why" style="--tc:var(--t1)">„${esc(T.notes[n-1])}“</p>`:""}
         <details class="chain" open><summary>Wirkungsketten ${YEARS[n-1]}</summary>${chainList(y)}</details></div>
     </div>
@@ -1298,8 +1302,9 @@ function drawCmp(box){
     return `<div class="chartbox"><h4>${g.name}</h4><p class="u">${g.ind} · Ziel: ${g.target}</p>${lineChart(teams.map((t,j)=>({vals:sims[j].map(y=>y.v[g.k]),color:tc(t.ci)})),{years,min:{infl:1.5,alq:3,lb:0,bip:0,thg:430,armut:11,nl:8,ee:55}[g.k],max:{infl:3,alq:6.5,lb:5,bip:2.5,thg:640,armut:16,nl:16,ee:80}[g.k],band,dec:g.dec,aria:g.ind})}</div>`; }).join("")}</div></div>
   <div class="questions">
     <div class="panel"><p class="eyebrow">Leitfrage 1</p><h4>Wer hat jetzt „gewonnen“?</h4><p class="muted">Und wer entscheidet, welche Ziele zählen? Die Wirkungen sind positive Aussagen, die Gewichtung der Ziele ist eine normative Entscheidung.</p></div>
-    <div class="panel"><p class="eyebrow">Leitfrage 2</p><h4>Ist das Viereck von 1967 noch zeitgemäß?</h4><p class="muted">Nutzt die drei Positionen aus Kapitel 4.5: Viereck genügt, Sechseck überfällig, das Problem ist die Gewichtung.</p></div>
-    <div class="panel"><p class="eyebrow">Leitfrage 3</p><h4>Wer würde welche Ecke stärker gewichten?</h4><p class="muted">Ihr habt im Kabinett schon Ressortinteressen vertreten. Wie sähe die Rangliste aus Sicht von Gewerkschaft, Arbeitgebern oder Umweltverband aus?</p></div>
+    <div class="panel"><p class="eyebrow">Leitfrage 2</p><h4>Wer hat sich um Preise und Außenhandel gekümmert?</h4><p class="muted">Diese Ecken gehören keinem Ministerium: Zuständig sind EZB und EU. Was kann eine Bundesregierung dort überhaupt bewirken?</p></div>
+    <div class="panel"><p class="eyebrow">Leitfrage 3</p><h4>Ist das Viereck von 1967 noch zeitgemäß?</h4><p class="muted">Nutzt die drei Positionen aus Kapitel 4.5: Viereck genügt, Sechseck überfällig, das Problem ist die Gewichtung.</p></div>
+    <div class="panel"><p class="eyebrow">Leitfrage 4</p><h4>Wer würde welche Ecke stärker gewichten?</h4><p class="muted">Ihr habt im Kabinett schon Ressortinteressen vertreten. Wie sähe die Rangliste aus Sicht von Gewerkschaft, Arbeitgebern oder Umweltverband aus?</p></div>
   </div>
   <div class="row"><span class="spacer"></span>${rev?`<button class="btn small ghost" id="hide">Oktogon wieder verdecken</button>`:""}</div>`;
   const rb=box.querySelector("#reveal"); if(rb) rb.onclick=()=>doReveal(box, teams, n, sims, r4);
@@ -1359,7 +1364,7 @@ function renderQuellen(el){
     <li><strong>EZB:</strong> Sie reagiert auf die Inflation im Euroraum, zu der Deutschland etwa 30 % beiträgt. Liegt sie über 2 %, steigt der Zins; das bremst ein Jahr später Wachstum und Inflation und erhöht die Arbeitslosigkeit.</li>
     <li><strong>Krisenereignis 2029:</strong> trifft alle Teams gleich. Vorsorgende Maßnahmen in den Jahren davor dämpfen den Schock (Energieunabhängigkeit, neue Handelsmärkte, Fachkräfte).</li>
     <li><strong>Zielerreichung (0–100):</strong> Inflation: 100 bei 2 %, je Prozentpunkt Abweichung −35. Arbeitslosigkeit: 100 bei höchstens 3 %, je Punkt darüber −15. Leistungsbilanz: 100 bei ±1 %, je Punkt darüber −14. Wachstum: 100 bei 2–3 %, je Punkt Abstand −40, starke Sprünge kosten zusätzlich. Die Zusatzziele messen den Abstand zum Klimapfad, zum Erneuerbaren-Ziel 2030 und zu Spielzielen für Armut (11 %) und Niedriglohn (8 %).</li>
-    <li><strong>Ressort-Bilanz:</strong> Finanzen = Mittel aus Preisstabilität und Haushalt (100 Punkte bei höchstens 10 Mrd. € Ausgaben, je weitere Milliarde −2,5, Notlage −30). Wirtschaft = Mittel aus Wachstum und Außenwirtschaft. Arbeit &amp; Soziales = Beschäftigung.</li>
+    <li><strong>Ressort-Bilanz:</strong> Finanzen = Haushalt (100 Punkte bei höchstens 10 Mrd. € Ausgaben, je weitere Milliarde −2,5, Notlage −30). Wirtschaft = Wachstum. Arbeit &amp; Soziales = Beschäftigung. Preisstabilität und außenwirtschaftliches Gleichgewicht ist bewusst keinem Ministerium zugeordnet: Für die Preise ist die EZB zuständig (Art. 127 AEUV), für Zölle und Handelsabkommen die EU (Art. 3, 207 AEUV). Beide Ecken zählen trotzdem für das ganze Kabinett.</li>
     <li><strong>Ergebniscode:</strong> enthält Krise, Notlage, je Jahr die zwei Maßnahmen und das Vorrang-Ziel sowie ein Prüfzeichen. Namen werden nicht übertragen.</li>
     <li><strong>Datenrevisionen:</strong> Das Arbeitsblatt nennt für 2023/2024 −0,3 % und −0,2 %. Destatis hat diese Werte inzwischen auf −0,9 % und −0,5 % korrigiert. Auch das ist ein Informationsproblem der Wirtschaftspolitik.</li>
    </ul></div>`;

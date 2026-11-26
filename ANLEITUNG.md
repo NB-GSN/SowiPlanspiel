@@ -8,13 +8,15 @@
 
 Jede Dreiergruppe ist ein Kabinett und spielt **auf ihrem eigenen Gerät** fünf Jahre (2027–2031). Die drei Mitglieder vertreten unterschiedliche Ressorts mit eigenen Zielen:
 
-| Ressort | Ressort-Ziele | Typische Brille |
+| Ressort | Ressort-Ziel | Nicht ihr Hebel |
 |---|---|---|
-| Finanzministerium | Preisstabilität + Haushalt (Schuldenbremse) | Was kostet es? Sinkt die Inflation? |
-| Wirtschaftsministerium | Wachstum + außenwirtschaftliches Gleichgewicht | Wächst die Wirtschaft? Was passiert mit dem Außenhandel? |
-| Arbeits- und Sozialministerium | Beschäftigung | Entstehen Arbeitsplätze? Wer trägt die Lasten? |
+| Finanzministerium | Haushalt (Schuldenbremse) | Preisstabilität: Zuständig ist die unabhängige EZB. Staatsausgaben beeinflussen aber die Inflation, und darauf reagiert die EZB mit dem Leitzins. |
+| Wirtschaftsministerium | Wachstum | Außenhandel: Zölle und Freihandelsabkommen beschließt die EU. Die Bundesregierung kann nur werben. |
+| Arbeits- und Sozialministerium | Beschäftigung | Löhne: Tarifautonomie. Der Staat setzt nur den Rahmen (Mindestlohn). |
 
 Jedes Ressort bekommt eine eigene **Ressort-Bilanz**. Gewertet wird am Ende aber das ganze Kabinett im magischen Viereck. So entstehen echte Verhandlungen.
+
+**Bewusst ohne Ministerium:** Preisstabilität und außenwirtschaftliches Gleichgewicht gehören keinem Ressort, zählen aber für das ganze Kabinett. Die Gruppen merken so, dass zwei Ecken des Vierecks weitgehend außerhalb der Hand der Bundesregierung liegen (EZB, EU, Weltmarkt). Das ist eine gute Frage für die Auswertung: Wer kümmert sich im Kabinett um diese Ecken, wenn sie niemandem Punkte bringen?
 
 ## Ablauf eines Jahres auf dem Team-Gerät (ca. 9 Min.)
 
@@ -68,7 +70,7 @@ Verfasse nach dem Methodenkasten „Ein politisches Urteil formulieren“ ein Ur
 | Konflikt/Harmonie/Abwägen in der Kabinettssitzung | 4 M3 Zielbeziehungen, Methodenkasten |
 | Etiketten „erst Nachteil, dann Vorteil“, CO₂-Preis | Methodenkasten: Zeithorizont |
 | Mindestlohn 15 € vs. 17 € | Methodenkasten: Ausmaß |
-| Gesperrte Karten (Leitzins, Löhne, Zölle) | 3 M2 Träger: EZB, Tarifautonomie, EU |
+| Gesperrte Karten (Leitzins, Löhne, Zölle), „Nicht euer Hebel“ auf den Rollenkarten | 3 M2 Träger: EZB, Tarifautonomie, EU |
 | Ressorts mit eigenen Interessen | 1 M2 Staatsversagen: Eigeninteressen, organisierte Interessen |
 | Vorrang-Ziel und Protokoll | 2 M1 positive und normative Aussagen |
 | Oktogon und Gewichtung | 4 M3 Sechseck/Achteck, 4.3 M2, 4.5 |
